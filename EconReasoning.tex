@@ -207,18 +207,167 @@ changed. Building on results such as this and other examples that
 clearly illustrate the limits of rationality assumptions on LMs, this
 work discusses how to systematically measure \emph{economic} reasoning,
 combining literatures on economic thought and on computer science about
-gen AI benchmarking.
+gen AI benchmarking. In practical terms, the task at hand is to come up
+with testing mechanisms that estimate the level of economic reasoning of
+an LM by means of a prompt consisting of \(n \geq 0\) examples and a
+question with multiple answers.
+
+At its most essential form, testing for economic reasoning is the same
+as probing if the model is able to think in terms of logical operators.
+However, they can be subjective because (a) economic thought is always
+changing and (b) they are only as good as their abilites ot explain
+limited sets of reality (those that modern academics constantly see=
+rather than any other reality).
+
+Similar to many other social disciplines, economics requires the
+analytical judgment referred to by Robbins (1932) in the analyses of
+events as a basis to extrapolate and predict, and this has a bearing on
+how economic reasoning should be benchmarked. Economic inference depends
+primarily on articulating unobservable quantities, theorecised and
+estimated on the basis of observable measures. This is unlike other
+major disciplines. For example, in human and veterinary medicine, all
+physiological and pathological variables of clinical importance are
+observable, even if that is not yet technologically feasible today. In
+the medical sciences, theoretical models merely fill in the gaps in the
+absence of a technologically feasible complete measurement. In contrast,
+many economically relevant quantities are latent variables that cannot
+by definition be observed, and always require a model applied to data to
+be estimated, implicit or not.
+
+A quantitative test for economic reasoning must take this into account:
+selecting a correct answer in an economics question through reasoning
+will always depend on an unobserved transformation of the information
+received and the existing knowledge. This is important. LMs may also
+happen to choose the correct answer from either luck of through simple
+token probability. It is easy to see why a correct answer selected by
+chance is not informative about the reasoning abilities of a model. The
+second case requires more explanation: mathematically, LMs are trained
+to identify the most likely token \(\theta\) in a vocabulary \(V\) given
+the tokens in its prompt. In practice, the function is inexcrutable so
+it is also considered an unobservable transformation. But a few
+characteristics allows us to distinguish reasoning from prediction.
+First, reasoning is robust to minutiae and other irrelevant detail.
+Mathematically, it would be analogous to applying a manifold
+transformation that retains only the relevant information in a prompt
+and then applies logic operations on top of them, and on them only.
+Second, reasoning is locally complete, meaning that an LM that can
+correctly deduce that A implies B also is able to understand that A'
+does not imply B, or that A does not imply B'. In other words, a
+reasoning that appears to be correct but whose obvious corolary is not
+achieved by an LM cannot be said to have been reasoned in the first
+place.
+
+Knowledge: linguistic, common and commonsense.
+
+Interpretation. information theory. Shannon.
 
 The main intuition of this work is to combine a number of building
-blocks of evaluation. First, adversarial filtering as in HellaSwag.
-Second, evolving test set based on newly published academic work. Third,
-perturbations in the spirit of Alzahrani et al. (2024). And fourth, a
-mathematical adjustment that takes into account performance across
-perturbations, penalising results that vary with \ldots.
+blocks of evaluation.
+
+\begin{itemize}
+\item
+  the benchmark must be challenging for machines: I use an adjusted
+  version of adversarial filtering (Zellers et al. (2019)) to create
+  answer candidates that are hard for LMs to guess
+\item
+  the test must incorporate slow-moving evolutions in academic economic
+  thought: evolving test set based on newly published academic work.
+\item
+  results related to reasoning must be distinguished as best as possible
+  from the ability to interpret the prompt or from knowledge (implicit
+  or explicit) about economics, ie reasoning is a separate step: sets of
+  perturbations in the spirit of Alzahrani et al. (2024) for each
+  initial task.
+\end{itemize}
+
+the benchmark counts with a mathematical adjustment that takes into
+account performance across perturbations, penalising results that vary
+with \ldots.
 
 This benchmark evaluation addresses a poignant issue for the economics
 profession: the lack of publicly available data about how these
 benchmarks are created and any, and toasted.
+
+A major inspiration in the design of the questions and how they can
+generate identifying variations is the social economics literature. A
+key reference is Stantcheva (2023). The idea here is that the design of
+the questionnaire itself can elicit responses that allow for insight
+into non-observable traits such as reasoning. Many of the insights of
+this literature carry over naturally to the machine space.\footnote{Actually
+  testing whether LMs \emph{do not} parrot or ``organically'' exhibit
+  biases or other behaviours that are assumed to be exclusively human
+  would be an interesting line of research.}
+
+A substantial body of work creates and discusses benchmarking models in
+general. A very useful reference is Storks, Gao, and Chai (2020).
+Literature on benchmarking economic reasoning appears to be new,
+although other works have touched upon the topic from different angles.
+An early foray into questions related to AI's ability to conduct
+economic reasoning is due to Parkes and Wellman (2015). But their angle
+is more on how AIs can be used to estimate synthetic economic agents -
+machina oeconomicus - ideal versions of purely rational agents, rather
+than on the measurement and the implications of AIs acquiring economic
+reasoning abilities. In any case, Parkes and Wellman (2015) see economic
+reasoning as the ability to understand and solve complex
+game-theoretical environments (eg, the poker example).
+
+\section{Lessons from human surveys}\label{lessons-from-human-surveys}
+
+I use a considerable amount of specific advice on human surveys from
+Stantcheva (2023) to generate identifying variation in the questions.
+Specifically:
+
+\begin{itemize}
+\tightlist
+\item
+  coeteris paribus questions
+\item
+  pre-testing
+\item
+  including possibilities for blank, indifferent or even recognise that
+  AI does not know
+\item
+  avoiding jargon
+\item
+  questions that check for ``attention'' and ``effort'' on the part of
+  the respondent
+\item
+  also including open ended questions (as in Ferrario and Stantcheva
+  (2022))
+
+  \begin{itemize}
+  \tightlist
+  \item
+    including follow-up questions (``are thre any other reasons'')
+  \item
+    going beyond Ferrario and Stantcheva (2022), in this paper I use
+    open ended questions that are similar in nature to closed end
+    questions and deploy large language models to interpret them.
+  \end{itemize}
+\item
+  question ordering
+
+  \begin{itemize}
+  \tightlist
+  \item
+    in particular, consideration is given to whether each question
+    should be presented to a separate instance of the LM, or the full
+    questionnaire could be shared in the same ``chat''.
+  \end{itemize}
+\item
+  take due consideration of how to address the different types of bias
+  associated with surveys (adapted for the machine context, naturally)
+\end{itemize}
+
+\section{Desirable characteristics of a
+benchmark}\label{desirable-characteristics-of-a-benchmark}
+
+\subsection{Evolve over time}\label{evolve-over-time}
+
+Economic reasoning evolves over time. For example, the Lucas critique
+(Lucas (1976)) was influential in shifting macroeconomic modelling,
+while the credibility revolution described in Angrist and Pischke (2008)
+was similarly influential in microeconomic work.
 
 \section{A model of economic
 reasoning}\label{a-model-of-economic-reasoning}
@@ -242,8 +391,10 @@ input}\label{reasoning-as-an-abstract-of-the-input}
 \item
   Input prompt \(X\)
 \item
-  Transformed into \(g(X)\), a state space function that maps it to its
-  abstract fundamentals (similar to manifold learning)
+  Transformed into \(g(X, \kappa)\), a state space function that also
+  takes the existing knowledge \(\kappa\) and associates it with the
+  prompt to maps it to its abstract fundamentals (similar to manifold
+  learning)
 \item
   Result based on \(g(X)\).
 \end{itemize}
@@ -263,8 +414,9 @@ Because \(W\) cannot be a zero vector in a functioning network that is
 responsive to its inputs and \(\sigma(Wx + b)(1-\sigma(Wx + b)) = 0\)
 has no solution because neither term is 0 or 1 in a sigmoid function
 with finite inputs, the neural network cannot be a constant function.
-This extremely simplified example does not bode well for the robustness
-of results given small perturbations in the input prompt.
+This extremely simplified example, which holds for recursive
+architectures of similarly simple layers, does not bode well for the
+robustness of results given small perturbations in the input prompt.
 
 \section{Reasoning benchmarks in other
 fields}\label{reasoning-benchmarks-in-other-fields}
@@ -285,7 +437,7 @@ natural and artificial LMs. It will serve as the basis for the
 subsequent analyses and empirical creation of a reasoning benchmark.
 
 Let a sentence \(\mathbf{S} = (\theta_1, \theta_2, \theta_3, ...)\) be a
-sequence of tokens-location tuples \(\theta_x = (\tau, x)\), with each
+sequence of token-location tuples \(\theta_x = (\tau, x)\), with each
 \(\tau \in \mathbf{V}\) belonging to a vocabulary \(\mathbf{V}\) and
 \(x \in \mathbb{N}^{d_{\text{model}}}\).\footnote{The location is
   important because it helps define meaning, along with the actual
@@ -331,8 +483,12 @@ In other words, a first precondition for reasoning is to have a low
 categorical cross-entropy loss. Intuitively, a pre-condition of
 reasoning is to correctly interpret the inputs.
 
+Use Taylor expansion on model since its derivative to perturbation
+should be zero. This gives us a head start in the Taylor expansion. Try
+to link the T-expanded equation to an estimating equation.
+
 But what determines \(\pi_{i, C}\)? A combination of knowledges and
-rationales or logical relationships.
+logical relationships.
 
 Knowledges: linguistic knowledge, common knowledge and commonsense
 knowledge
@@ -346,6 +502,8 @@ than that it is a potentially simple or complex way to interact. What is
 important is to add the categorical cross-entropy to the estimation
 equation.
 
+\textbf{Benchmark testing mechanism}\ldots{}
+
 \section{Reasoning about economics}\label{reasoning-about-economics}
 
 The model above allows us to estimate reasoning while also breaking down
@@ -358,8 +516,28 @@ thinking}. The empirical estimation follows.
 
 Each \emph{task} \(\theta \in \Theta\) can be asked in various different
 ways, each one being called a \emph{question} \(q \in \theta\).
-Questions vary with respect to their adversarial aspect. Following
-Alzahrani et al. (2024), the variations \(q\) are:
+Questions vary with respect to their adversarial aspect; it is this
+variation within each question that allows the empirical estimation of
+the effects associated with interpretation or with knowledge. Most of
+the variations are originally those tested in Alzahrani et al. (2024).
+The variation in response between the questions within each task will
+comprise the evaluation of the actual reasoning capabilities. As alluded
+to before, the variations are organised into those that measure the
+stability of a response to adversarial interpretation answers, and those
+that measure the stability across the knowledge dimension. In practice,
+each task has hundreds of different \(q\). These groups are described in
+more detail next.
+
+\subsection{Variations related to
+interpretation}\label{variations-related-to-interpretation}
+
+There are several classes of variations that can help test an LMs'
+interpretation.
+
+\subsubsection{Choice variations}\label{choice-variations}
+
+Here the choices remain the same for a task but vary in their order
+across questions
 
 \begin{itemize}
 \item
@@ -372,13 +550,35 @@ Alzahrani et al. (2024), the variations \(q\) are:
   common but unordered answer choice symbols
 \end{itemize}
 
-In practice, each task has hundreds of different \(q\). The variation in
-response between the questions within each task will comprise the
-evaluation of the actual reasoning capabilities.
+\subsubsection{Word variations}\label{word-variations}
 
-In addition, two more tests are added: the changing of irrelevant detail
-(a la Perez-Cruz and Shin (2024)) and random word repetition as if it
-were a typo.
+The main idea here is to introduce or change words that are irrelevant.
+This is along the lines of the test conducted by Perez-Cruz and Shin
+(2024).
+
+Another one is to conduct random word repetition as if it were a typo
+
+\subsection{Variations related to
+knowledge}\label{variations-related-to-knowledge}
+
+Changing key words related to field knowledge with other field knowledge
+words but that would not make a sense to an expert. This can be compared
+with just changing the same words into another generic word. Comparing
+responses between both should indicate the level of knowledge used by
+the model (should it? need to think more)
+
+\subsection{Estimation formula}\label{estimation-formula}
+
+The main formula is akin to the linear probability model since \(a_{q}\)
+is either zero or one:
+
+\[
+a_{q} = \beta_{\theta} \theta + \beta_{\text{Interpretation}} \eta_q + \beta_{\text{Knowledge}} \kappa_q + \epsilon_q
+\]
+
+Another idea to explore is whether these variations can actually
+instrument interpretation and knowledge. This would allow the formula to
+estimate the reasoning bit.
 
 \section{Operational characteristics}\label{operational-characteristics}
 
@@ -387,6 +587,44 @@ were a typo.
 \item
   avoid becoming part of training data
 \end{itemize}
+
+Some drawbacks of using academic papers include:
+
+\begin{itemize}
+\tightlist
+\item
+  bias to report only positive findings (and to do so in a way that is
+  generous towards said findings)
+\item
+  Also, academic papers suffer from false negatives: many contributions
+  that are now considered classics have been previously rejected (Gans
+  and Shepherd (1994)).
+\end{itemize}
+
+\section{Conclusions}\label{conclusions}
+
+As economic agents and policymakers harness generative artificial
+intelligence (AI) to reap considerable efficiencies, and thus their
+societal footprint becomes larger, a benchmark for economic reasoning is
+needed. I suggest ways to implement such a benchmark, and measure the
+current performance of a selected list of LMs.
+
+\section{Annex 1: discussion of biases in human surveys and how they
+could affect LM
+questionnaires}\label{annex-1-discussion-of-biases-in-human-surveys-and-how-they-could-affect-lm-questionnaires}
+
+\begin{itemize}
+\tightlist
+\item
+  Section A-4 in Stantcheva (2023)
+\end{itemize}
+
+The goal of this annex is to list side-by-side the main human biases
+that affect survey responses and their corresponding machine version, if
+any (from a theoretical perspective - it would be interesting to test if
+LMs carry over some of these biases that are supposed to be only human,
+which could suggest they are parroting or in extremis developing sources
+of bias like shame, etc).
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
@@ -404,9 +642,53 @@ Alrashed, Shaykhah Alsubaie, Yusef Almushaykeh, Faisal Mirza, et al.
 2024. {``When Benchmarks Are Targets: Revealing the Sensitivity of Large
 Language Model Leaderboards.''} \emph{arXiv Preprint arXiv:2402.01781}.
 
+\bibitem[\citeproctext]{ref-angrist2008mostly}
+Angrist, Joshua D., and Jörn-Steffen Pischke. 2008. \emph{Mostly
+Harmless Econometrics: An Empiricist's Companion}. Princeton University
+Press.
+
+\bibitem[\citeproctext]{ref-ferrario2022eliciting}
+Ferrario, Beatrice, and Stefanie Stantcheva. 2022. {``Eliciting People's
+First-Order Concerns: Text Analysis of Open-Ended Survey Questions.''}
+In \emph{AEA Papers and Proceedings}, 112:163--69. American Economic
+Association 2014 Broadway, Suite 305, Nashville, TN 37203.
+
+\bibitem[\citeproctext]{ref-mighty1994fallen}
+Gans, Joshua S., and George B. Shepherd. 1994. {``How Are the Mighty
+Fallen: Rejected Classic Articles by Leading Economists.''}
+\emph{Journal of Economic Perspectives} 8 (1): 165--79.
+\url{https://doi.org/10.1257/jep.8.1.165}.
+
+\bibitem[\citeproctext]{ref-lucas1976econometric}
+Lucas, Robert E. 1976. {``Econometric Policy Evaluation: A Critique.''}
+\emph{Journal of Monetary Economics} 1 (2): 19--46.
+
+\bibitem[\citeproctext]{ref-parkes2015economic}
+Parkes, David C, and Michael P Wellman. 2015. {``Economic Reasoning and
+Artificial Intelligence.''} \emph{Science} 349 (6245): 267--72.
+
 \bibitem[\citeproctext]{ref-perez2024testing}
 Perez-Cruz, Fernando, and Hyun Song Shin. 2024. {``Testing the Cognitive
 Limits of Large Language Models.''} Bank for International Settlements.
+
+\bibitem[\citeproctext]{ref-robbins1932essay}
+Robbins, Lionel. 1932. \emph{An Essay on the Nature and Significance of
+Economic Science}. Macmillan; Co., Limited.
+
+\bibitem[\citeproctext]{ref-stantcheva2023run}
+Stantcheva, Stefanie. 2023. {``How to Run Surveys: A Guide to Creating
+Your Own Identifying Variation and Revealing the Invisible.''}
+\emph{Annual Review of Economics} 15: 205--34.
+
+\bibitem[\citeproctext]{ref-storks2020recent}
+Storks, Shane, Qiaozi Gao, and Joyce Y. Chai. 2020. {``Recent Advances
+in Natural Language Inference: A Survey of Benchmarks, Resources, and
+Approaches.''} \url{https://arxiv.org/abs/1904.01172}.
+
+\bibitem[\citeproctext]{ref-zellers2019hellaswag}
+Zellers, Rowan, Ari Holtzman, Yonatan Bisk, Ali Farhadi, and Yejin Choi.
+2019. {``Hellaswag: Can a Machine Really Finish Your Sentence?''}
+\emph{arXiv Preprint arXiv:1905.07830}.
 
 \end{CSLReferences}
 
