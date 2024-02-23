@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Douglas K. G. Araujo">
+
+<title>Measuring the economic reasoning abilities of language models(Preliminary and incomplete)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="EconReasoning_files/libs/clipboard/clipboard.min.js"></script>
+<script src="EconReasoning_files/libs/quarto-html/quarto.js"></script>
+<script src="EconReasoning_files/libs/quarto-html/popper.min.js"></script>
+<script src="EconReasoning_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="EconReasoning_files/libs/quarto-html/anchor.min.js"></script>
+<link href="EconReasoning_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="EconReasoning_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="EconReasoning_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="EconReasoning_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="EconReasoning_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#literature" id="toc-literature" class="nav-link" data-scroll-target="#literature">Literature</a></li>
+  </ul></li>
+  <li><a href="#lessons-from-human-surveys" id="toc-lessons-from-human-surveys" class="nav-link" data-scroll-target="#lessons-from-human-surveys">Lessons from human surveys</a></li>
+  <li><a href="#desirable-characteristics-of-a-benchmark" id="toc-desirable-characteristics-of-a-benchmark" class="nav-link" data-scroll-target="#desirable-characteristics-of-a-benchmark">Desirable characteristics of a benchmark</a>
+  <ul class="collapse">
+  <li><a href="#evolve-over-time" id="toc-evolve-over-time" class="nav-link" data-scroll-target="#evolve-over-time">Evolve over time</a></li>
+  </ul></li>
+  <li><a href="#a-model-of-economic-reasoning" id="toc-a-model-of-economic-reasoning" class="nav-link" data-scroll-target="#a-model-of-economic-reasoning">A model of economic reasoning</a>
+  <ul class="collapse">
+  <li><a href="#reasoning-as-an-abstract-of-the-input" id="toc-reasoning-as-an-abstract-of-the-input" class="nav-link" data-scroll-target="#reasoning-as-an-abstract-of-the-input">Reasoning as an abstract of the input</a></li>
+  <li><a href="#a-very-simple-model" id="toc-a-very-simple-model" class="nav-link" data-scroll-target="#a-very-simple-model">A (very) simple model</a></li>
+  </ul></li>
+  <li><a href="#reasoning-benchmarks-in-other-fields" id="toc-reasoning-benchmarks-in-other-fields" class="nav-link" data-scroll-target="#reasoning-benchmarks-in-other-fields">Reasoning benchmarks in other fields</a></li>
+  <li><a href="#a-model-of-reasoning" id="toc-a-model-of-reasoning" class="nav-link" data-scroll-target="#a-model-of-reasoning">A model of reasoning</a>
+  <ul class="collapse">
+  <li><a href="#the-importance-of-manifold-for-reasoning" id="toc-the-importance-of-manifold-for-reasoning" class="nav-link" data-scroll-target="#the-importance-of-manifold-for-reasoning">The importance of manifold for reasoning</a></li>
+  <li><a href="#reasoning-iself-as-a-manifold" id="toc-reasoning-iself-as-a-manifold" class="nav-link" data-scroll-target="#reasoning-iself-as-a-manifold">Reasoning iself as a manifold</a></li>
+  </ul></li>
+  <li><a href="#reasoning-about-economics" id="toc-reasoning-about-economics" class="nav-link" data-scroll-target="#reasoning-about-economics">Reasoning about economics</a></li>
+  <li><a href="#empirical-estimation" id="toc-empirical-estimation" class="nav-link" data-scroll-target="#empirical-estimation">Empirical estimation</a>
+  <ul class="collapse">
+  <li><a href="#variations-related-to-interpretation" id="toc-variations-related-to-interpretation" class="nav-link" data-scroll-target="#variations-related-to-interpretation">Variations related to interpretation</a>
+  <ul class="collapse">
+  <li><a href="#choice-variations" id="toc-choice-variations" class="nav-link" data-scroll-target="#choice-variations">Choice variations</a></li>
+  <li><a href="#word-variations" id="toc-word-variations" class="nav-link" data-scroll-target="#word-variations">Word variations</a></li>
+  </ul></li>
+  <li><a href="#variations-related-to-knowledge" id="toc-variations-related-to-knowledge" class="nav-link" data-scroll-target="#variations-related-to-knowledge">Variations related to knowledge</a></li>
+  <li><a href="#estimation-formula" id="toc-estimation-formula" class="nav-link" data-scroll-target="#estimation-formula">Estimation formula</a></li>
+  </ul></li>
+  <li><a href="#operational-characteristics" id="toc-operational-characteristics" class="nav-link" data-scroll-target="#operational-characteristics">Operational characteristics</a></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a></li>
+  <li><a href="#annex-1-discussion-of-biases-in-human-surveys-and-how-they-could-affect-lm-questionnaires" id="toc-annex-1-discussion-of-biases-in-human-surveys-and-how-they-could-affect-lm-questionnaires" class="nav-link" data-scroll-target="#annex-1-discussion-of-biases-in-human-surveys-and-how-they-could-affect-lm-questionnaires">Annex 1: discussion of biases in human surveys and how they could affect LM questionnaires</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="EconReasoning.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Measuring the economic reasoning abilities of language models(Preliminary and incomplete)</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Douglas K. G. Araujo </p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Bank for International Settlements
+          </p>
+      </div>
+    </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+<div>
+  <div class="abstract">
+    <div class="abstract-title">Abstract</div>
+    Economic reasoning is represented as a state space function.
+  </div>
+</div>
+
+</header>
+
+<blockquote class="blockquote">
+<p>荃者所以在魚，得魚而忘荃；蹄者所以在兔，得兔而忘蹄；言者所以在意，得意而忘言。吾安得忘言之人而與之言哉 (Zhuangzi)</p>
+</blockquote>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Language models (LMs), in particular those classified as generative artificial intelligence (gen AI), are finding increasing uses in finance and economics. These models are usually tested for their ability to reason, and seem to do well: for example, OpenAI’s GPT-4 boats more than 80% correct results in academic and professional micro- and macroeconomics tests (<span class="citation" data-cites="achiam2023gpt">Achiam et al. (<a href="#ref-achiam2023gpt" role="doc-biblioref">2023</a>)</span>). Still, even such advanced models can fail miserably. <span class="citation" data-cites="perez2024testing">Perez-Cruz and Shin (<a href="#ref-perez2024testing" role="doc-biblioref">2024</a>)</span> demonstrate how the same model can correctly solve a logical puzzle requiring reasoning about higher order knowledge, only to fail when irrelevant details are changed. Building on results such as this and other examples that clearly illustrate the limits of rationality assumptions on LMs, this work discusses how to systematically measure <em>economic</em> reasoning, combining literatures on economic thought and on computer science about gen AI benchmarking. In practical terms, the task at hand is to come up with testing mechanisms that estimate the level of economic reasoning of an LM by means of a prompt consisting of <span class="math inline">\(n \geq 0\)</span> examples and a question with multiple answers.</p>
+<p>At its most essential form, testing for economic reasoning is the same as probing if the model is able to think in terms of logical operators. However, they can be subjective because (a) economic thought is always changing and (b) they are only as good as their abilites ot explain limited sets of reality (those that modern academics constantly see= rather than any other reality).</p>
+<p>Similar to many other social disciplines, economics requires the analytical judgment referred to by <span class="citation" data-cites="robbins1932essay">Robbins (<a href="#ref-robbins1932essay" role="doc-biblioref">1932</a>)</span> in the analyses of events as a basis to extrapolate and predict, and this has a bearing on how economic reasoning should be benchmarked. Economic inference depends primarily on articulating unobservable quantities, theorecised and estimated on the basis of observable measures. This is unlike other major disciplines. For example, in human and veterinary medicine, all physiological and pathological variables of clinical importance are observable, even if that is not yet technologically feasible today. In the medical sciences, theoretical models merely fill in the gaps in the absence of a technologically feasible complete measurement. In contrast, many economically relevant quantities are latent variables that cannot by definition be observed, and always require a model applied to data to be estimated, implicit or not.</p>
+<p>A quantitative test for economic reasoning must take this into account: selecting a correct answer in an economics question through reasoning will always depend on an unobserved transformation of the information received and the existing knowledge. This is important. LMs may also happen to choose the correct answer from either luck of through simple token probability. It is easy to see why a correct answer selected by chance is not informative about the reasoning abilities of a model. The second case requires more explanation: mathematically, LMs are trained to identify the most likely token <span class="math inline">\(\theta\)</span> in a vocabulary <span class="math inline">\(V\)</span> given the tokens in its prompt. In practice, the function is inexcrutable so it is also considered an unobservable transformation. But a few characteristics allows us to distinguish reasoning from prediction. First, reasoning is robust to minutiae and other irrelevant detail. Mathematically, it would be analogous to applying a manifold transformation that retains only the relevant information in a prompt and then applies logic operations on top of them, and on them only. Second, reasoning is locally complete, meaning that an LM that can correctly deduce that A implies B also is able to understand that A’ does not imply B, or that A does not imply B’. In other words, a reasoning that appears to be correct but whose obvious corolary is not achieved by an LM cannot be said to have been reasoned in the first place.</p>
+<p>Knowledge: linguistic, common and commonsense.</p>
+<p>Interpretation. information theory. Shannon.</p>
+<p>The main intuition of this work is to combine a number of building blocks of evaluation.</p>
+<ul>
+<li><p>the benchmark must be challenging for machines: I use an adjusted version of adversarial filtering (<span class="citation" data-cites="zellers2019hellaswag">Zellers et al. (<a href="#ref-zellers2019hellaswag" role="doc-biblioref">2019</a>)</span>) to create answer candidates that are hard for LMs to guess</p></li>
+<li><p>the test must incorporate slow-moving evolutions in academic economic thought: evolving test set based on newly published academic work.</p></li>
+<li><p>results related to reasoning must be distinguished as best as possible from the ability to interpret the prompt or from knowledge (implicit or explicit) about economics, ie reasoning is a separate step: sets of perturbations in the spirit of <span class="citation" data-cites="alzahrani2024benchmarks">Alzahrani et al. (<a href="#ref-alzahrani2024benchmarks" role="doc-biblioref">2024</a>)</span> for each initial task.</p></li>
+</ul>
+<p>the benchmark counts with a mathematical adjustment that takes into account performance across perturbations, penalising results that vary with ….</p>
+<p>This benchmark evaluation addresses a poignant issue for the economics profession: the lack of publicly available data about how these benchmarks are created and any, and toasted.</p>
+<p>A major inspiration in the design of the questions and how they can generate identifying variations is the social economics literature. A key reference is <span class="citation" data-cites="stantcheva2023run">Stantcheva (<a href="#ref-stantcheva2023run" role="doc-biblioref">2023</a>)</span>. The idea here is that the design of the questionnaire itself can elicit responses that allow for insight into non-observable traits such as reasoning. Many of the insights of this literature carry over naturally to the machine space.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<section id="literature" class="level2">
+<h2 class="anchored" data-anchor-id="literature">Literature</h2>
+<p>Four streams of literature.</p>
+<p>Benchmarking… A substantial body of work creates and discusses benchmarking models in general. A very useful reference is <span class="citation" data-cites="storks2020recent">Storks, Gao, and Chai (<a href="#ref-storks2020recent" role="doc-biblioref">2020</a>)</span>. Literature on benchmarking economic reasoning appears to be new, although other works have touched upon the topic from different angles.</p>
+<p>Social economics…</p>
+<p>Reasoning itself…</p>
+<p>A nascent literature on the evaluation of language models in economic settings. An early foray into questions related to AI’s ability to conduct economic reasoning is due to <span class="citation" data-cites="parkes2015economic">Parkes and Wellman (<a href="#ref-parkes2015economic" role="doc-biblioref">2015</a>)</span>. But their angle is more on how AIs can be used to estimate synthetic economic agents - machina oeconomicus - ideal versions of purely rational agents, rather than on the measurement and the implications of AIs acquiring economic reasoning abilities. In any case, <span class="citation" data-cites="parkes2015economic">Parkes and Wellman (<a href="#ref-parkes2015economic" role="doc-biblioref">2015</a>)</span> see economic reasoning as the ability to understand and solve complex game-theoretical environments (eg, the poker example). <span class="citation" data-cites="mei2024turing">Mei et al. (<a href="#ref-mei2024turing" role="doc-biblioref">2024</a>)</span> do an extensive comparison of personality traits from the behaviour of ChatGPT with human behaviour in games that require cooperation, finding that its performance is consistent with humans, and when it deviates the AI models tend to behave in the altruistic and cooperative than the mass distribution of humans. Interestingly, ChatGPT responds differently to different formulations of the same situation. In contrast to <span class="citation" data-cites="mei2024turing">Mei et al. (<a href="#ref-mei2024turing" role="doc-biblioref">2024</a>)</span>, this paper and its empirical counterpart are more generall, and discuss reasoning as a whole. Another contrast to that paper is that the current benchmark is focused on reasoning ability only, not personality. <span class="citation" data-cites="perez2024testing">Perez-Cruz and Shin (<a href="#ref-perez2024testing" role="doc-biblioref">2024</a>)</span> illustrate the brittleness of a leading AI’s reasoning, which has markedly lower performance when trivial details in the prompts are different. Similarly, <span class="citation" data-cites="korinek2023gen">Korinek (<a href="#ref-korinek2023gen" role="doc-biblioref">2023</a>)</span> report (in his Chat 23) that results from a technical prompt in economics are reasonable but also brittle, with answers changing when prompt wording changes or even simply if the tasks are re-ordered.</p>
+</section>
+</section>
+<section id="lessons-from-human-surveys" class="level1">
+<h1>Lessons from human surveys</h1>
+<p>I use a considerable amount of specific advice on human surveys from <span class="citation" data-cites="stantcheva2023run">Stantcheva (<a href="#ref-stantcheva2023run" role="doc-biblioref">2023</a>)</span> to generate identifying variation in the questions. Specifically:</p>
+<ul>
+<li>coeteris paribus questions</li>
+<li>pre-testing</li>
+<li>including possibilities for blank, indifferent or even recognise that AI does not know</li>
+<li>avoiding jargon</li>
+<li>questions that check for “attention” and “effort” on the part of the respondent</li>
+<li>also including open ended questions (as in <span class="citation" data-cites="ferrario2022eliciting">Ferrario and Stantcheva (<a href="#ref-ferrario2022eliciting" role="doc-biblioref">2022</a>)</span>)
+<ul>
+<li>including follow-up questions (“are thre any other reasons”)</li>
+<li>going beyond <span class="citation" data-cites="ferrario2022eliciting">Ferrario and Stantcheva (<a href="#ref-ferrario2022eliciting" role="doc-biblioref">2022</a>)</span>, in this paper I use open ended questions that are similar in nature to closed end questions and deploy large language models to interpret them.</li>
+</ul></li>
+<li>question ordering
+<ul>
+<li>in particular, consideration is given to whether each question should be presented to a separate instance of the LM, or the full questionnaire could be shared in the same “chat”.</li>
+</ul></li>
+<li>take due consideration of how to address the different types of bias associated with surveys (adapted for the machine context, naturally)</li>
+</ul>
+</section>
+<section id="desirable-characteristics-of-a-benchmark" class="level1">
+<h1>Desirable characteristics of a benchmark</h1>
+<section id="evolve-over-time" class="level2">
+<h2 class="anchored" data-anchor-id="evolve-over-time">Evolve over time</h2>
+<p>Economic reasoning evolves over time. For example, the Lucas critique (<span class="citation" data-cites="lucas1976econometric">Lucas (<a href="#ref-lucas1976econometric" role="doc-biblioref">1976</a>)</span>) was influential in shifting macroeconomic modelling, while the credibility revolution described in <span class="citation" data-cites="angrist2008mostly">Angrist and Pischke (<a href="#ref-angrist2008mostly" role="doc-biblioref">2008</a>)</span> was similarly influential in microeconomic work. <span class="citation" data-cites="debreu1984economic">Debreu (<a href="#ref-debreu1984economic" role="doc-biblioref">1984</a>)</span> describes the evolution of economic theory up until that point.</p>
+</section>
+</section>
+<section id="a-model-of-economic-reasoning" class="level1">
+<h1>A model of economic reasoning</h1>
+<p>The result from existing benchmarks is largely, if not completely, directly related to the number of questions correctly answered. However, this measures only the model’s ability to answer correctly, <em>not necessarily</em> its reasoning capabilities. The latter are part of a latent state space sitting between the input prompt and the answer. More concretely, for an input prompt <span class="math inline">\(X\)</span>, which includes a question and any necessary explicit information, the language model is a function <span class="math inline">\(\mathbf{M}\)</span> that maps it to a given response: <span class="math inline">\(\mathbf{M} : X \to y\)</span>. In order to show that it is done by reasoning, we need tests (and more specifically, measurements) that convey some information about the inner workings of this function.</p>
+<section id="reasoning-as-an-abstract-of-the-input" class="level2">
+<h2 class="anchored" data-anchor-id="reasoning-as-an-abstract-of-the-input">Reasoning as an abstract of the input</h2>
+<ul>
+<li><p>Input prompt <span class="math inline">\(X\)</span></p></li>
+<li><p>Transformed into <span class="math inline">\(g(X, \kappa)\)</span>, a state space function that also takes the existing knowledge <span class="math inline">\(\kappa\)</span> and associates it with the prompt to maps it to its abstract fundamentals (similar to manifold learning)</p></li>
+<li><p>Result based on <span class="math inline">\(g(X)\)</span>.</p></li>
+</ul>
+</section>
+<section id="a-very-simple-model" class="level2">
+<h2 class="anchored" data-anchor-id="a-very-simple-model">A (very) simple model</h2>
+<p>This section builds on the intuition that in true reasoning, the result should be robust to minute perturbations, ie the model is a constant function over the domain of the input. Formally, both <span class="math inline">\(\mathbf{M}(X) = y\)</span> and <span class="math inline">\(\mathbf{M}(X + \epsilon) = y\)</span> for an infinitesimal <span class="math inline">\(\epsilon\)</span>. This implies the derivative with respect to the input prompt is zero. Using as an approachable example the simplest possible neural network, the logistic regression <span class="math inline">\(\mathbf{N}(x) = \sigma(Wx + b)\)</span>, such robustness further implies that <span class="math inline">\(\frac{d\mathbf{N}}{d x} = \sigma(Wx + b)(1-\sigma(Wx + b))W = 0\)</span>. Because <span class="math inline">\(W\)</span> cannot be a zero vector in a functioning network that is responsive to its inputs and <span class="math inline">\(\sigma(Wx + b)(1-\sigma(Wx + b)) = 0\)</span> has no solution because neither term is 0 or 1 in a sigmoid function with finite inputs, the neural network cannot be a constant function. This extremely simplified example, which holds for recursive architectures of similarly simple layers, does not bode well for the robustness of results given small perturbations in the input prompt.</p>
+</section>
+</section>
+<section id="reasoning-benchmarks-in-other-fields" class="level1">
+<h1>Reasoning benchmarks in other fields</h1>
+<ul>
+<li><p>Math</p></li>
+<li><p>Medical</p></li>
+<li><p>Biologia</p></li>
+</ul>
+</section>
+<section id="a-model-of-reasoning" class="level1">
+<h1>A model of reasoning</h1>
+<p>This section develops a model of reasoning that fits naturally into both natural and artificial LMs. It will serve as the basis for the subsequent analyses and empirical creation of a reasoning benchmark.</p>
+<p>Let a sentence <span class="math inline">\(\mathbf{S} = (\theta_1, \theta_2, \theta_3, ...)\)</span> be a sequence of token-location tuples <span class="math inline">\(\theta_x = (\tau, x)\)</span>, with each <span class="math inline">\(\tau \in \mathbf{V}\)</span> belonging to a vocabulary <span class="math inline">\(\mathbf{V}\)</span> and <span class="math inline">\(x \in \mathbb{N}^{d_{\text{model}}}\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Create a function <span class="math inline">\(\pi_{i, C} : \theta, \mathbf{S} \to \{-1, 0, 1\}\)</span> that maps each token into one of three possibilities: the token’s information can be considered a adversarial (-1), irrelevant (0) or relevant (1) with respect to the likelihood of individual (or LM) <span class="math inline">\(i\)</span> uttering another sentence C. For example, take the following quote from the character Barf in the 1987 movie Spaceballs, organised as two sentences “I’m a mog. Half man, half dog.” and “I’m my own best friend.” With word-level tokenisation, <span class="math inline">\(\mathbf{S} = \{("\text{I'm}", 1), ("\text{a}", 2), ("\text{mog}", 3), ("\text{.}", 4), ("\text{Half}", 5), ("\text{man}", 6), ("\text{,}", 7), ("\text{half}", 8), ("\text{dog}", 9), ("\text{.}", 10)\}\)</span> and <span class="math inline">\(\mathbf{C}\)</span> is similarly broken down. This example illustrates that even when there is not a logical connection grounded in truth, tokens in one sentence - even those made up like “mog”, can have a bearing on the likelihood of tokens appearing in another sentence. This likelihood can differ depending on the location of the token, which also allows for situations where repeteating of a word <span class="math inline">\(\tau\)</span> is meant to convey different meaning. Another feature of this example is that all <span class="math inline">\(\pi_{\text{Barf}, C}(\theta) = 1 \forall \theta \in \mathbf{S}\)</span>. In the alternative sentence “I’m a mog. Half man, half dog. I am alive.”, the new component is obviously irrelevant for <span class="math inline">\(\mathbf{C}\)</span>: <span class="math inline">\(\prod_{x \in [10, 14]} \pi_{\text{Barf}, C}(\theta_x) = 0\)</span>.</p>
+<p>This exposition is important to delve into the reasoning aspect, entirely organised by function <span class="math inline">\(\pi\)</span>. Since <span class="math inline">\(\pi_{i, C}\)</span> measures how informative a token is for individual <span class="math inline">\(i\)</span>’s <span class="math inline">\(\mathbf{C}\)</span>, it constitutes the first aspect of reasoning: to recognise when a token is adversarial, irrelevant or relevant. This step is necessary before the application of any logical rules <span class="math inline">\(\mathcal{l} \in \mathcal{L}\)</span> on the weighted token, <span class="math inline">\(\pi_{i, C}(\theta_x) \theta_x\)</span>. The exact underpinnings of these logical rules are beyond the scope of this work - it can be approximated by a possibly non-linear function, <span class="math inline">\(g\)</span>. What suffices in this work is to say that reasoning <em>depends</em> on correctly classifying the tokens: all relevant tokens must be so identified, lest they be either ignored as the irrelevant ones or taken with the opposite meaning. Similarly, if all relevant tokens are indeed diagnosed correctly but other tokens are also diagnosed as relevant when they are not, then this will cause problems for the correct reasoning. In other words, a first precondition for reasoning is to have a low categorical cross-entropy loss. Intuitively, a pre-condition of reasoning is to correctly interpret the inputs.</p>
+<p>Use Taylor expansion on model since its derivative to perturbation should be zero. This gives us a head start in the Taylor expansion. Try to link the T-expanded equation to an estimating equation.</p>
+<p>But what determines <span class="math inline">\(\pi_{i, C}\)</span>? A combination of knowledges and logical relationships.</p>
+<p>Knowledges: linguistic knowledge, common knowledge and commonsense knowledge</p>
+<p>Rationales: reasoning from logic</p>
+<p>Armed with the sentence-level categorical cross-entropy, the individual can establish chains of thought that will finally lead to reasoning. Again, for simplicity, the exact function is not discussed here, other than that it is a potentially simple or complex way to interact. What is important is to add the categorical cross-entropy to the estimation equation.</p>
+<p><strong>Benchmark testing mechanism</strong>…</p>
+<section id="the-importance-of-manifold-for-reasoning" class="level2">
+<h2 class="anchored" data-anchor-id="the-importance-of-manifold-for-reasoning">The importance of manifold for reasoning</h2>
+<p>The first step, interpreting the received impulses (ie, the prompts), involve correctly judging what is relevant and what is not relevant. This is similar for example to how the brain receives an incredible amount of sensory inputs but chooses to focus only on those that are more relevant instead of being overwhelmed with everything else, an observation that has inspired dimensionality-reduction algorithms (eg, isometric mapping, or IsoMap, by <span class="citation" data-cites="tenenbaum2000global">Tenenbaum, Silva, and Langford (<a href="#ref-tenenbaum2000global" role="doc-biblioref">2000</a>)</span> describes how to find global optima while also defining the (much lower) degrees of freedom in a high-dimensional input).</p>
+<p>For example, <span class="citation" data-cites="intrinsic2021">Pope et al. (<a href="#ref-intrinsic2021" role="doc-biblioref">2021</a>)</span> study the intrinsic underlying dimensionality of the manifold of image datasets and find them to be significantly lower. In practice, inputs can even be said to be <em>union of manifolds</em> (as verified by <span class="citation" data-cites="brown2022verifying">Brown et al. (<a href="#ref-brown2022verifying" role="doc-biblioref">2022</a>)</span> with image datasets in an exercise similar to the one by <span class="citation" data-cites="intrinsic2021">Pope et al. (<a href="#ref-intrinsic2021" role="doc-biblioref">2021</a>)</span>), which means that each manifold has its own intrinsic dimensionality that is not forced upon the other manifolds. This perspective affords flexibility in the interpretation of identifying variations because they don’t necessarily need to probe the same dimensions at each task.</p>
+<p>In econometrics, <span class="citation" data-cites="andrews2016geometric">Andrews and Mikusheva (<a href="#ref-andrews2016geometric" role="doc-biblioref">2016</a>)</span>.</p>
+</section>
+<section id="reasoning-iself-as-a-manifold" class="level2">
+<h2 class="anchored" data-anchor-id="reasoning-iself-as-a-manifold">Reasoning iself as a manifold</h2>
+<p>Since proper reasoning needs to be insensitive to unimportant details, and the vector of changes depends on logical relationships between components, the set of all “reasonable” constructions is not obtained at random but reflects this lower-dimensional, underlying structure, similar to how random pixels would only rarely form human faces.</p>
+<ol class="example" type="1">
+<li></li>
+</ol>
+<p><span class="citation" data-cites="gilboa2014analogies">Gilboa et al. (<a href="#ref-gilboa2014analogies" role="doc-biblioref">2014</a>)</span> argues why economic reasoning works in the way of creating simple, positively wrong but conceptually useful representations of reality, even when economics is studying particular cases. A marked characteristic of such models is their preference for simplicity, a theme also explored by <span class="citation" data-cites="GILBOA20101757">Gilboa and Schmeidler (<a href="#ref-GILBOA20101757" role="doc-biblioref">2010</a>)</span>, who study the matching of economic theories to empirical data, generalising the evaluation of how reasonable a theory is through a combination of their likelihood (or goodness-of-fit) with a penalising factor for their complexity. Intuitively, this simplicity in reasoning is suggestive of the manifold hypothesis in reasoning as well.</p>
+<p><span class="citation" data-cites="rationality2023gilboa">Gilboa, Minardi, and Wang (<a href="#ref-rationality2023gilboa" role="doc-biblioref">2023</a>)</span> sees rationality, or reasoning, also as a robustness to trivial detail, and also discuss different types of reasoning (subjective reasoning, etc).</p>
+</section>
+</section>
+<section id="reasoning-about-economics" class="level1">
+<h1>Reasoning about economics</h1>
+<p>The model above allows us to estimate reasoning while also breaking down some of its components to better understand them. For example, we can estimate any errors in reasoning into an issue with <strong>interpretation</strong>, <strong>knowledge</strong> and <strong>logical thinking</strong>. The empirical estimation follows.</p>
+<p><span class="citation" data-cites="theory2022gilboa">Gilboa et al. (<a href="#ref-theory2022gilboa" role="doc-biblioref">2022</a>)</span> distinguish between three types of inquity in economic theory: economics itself (analysis of economic phenomena), development of economic methods (the development of analytical tools needed to study economic phenomena) and the methodology of economics (the research/scientific endeavour in economics, including but not limited to theory).<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+</section>
+<section id="empirical-estimation" class="level1">
+<h1>Empirical estimation</h1>
+<p>Each <em>task</em> <span class="math inline">\(\theta \in \Theta\)</span> can be asked in various different ways, each one being called a <em>question</em> <span class="math inline">\(q \in \theta\)</span>. Questions vary with respect to their adversarial aspect; it is this variation within each question that allows the empirical estimation of the effects associated with interpretation or with knowledge. Most of the variations are originally those tested in <span class="citation" data-cites="alzahrani2024benchmarks">Alzahrani et al. (<a href="#ref-alzahrani2024benchmarks" role="doc-biblioref">2024</a>)</span>. The variation in response between the questions within each task will comprise the evaluation of the actual reasoning capabilities. As alluded to before, the variations are organised into those that measure the stability of a response to adversarial interpretation answers, and those that measure the stability across the knowledge dimension. In practice, each task has hundreds of different <span class="math inline">\(q\)</span>. These groups are described in more detail next.</p>
+<section id="variations-related-to-interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="variations-related-to-interpretation">Variations related to interpretation</h2>
+<p>There are several classes of variations that can help test an LMs’ interpretation.</p>
+<section id="choice-variations" class="level3">
+<h3 class="anchored" data-anchor-id="choice-variations">Choice variations</h3>
+<p>Here the choices remain the same for a task but vary in their order across questions</p>
+<ul>
+<li><p>random choice order</p></li>
+<li><p>biased choice order</p></li>
+<li><p>uncommon answer choice symbols</p></li>
+<li><p>common but unordered answer choice symbols</p></li>
+</ul>
+</section>
+<section id="word-variations" class="level3">
+<h3 class="anchored" data-anchor-id="word-variations">Word variations</h3>
+<p>The main idea here is to introduce or change words that are irrelevant. This is along the lines of the test conducted by <span class="citation" data-cites="perez2024testing">Perez-Cruz and Shin (<a href="#ref-perez2024testing" role="doc-biblioref">2024</a>)</span>.</p>
+<p>Another one is to conduct random word repetition as if it were a typo</p>
+</section>
+</section>
+<section id="variations-related-to-knowledge" class="level2">
+<h2 class="anchored" data-anchor-id="variations-related-to-knowledge">Variations related to knowledge</h2>
+<p>Changing key words related to field knowledge with other field knowledge words but that would not make a sense to an expert. This can be compared with just changing the same words into another generic word. Comparing responses between both should indicate the level of knowledge used by the model (should it? need to think more)</p>
+</section>
+<section id="estimation-formula" class="level2">
+<h2 class="anchored" data-anchor-id="estimation-formula">Estimation formula</h2>
+<p>The main formula is akin to the linear probability model since <span class="math inline">\(a_{q}\)</span> is either zero or one:</p>
+<p><span class="math display">\[
+a_{q} = \beta_{\theta} \theta + \beta_{\text{Interpretation}} \eta_q + \beta_{\text{Knowledge}} \kappa_q + \epsilon_q
+\]</span></p>
+<p>Another idea to explore is whether these variations can actually instrument interpretation and knowledge. This would allow the formula to estimate the reasoning bit.</p>
+</section>
+</section>
+<section id="operational-characteristics" class="level1">
+<h1>Operational characteristics</h1>
+<ul>
+<li>avoid becoming part of training data</li>
+</ul>
+<p>Some drawbacks of using academic papers include:</p>
+<ul>
+<li>bias to report only positive findings (and to do so in a way that is generous towards said findings)</li>
+<li>Also, academic papers suffer from false negatives: many contributions that are now considered classics have been previously rejected (<span class="citation" data-cites="mighty1994fallen">Gans and Shepherd (<a href="#ref-mighty1994fallen" role="doc-biblioref">1994</a>)</span>).</li>
+</ul>
+</section>
+<section id="conclusions" class="level1">
+<h1>Conclusions</h1>
+<p>As economic agents and policymakers harness generative artificial intelligence (AI) to reap considerable efficiencies, and thus their societal footprint becomes larger, a benchmark for economic reasoning is needed. I suggest ways to implement such a benchmark, and measure the current performance of a selected list of LMs.</p>
+<p>Let me conclude with Ken Arrow’s impossibility theorem (CITE), or rather the story of how he achieved this incredibly influential result. Arrow first attempted to improve upon two-century-old Condorcet’s paradox, and studied ways in which individual preferences could be aggregated while satisfying some intuitive conditions. It was only through repeated failures to do so that he switched the focus to attempting to prove its impossibility. While Arrow can be safely used as a prime example of economic reasoning, the point this anecdote illustrates is that breakthroughs in economic knowledge require also inspiration (in this case from the appeal of addressing Condorcet’s paradox) as well as persistence and ability to change one’s focus. The current work focuses on developing robust benchmarks of models’ reasoning abilities in economics; further work exploring their contributions to inspiration<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> and to methodological assistance (as in the example to change focus) are also warranted for a more complete assessment of models’ abilities to provide cognitive support to human economists.</p>
+</section>
+<section id="annex-1-discussion-of-biases-in-human-surveys-and-how-they-could-affect-lm-questionnaires" class="level1">
+<h1>Annex 1: discussion of biases in human surveys and how they could affect LM questionnaires</h1>
+<ul>
+<li>Section A-4 in <span class="citation" data-cites="stantcheva2023run">Stantcheva (<a href="#ref-stantcheva2023run" role="doc-biblioref">2023</a>)</span></li>
+</ul>
+<p>The goal of this annex is to list side-by-side the main human biases that affect survey responses and their corresponding machine version, if any (from a theoretical perspective - it would be interesting to test if LMs carry over some of these biases that are supposed to be only human, which could suggest they are parroting or in extremis developing sources of bias like shame, etc).</p>
+</section>
+<section id="references" class="level1 unnumbered">
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-achiam2023gpt" class="csl-entry" role="listitem">
+Achiam, Josh, Steven Adler, Sandhini Agarwal, Lama Ahmad, Ilge Akkaya, Florencia Leoni Aleman, Diogo Almeida, et al. 2023. <span>“Gpt-4 Technical Report.”</span> <em>arXiv Preprint arXiv:2303.08774</em>.
+</div>
+<div id="ref-alzahrani2024benchmarks" class="csl-entry" role="listitem">
+Alzahrani, Norah, Hisham Abdullah Alyahya, Yazeed Alnumay, Sultan Alrashed, Shaykhah Alsubaie, Yusef Almushaykeh, Faisal Mirza, et al. 2024. <span>“When Benchmarks Are Targets: Revealing the Sensitivity of Large Language Model Leaderboards.”</span> <em>arXiv Preprint arXiv:2402.01781</em>.
+</div>
+<div id="ref-andrews2016geometric" class="csl-entry" role="listitem">
+Andrews, Isaiah, and Anna Mikusheva. 2016. <span>“A Geometric Approach to Nonlinear Econometric Models.”</span> <em>Econometrica</em> 84 (3): 1249–64.
+</div>
+<div id="ref-angrist2008mostly" class="csl-entry" role="listitem">
+Angrist, Joshua D., and Jörn-Steffen Pischke. 2008. <em>Mostly Harmless Econometrics: An Empiricist’s Companion</em>. Princeton University Press.
+</div>
+<div id="ref-brown2022verifying" class="csl-entry" role="listitem">
+Brown, Bradley CA, Anthony L Caterini, Brendan Leigh Ross, Jesse C Cresswell, and Gabriel Loaiza-Ganem. 2022. <span>“Verifying the Union of Manifolds Hypothesis for Image Data.”</span> In <em>The Eleventh International Conference on Learning Representations</em>.
+</div>
+<div id="ref-debreu1984economic" class="csl-entry" role="listitem">
+Debreu, Gerard. 1984. <span>“Economic Theory in the Mathematical Mode.”</span> <em>The American Economic Review</em> 74 (3): 267–78.
+</div>
+<div id="ref-ferrario2022eliciting" class="csl-entry" role="listitem">
+Ferrario, Beatrice, and Stefanie Stantcheva. 2022. <span>“Eliciting People’s First-Order Concerns: Text Analysis of Open-Ended Survey Questions.”</span> In <em>AEA Papers and Proceedings</em>, 112:163–69. American Economic Association 2014 Broadway, Suite 305, Nashville, TN 37203.
+</div>
+<div id="ref-mighty1994fallen" class="csl-entry" role="listitem">
+Gans, Joshua S., and George B. Shepherd. 1994. <span>“How Are the Mighty Fallen: Rejected Classic Articles by Leading Economists.”</span> <em>Journal of Economic Perspectives</em> 8 (1): 165–79. <a href="https://doi.org/10.1257/jep.8.1.165">https://doi.org/10.1257/jep.8.1.165</a>.
+</div>
+<div id="ref-rationality2023gilboa" class="csl-entry" role="listitem">
+Gilboa, Itzhak, Stefania Minardi, and Fan Wang. 2023. <span>“<span class="nocase">Schumpeter Lecture 2023: Rationality and Zero Risk</span>.”</span> <em>Journal of the European Economic Association</em> 22 (1): 1–33. <a href="https://doi.org/10.1093/jeea/jvad071">https://doi.org/10.1093/jeea/jvad071</a>.
+</div>
+<div id="ref-gilboa2014analogies" class="csl-entry" role="listitem">
+Gilboa, Itzhak, Andrew Postlewaite, Larry Samuelson, and David Schmeidler. 2014. <span>“<span class="nocase">Economic Models as Analogies</span>.”</span> <em>The Economic Journal</em> 124 (578): F513–33. <a href="https://doi.org/10.1111/ecoj.12128">https://doi.org/10.1111/ecoj.12128</a>.
+</div>
+<div id="ref-theory2022gilboa" class="csl-entry" role="listitem">
+———. 2022. <span>“Economic Theory: Economics, Methods and Methodology.”</span> <em>Revue Économique</em> 73 (6): pp. 897–920. <a href="https://www.jstor.org/stable/48714515">https://www.jstor.org/stable/48714515</a>.
+</div>
+<div id="ref-GILBOA20101757" class="csl-entry" role="listitem">
+Gilboa, Itzhak, and David Schmeidler. 2010. <span>“Simplicity and Likelihood: An Axiomatic Approach.”</span> <em>Journal of Economic Theory</em> 145 (5): 1757–75. https://doi.org/<a href="https://doi.org/10.1016/j.jet.2010.03.010">https://doi.org/10.1016/j.jet.2010.03.010</a>.
+</div>
+<div id="ref-korinek2023gen" class="csl-entry" role="listitem">
+Korinek, Anton. 2023. <span>“Generative AI for Economic Research: Use Cases and Implications for Economists.”</span> <em>Journal of Economic Literature</em> 61 (4): 1281–1317. <a href="https://doi.org/10.1257/jel.20231736">https://doi.org/10.1257/jel.20231736</a>.
+</div>
+<div id="ref-lucas1976econometric" class="csl-entry" role="listitem">
+Lucas, Robert E. 1976. <span>“Econometric Policy Evaluation: A Critique.”</span> <em>Journal of Monetary Economics</em> 1 (2): 19–46.
+</div>
+<div id="ref-mei2024turing" class="csl-entry" role="listitem">
+Mei, Qiaozhu, Yutong Xie, Walter Yuan, and Matthew O. Jackson. 2024. <span>“A Turing Test of Whether AI Chatbots Are Behaviorally Similar to Humans.”</span> <em>Proceedings of the National Academy of Sciences</em> 121 (9): e2313925121. <a href="https://doi.org/10.1073/pnas.2313925121">https://doi.org/10.1073/pnas.2313925121</a>.
+</div>
+<div id="ref-parkes2015economic" class="csl-entry" role="listitem">
+Parkes, David C, and Michael P Wellman. 2015. <span>“Economic Reasoning and Artificial Intelligence.”</span> <em>Science</em> 349 (6245): 267–72.
+</div>
+<div id="ref-perez2024testing" class="csl-entry" role="listitem">
+Perez-Cruz, Fernando, and Hyun Song Shin. 2024. <span>“Testing the Cognitive Limits of Large Language Models.”</span> Bank for International Settlements.
+</div>
+<div id="ref-intrinsic2021" class="csl-entry" role="listitem">
+Pope, Phillip, Chen Zhu, Ahmed Abdelkader, Micah Goldblum, and Tom Goldstein. 2021. <span>“The Intrinsic Dimension of Images and Its Impact on Learning.”</span> <em>CoRR</em> abs/2104.08894. <a href="https://arxiv.org/abs/2104.08894">https://arxiv.org/abs/2104.08894</a>.
+</div>
+<div id="ref-robbins1932essay" class="csl-entry" role="listitem">
+Robbins, Lionel. 1932. <em>An Essay on the Nature and Significance of Economic Science</em>. Macmillan; Co., Limited.
+</div>
+<div id="ref-stantcheva2023run" class="csl-entry" role="listitem">
+Stantcheva, Stefanie. 2023. <span>“How to Run Surveys: A Guide to Creating Your Own Identifying Variation and Revealing the Invisible.”</span> <em>Annual Review of Economics</em> 15: 205–34.
+</div>
+<div id="ref-storks2020recent" class="csl-entry" role="listitem">
+Storks, Shane, Qiaozi Gao, and Joyce Y. Chai. 2020. <span>“Recent Advances in Natural Language Inference: A Survey of Benchmarks, Resources, and Approaches.”</span> <a href="https://arxiv.org/abs/1904.01172">https://arxiv.org/abs/1904.01172</a>.
+</div>
+<div id="ref-tenenbaum2000global" class="csl-entry" role="listitem">
+Tenenbaum, Joshua B, Vin de Silva, and John C Langford. 2000. <span>“A Global Geometric Framework for Nonlinear Dimensionality Reduction.”</span> <em>Science</em> 290 (5500): 2319–23.
+</div>
+<div id="ref-zellers2019hellaswag" class="csl-entry" role="listitem">
+Zellers, Rowan, Ari Holtzman, Yonatan Bisk, Ali Farhadi, and Yejin Choi. 2019. <span>“Hellaswag: Can a Machine Really Finish Your Sentence?”</span> <em>arXiv Preprint arXiv:1905.07830</em>.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Actually testing whether LMs <em>do not</em> parrot or “organically” exhibit biases or other behaviours that are assumed to be exclusively human would be an interesting line of research.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The location is important because it helps define meaning, along with the actual letter (more generally, symbol) content of th token. Note that in this paper, white spaces are abstracted away for expositional simplicity.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>In fact, <span class="citation" data-cites="theory2022gilboa">Gilboa et al. (<a href="#ref-theory2022gilboa" role="doc-biblioref">2022</a>)</span> even allude to the blurred lines between economics and the philosophy or sociology of economics. I don’t go ino these differences here.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><span class="citation" data-cites="korinek2023gen">Korinek (<a href="#ref-korinek2023gen" role="doc-biblioref">2023</a>)</span> illustrates use of AI models to help economists have new ideas for work.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
