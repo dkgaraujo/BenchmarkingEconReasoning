@@ -165,7 +165,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Measuring the economic reasoning abilities of language models},
+  pdftitle={Measuring the economic reasoning abilities of language models(Preliminary and incomplete)},
   pdfauthor={Douglas K. G. Araujo},
   colorlinks=true,
   linkcolor={blue},
@@ -175,8 +175,8 @@
   pdfcreator={LaTeX via pandoc}}
 
 \title{Measuring the economic reasoning abilities of language
-models\thanks{This work represents my opinion and not necessarily that
-of the BIS.}}
+models\newline(Preliminary and incomplete)\thanks{This work represents
+my opinion and not necessarily that of the BIS.}}
 
 
   \author{Douglas K. G. Araujo}
@@ -298,18 +298,45 @@ this literature carry over naturally to the machine space.\footnote{Actually
   biases or other behaviours that are assumed to be exclusively human
   would be an interesting line of research.}
 
-A substantial body of work creates and discusses benchmarking models in
-general. A very useful reference is Storks, Gao, and Chai (2020).
-Literature on benchmarking economic reasoning appears to be new,
-although other works have touched upon the topic from different angles.
-An early foray into questions related to AI's ability to conduct
-economic reasoning is due to Parkes and Wellman (2015). But their angle
-is more on how AIs can be used to estimate synthetic economic agents -
-machina oeconomicus - ideal versions of purely rational agents, rather
-than on the measurement and the implications of AIs acquiring economic
-reasoning abilities. In any case, Parkes and Wellman (2015) see economic
-reasoning as the ability to understand and solve complex
-game-theoretical environments (eg, the poker example).
+\subsection{Literature}\label{literature}
+
+Four streams of literature.
+
+Benchmarking\ldots{} A substantial body of work creates and discusses
+benchmarking models in general. A very useful reference is Storks, Gao,
+and Chai (2020). Literature on benchmarking economic reasoning appears
+to be new, although other works have touched upon the topic from
+different angles.
+
+Social economics\ldots{}
+
+Reasoning itself\ldots{}
+
+A nascent literature on the evaluation of language models in economic
+settings. An early foray into questions related to AI's ability to
+conduct economic reasoning is due to Parkes and Wellman (2015). But
+their angle is more on how AIs can be used to estimate synthetic
+economic agents - machina oeconomicus - ideal versions of purely
+rational agents, rather than on the measurement and the implications of
+AIs acquiring economic reasoning abilities. In any case, Parkes and
+Wellman (2015) see economic reasoning as the ability to understand and
+solve complex game-theoretical environments (eg, the poker example). Mei
+et al. (2024) do an extensive comparison of personality traits from the
+behaviour of ChatGPT with human behaviour in games that require
+cooperation, finding that its performance is consistent with humans, and
+when it deviates the AI models tend to behave in the altruistic and
+cooperative than the mass distribution of humans. Interestingly, ChatGPT
+responds differently to different formulations of the same situation. In
+contrast to Mei et al. (2024), this paper and its empirical counterpart
+are more generall, and discuss reasoning as a whole. Another contrast to
+that paper is that the current benchmark is focused on reasoning ability
+only, not personality. Perez-Cruz and Shin (2024) illustrate the
+brittleness of a leading AI's reasoning, which has markedly lower
+performance when trivial details in the prompts are different.
+Similarly, Korinek (2023) report (in his Chat 23) that results from a
+technical prompt in economics are reasonable but also brittle, with
+answers changing when prompt wording changes or even simply if the tasks
+are re-ordered.
 
 \section{Lessons from human surveys}\label{lessons-from-human-surveys}
 
@@ -367,7 +394,8 @@ benchmark}\label{desirable-characteristics-of-a-benchmark}
 Economic reasoning evolves over time. For example, the Lucas critique
 (Lucas (1976)) was influential in shifting macroeconomic modelling,
 while the credibility revolution described in Angrist and Pischke (2008)
-was similarly influential in microeconomic work.
+was similarly influential in microeconomic work. Debreu (1984) describes
+the evolution of economic theory up until that point.
 
 \section{A model of economic
 reasoning}\label{a-model-of-economic-reasoning}
@@ -504,6 +532,61 @@ equation.
 
 \textbf{Benchmark testing mechanism}\ldots{}
 
+\subsection{The importance of manifold for
+reasoning}\label{the-importance-of-manifold-for-reasoning}
+
+The first step, interpreting the received impulses (ie, the prompts),
+involve correctly judging what is relevant and what is not relevant.
+This is similar for example to how the brain receives an incredible
+amount of sensory inputs but chooses to focus only on those that are
+more relevant instead of being overwhelmed with everything else, an
+observation that has inspired dimensionality-reduction algorithms (eg,
+isometric mapping, or IsoMap, by Tenenbaum, Silva, and Langford (2000)
+describes how to find global optima while also defining the (much lower)
+degrees of freedom in a high-dimensional input).
+
+For example, Pope et al. (2021) study the intrinsic underlying
+dimensionality of the manifold of image datasets and find them to be
+significantly lower. In practice, inputs can even be said to be
+\emph{union of manifolds} (as verified by Brown et al. (2022) with image
+datasets in an exercise similar to the one by Pope et al. (2021)), which
+means that each manifold has its own intrinsic dimensionality that is
+not forced upon the other manifolds. This perspective affords
+flexibility in the interpretation of identifying variations because they
+don't necessarily need to probe the same dimensions at each task.
+
+In econometrics, Andrews and Mikusheva (2016).
+
+\subsection{Reasoning iself as a
+manifold}\label{reasoning-iself-as-a-manifold}
+
+Since proper reasoning needs to be insensitive to unimportant details,
+and the vector of changes depends on logical relationships between
+components, the set of all ``reasonable'' constructions is not obtained
+at random but reflects this lower-dimensional, underlying structure,
+similar to how random pixels would only rarely form human faces.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+\end{enumerate}
+
+Gilboa et al. (2014) argues why economic reasoning works in the way of
+creating simple, positively wrong but conceptually useful
+representations of reality, even when economics is studying particular
+cases. A marked characteristic of such models is their preference for
+simplicity, a theme also explored by Gilboa and Schmeidler (2010), who
+study the matching of economic theories to empirical data, generalising
+the evaluation of how reasonable a theory is through a combination of
+their likelihood (or goodness-of-fit) with a penalising factor for their
+complexity. Intuitively, this simplicity in reasoning is suggestive of
+the manifold hypothesis in reasoning as well.
+
+Gilboa, Minardi, and Wang (2023) sees rationality, or reasoning, also as
+a robustness to trivial detail, and also discuss different types of
+reasoning (subjective reasoning, etc).
+
 \section{Reasoning about economics}\label{reasoning-about-economics}
 
 The model above allows us to estimate reasoning while also breaking down
@@ -511,6 +594,15 @@ some of its components to better understand them. For example, we can
 estimate any errors in reasoning into an issue with
 \textbf{interpretation}, \textbf{knowledge} and \textbf{logical
 thinking}. The empirical estimation follows.
+
+Gilboa et al. (2022) distinguish between three types of inquity in
+economic theory: economics itself (analysis of economic phenomena),
+development of economic methods (the development of analytical tools
+needed to study economic phenomena) and the methodology of economics
+(the research/scientific endeavour in economics, including but not
+limited to theory).\footnote{In fact, Gilboa et al. (2022) even allude
+  to the blurred lines between economics and the philosophy or sociology
+  of economics. I don't go ino these differences here.}
 
 \section{Empirical estimation}\label{empirical-estimation}
 
@@ -609,6 +701,25 @@ societal footprint becomes larger, a benchmark for economic reasoning is
 needed. I suggest ways to implement such a benchmark, and measure the
 current performance of a selected list of LMs.
 
+Let me conclude with Ken Arrow's impossibility theorem (CITE), or rather
+the story of how he achieved this incredibly influential result. Arrow
+first attempted to improve upon two-century-old Condorcet's paradox, and
+studied ways in which individual preferences could be aggregated while
+satisfying some intuitive conditions. It was only through repeated
+failures to do so that he switched the focus to attempting to prove its
+impossibility. While Arrow can be safely used as a prime example of
+economic reasoning, the point this anecdote illustrates is that
+breakthroughs in economic knowledge require also inspiration (in this
+case from the appeal of addressing Condorcet's paradox) as well as
+persistence and ability to change one's focus. The current work focuses
+on developing robust benchmarks of models' reasoning abilities in
+economics; further work exploring their contributions to
+inspiration\footnote{Korinek (2023) illustrates use of AI models to help
+  economists have new ideas for work.} and to methodological assistance
+(as in the example to change focus) are also warranted for a more
+complete assessment of models' abilities to provide cognitive support to
+human economists.
+
 \section{Annex 1: discussion of biases in human surveys and how they
 could affect LM
 questionnaires}\label{annex-1-discussion-of-biases-in-human-surveys-and-how-they-could-affect-lm-questionnaires}
@@ -642,10 +753,24 @@ Alrashed, Shaykhah Alsubaie, Yusef Almushaykeh, Faisal Mirza, et al.
 2024. {``When Benchmarks Are Targets: Revealing the Sensitivity of Large
 Language Model Leaderboards.''} \emph{arXiv Preprint arXiv:2402.01781}.
 
+\bibitem[\citeproctext]{ref-andrews2016geometric}
+Andrews, Isaiah, and Anna Mikusheva. 2016. {``A Geometric Approach to
+Nonlinear Econometric Models.''} \emph{Econometrica} 84 (3): 1249--64.
+
 \bibitem[\citeproctext]{ref-angrist2008mostly}
 Angrist, Joshua D., and Jörn-Steffen Pischke. 2008. \emph{Mostly
 Harmless Econometrics: An Empiricist's Companion}. Princeton University
 Press.
+
+\bibitem[\citeproctext]{ref-brown2022verifying}
+Brown, Bradley CA, Anthony L Caterini, Brendan Leigh Ross, Jesse C
+Cresswell, and Gabriel Loaiza-Ganem. 2022. {``Verifying the Union of
+Manifolds Hypothesis for Image Data.''} In \emph{The Eleventh
+International Conference on Learning Representations}.
+
+\bibitem[\citeproctext]{ref-debreu1984economic}
+Debreu, Gerard. 1984. {``Economic Theory in the Mathematical Mode.''}
+\emph{The American Economic Review} 74 (3): 267--78.
 
 \bibitem[\citeproctext]{ref-ferrario2022eliciting}
 Ferrario, Beatrice, and Stefanie Stantcheva. 2022. {``Eliciting People's
@@ -659,9 +784,44 @@ Fallen: Rejected Classic Articles by Leading Economists.''}
 \emph{Journal of Economic Perspectives} 8 (1): 165--79.
 \url{https://doi.org/10.1257/jep.8.1.165}.
 
+\bibitem[\citeproctext]{ref-rationality2023gilboa}
+Gilboa, Itzhak, Stefania Minardi, and Fan Wang. 2023. {``{Schumpeter
+Lecture 2023: Rationality and Zero Risk}.''} \emph{Journal of the
+European Economic Association} 22 (1): 1--33.
+\url{https://doi.org/10.1093/jeea/jvad071}.
+
+\bibitem[\citeproctext]{ref-gilboa2014analogies}
+Gilboa, Itzhak, Andrew Postlewaite, Larry Samuelson, and David
+Schmeidler. 2014. {``{Economic Models as Analogies}.''} \emph{The
+Economic Journal} 124 (578): F513--33.
+\url{https://doi.org/10.1111/ecoj.12128}.
+
+\bibitem[\citeproctext]{ref-theory2022gilboa}
+---------. 2022. {``Economic Theory: Economics, Methods and
+Methodology.''} \emph{Revue Économique} 73 (6): pp. 897--920.
+\url{https://www.jstor.org/stable/48714515}.
+
+\bibitem[\citeproctext]{ref-GILBOA20101757}
+Gilboa, Itzhak, and David Schmeidler. 2010. {``Simplicity and
+Likelihood: An Axiomatic Approach.''} \emph{Journal of Economic Theory}
+145 (5): 1757--75.
+https://doi.org/\url{https://doi.org/10.1016/j.jet.2010.03.010}.
+
+\bibitem[\citeproctext]{ref-korinek2023gen}
+Korinek, Anton. 2023. {``Generative AI for Economic Research: Use Cases
+and Implications for Economists.''} \emph{Journal of Economic
+Literature} 61 (4): 1281--1317.
+\url{https://doi.org/10.1257/jel.20231736}.
+
 \bibitem[\citeproctext]{ref-lucas1976econometric}
 Lucas, Robert E. 1976. {``Econometric Policy Evaluation: A Critique.''}
 \emph{Journal of Monetary Economics} 1 (2): 19--46.
+
+\bibitem[\citeproctext]{ref-mei2024turing}
+Mei, Qiaozhu, Yutong Xie, Walter Yuan, and Matthew O. Jackson. 2024.
+{``A Turing Test of Whether AI Chatbots Are Behaviorally Similar to
+Humans.''} \emph{Proceedings of the National Academy of Sciences} 121
+(9): e2313925121. \url{https://doi.org/10.1073/pnas.2313925121}.
 
 \bibitem[\citeproctext]{ref-parkes2015economic}
 Parkes, David C, and Michael P Wellman. 2015. {``Economic Reasoning and
@@ -670,6 +830,12 @@ Artificial Intelligence.''} \emph{Science} 349 (6245): 267--72.
 \bibitem[\citeproctext]{ref-perez2024testing}
 Perez-Cruz, Fernando, and Hyun Song Shin. 2024. {``Testing the Cognitive
 Limits of Large Language Models.''} Bank for International Settlements.
+
+\bibitem[\citeproctext]{ref-intrinsic2021}
+Pope, Phillip, Chen Zhu, Ahmed Abdelkader, Micah Goldblum, and Tom
+Goldstein. 2021. {``The Intrinsic Dimension of Images and Its Impact on
+Learning.''} \emph{CoRR} abs/2104.08894.
+\url{https://arxiv.org/abs/2104.08894}.
 
 \bibitem[\citeproctext]{ref-robbins1932essay}
 Robbins, Lionel. 1932. \emph{An Essay on the Nature and Significance of
@@ -684,6 +850,11 @@ Your Own Identifying Variation and Revealing the Invisible.''}
 Storks, Shane, Qiaozi Gao, and Joyce Y. Chai. 2020. {``Recent Advances
 in Natural Language Inference: A Survey of Benchmarks, Resources, and
 Approaches.''} \url{https://arxiv.org/abs/1904.01172}.
+
+\bibitem[\citeproctext]{ref-tenenbaum2000global}
+Tenenbaum, Joshua B, Vin de Silva, and John C Langford. 2000. {``A
+Global Geometric Framework for Nonlinear Dimensionality Reduction.''}
+\emph{Science} 290 (5500): 2319--23.
 
 \bibitem[\citeproctext]{ref-zellers2019hellaswag}
 Zellers, Rowan, Ari Holtzman, Yonatan Bisk, Ali Farhadi, and Yejin Choi.
