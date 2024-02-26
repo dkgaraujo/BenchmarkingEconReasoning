@@ -380,7 +380,8 @@ The first body of works is on benchmarking tasks for AI models. A
 substantial body of work creates and discusses model benchmarking in
 general; a voluminous and well-organised compilation of references is
 Storks, Gao, and Chai (2020). Interested readers are strongly encouraged
-to that paper for space considerations.
+to that paper for space considerations, while selected benchmarks are
+described in Section~\ref{sec-bench}.
 
 Secondly, this paper draws from insighs in the more general AI reasoning
 literature. As other parts of AI development, it is informed and
@@ -450,7 +451,7 @@ This extremely simplified example, which holds for recursive
 architectures of similarly simple layers, does not bode well for the
 robustness of results given small perturbations in the input prompt.
 
-\section{Existing benchmarks}\label{existing-benchmarks}
+\section{Existing benchmarks}\label{sec-bench}
 
 There are numerous benchmark tasks, and their number is increasing with
 the sophistication of newer AI models (Storks, Gao, and Chai (2020)). In
@@ -460,19 +461,140 @@ the main ones in each type, to further illustrate why a new benchmark is
 needed and more specifically how one geared towards economics can be
 constructed.
 
-\textbf{Reference resolution}
+\subsection{Reference resolution}\label{reference-resolution}
 
-\textbf{Question answering}
+\begin{itemize}
+\tightlist
+\item
+  Measures ability to identify referents (ie, linguistic mentions)
+\item
+  Complicated task due to ambiguities, requires intense commonsense
+  knowledge
+\item
+  Needs typically handcrafted data
+\item
+  Datasets tend to be smaller than other benchmarks
+\item
+  Examples: Winograd, WinoGrande (Levesque, Davis, and Morgenstern
+  (2012))
+\item
+  Browning and LeCun (2023) see the failure of these challenges to
+  present a serious challenge to modern LLMs as a sign that lingusitic
+  tests are unlikely to be good proxies for reasoning abilities.
+\end{itemize}
 
-\textbf{Textual entailment}
+\subsection{Question answering}\label{question-answering}
 
-\textbf{Intuitive psychology}
+\begin{itemize}
+\tightlist
+\item
+  Mixes language processing and reasoning skills
+\item
+  Some benchmarks can be solved without deep understanding, only from
+  linguistic context
+\item
+  But many Q\&As require external knowledge
+\item
+  Highlighted example: ARC (Clark et al. (2018))
+\item
+  Other examples: MCTest, RACE, NarrativeQA, MCScript, ProPara, MultiRC,
+  ARCT, SQuAD 2.0, CoQA, QuAC, and many others
+\end{itemize}
 
-\textbf{Plausible inference}
+\subsection{Textual entailment}\label{textual-entailment}
 
-\textbf{Multiple tasks}
+\begin{itemize}
+\tightlist
+\item
+  Entailment: a directional relationship between a statement and a
+  hypothesis where a typical person would infer the hypothesis to be
+  true given the statement
+\item
+  Some benchmarks also test ability to recognise contradiction
+\item
+  Requires substantial commonsense knowledge
+\item
+  Highlighted example: SherLlic (Schmitt and Schütze (2019))
+\item
+  Other examples: RTE, conversational entailment, SICK, SNLI, MultiNLI,
+  SCITail, and others
+\end{itemize}
 
-\textbf{Expert tasks}
+\subsection{Intuitive psychology}\label{intuitive-psychology}
+
+\begin{itemize}
+\tightlist
+\item
+  Inference of emotions and intensions conditional on description of
+  behaviour
+\item
+  Requires substantial commonsense knowledge
+\item
+  Highlighted example: SocialIQA (Sap et al. (2019))
+
+  \begin{itemize}
+  \tightlist
+  \item
+    results of increasing performance in other tests suggest some level
+    of commonsense knowledge is learnable through data
+  \end{itemize}
+\item
+  Other examples: Triangle-COPA, ROCStories, Event2Mind
+\end{itemize}
+
+\subsection{Plausible inference}\label{plausible-inference}
+
+\begin{itemize}
+\tightlist
+\item
+  Associated with abductive reasoning
+\item
+  Hypothetical, intermediate certainty or even uncertain conclusions
+  based on a limited context
+\item
+  Requires linguistic, common and commonsense knowledge
+\item
+  Highlighted examples: SWAG (Zellers et al. (2018)), HellaSWAG (Zellers
+  et al. (2019))
+\item
+  Examples: COPA, CBT, ROCStories, LAMBADA, JOCI, CLOTH, ReCoRD,
+  AlphaNLI
+\end{itemize}
+
+\subsection{Multiple tasks}\label{multiple-tasks}
+
+\begin{itemize}
+\tightlist
+\item
+  Some of them include some tasks requiring some economics-specific
+  knowledge
+\item
+  Examples: bAbI, Inference Is Everything, DNC, GLUE, SuperGLUE
+\item
+  More recently, BIG Bench (Srivastava et al. (2022))
+
+  \begin{itemize}
+  \tightlist
+  \item
+    BIG = ``Beyond the Imitation Game''
+  \end{itemize}
+\end{itemize}
+
+\subsection{Expert tasks}\label{expert-tasks}
+
+\begin{itemize}
+\tightlist
+\item
+  Geared towards field-specific knowledge (eg, law, medicine)
+\item
+  Publicly available tests
+\item
+  Usually require substantial common and commonsense knowledge
+\item
+  No economics-specific benchmark that I know of
+\end{itemize}
+
+\subsection{General comment}\label{general-comment}
 
 The result from existing benchmarks is largely, if not completely,
 directly related to the number of questions correctly answered. However,
@@ -698,6 +820,27 @@ itself entails some dimensionality reduction, in line with the existence
 of evidence that some real-world data are in fact realisations of a
 manifold (Pope et al. (2021)).
 
+\subsection{Identification}\label{identification}
+
+Due to the sequential nature of Equation~\ref{eq-empiric} and the
+desirability of measuring an AI model's performance across the three
+reasoning steps, identification of the model obtains from a combination
+of analysis to find how the values can be estimated empirically to be
+one or zero. This then leads to the creation of identifying variation
+during the question generating process as described in
+Section~\ref{sec-variation}.
+
+For each question \(q\), \(\phi\) only depends on the specific prompt at
+hand (ie, \(q + \epsilon_f\)) and is independent of the two other
+values. When estimated from the question data it is also independent of
+the AI model's knowledge set \(\theta\). Once an estimate for
+\(\hat{\phi}\) is available, it can be used to condition \(\kappa\)
+along with the AI's fixed knowledge set, which does not change across
+observations of \(q\) or \(q + \epsilon_k\), and therefore is absorbed
+away since the estimation is done for each AI. Finally, \(\hat{\phi}\)
+and \(\hat{\kappa}\) are used to condition the estimates of \(\lambda\)
+based on \(q + \epsilon_l\).
+
 \section{Reasoning about economics}\label{reasoning-about-economics}
 
 The model above allows us to estimate reasoning while also breaking down
@@ -747,7 +890,7 @@ between these observed variables. Economists, in contrast, will always
 need to conduct thought experiments and think in latent terms to conduct
 any type of meaningful economic reasoning.
 
-\section{Empirical estimation}\label{empirical-estimation}
+\section{Empirical estimation}\label{sec-variation}
 
 Recall from Equation~\ref{eq-empiric} that estimation requires an
 evaluation of several variations of the same seed question \(q\) for
@@ -1138,6 +1281,11 @@ International Conference on Learning Representations}.
 Browning, Jacob, and Yann LeCun. 2022. {``AI and the Limits of
 Language.''} \emph{Noema}.
 
+\bibitem[\citeproctext]{ref-BROWNING2023104031}
+---------. 2023. {``Language, Common Sense, and the Winograd Schema
+Challenge.''} \emph{Artificial Intelligence} 325: 104031.
+https://doi.org/\url{https://doi.org/10.1016/j.artint.2023.104031}.
+
 \bibitem[\citeproctext]{ref-bubeck2023sparks}
 Bubeck, Sébastien, Varun Chandrasekaran, Ronen Eldan, Johannes Gehrke,
 Eric Horvitz, Ece Kamar, Peter Lee, et al. 2023. {``Sparks of Artificial
@@ -1157,6 +1305,12 @@ eScholarship, University of California.
 Chen, Sihan, Richard Futrell, and Kyle Mahowald. 2023. {``An
 Information-Theoretic Approach to the Typology of Spatial
 Demonstratives.''} \emph{Cognition} 240: 105505.
+
+\bibitem[\citeproctext]{ref-clark2018think}
+Clark, Peter, Isaac Cowhey, Oren Etzioni, Tushar Khot, Ashish Sabharwal,
+Carissa Schoenick, and Oyvind Tafjord. 2018. {``Think You Have Solved
+Question Answering? Try Arc, the Ai2 Reasoning Challenge.''} \emph{arXiv
+Preprint arXiv:1803.05457}.
 
 \bibitem[\citeproctext]{ref-danielsson2022artificial}
 Danielsson, Jon, Robert Macrae, and Andreas Uthemann. 2022.
@@ -1282,6 +1436,11 @@ Version 0.9. 2, 2022-06-27.''} \emph{Open Review} 62.
 Lee, Yonghyeon. 2023. {``A Geometric Perspective on Autoencoders.''}
 \emph{arXiv Preprint arXiv:2309.08247}.
 
+\bibitem[\citeproctext]{ref-levesque2012winograd}
+Levesque, Hector, Ernest Davis, and Leora Morgenstern. 2012. {``The
+Winograd Schema Challenge.''} In \emph{Thirteenth International
+Conference on the Principles of Knowledge Representation and Reasoning}.
+
 \bibitem[\citeproctext]{ref-lewbel2019identification}
 Lewbel, Arthur. 2019. {``The Identification Zoo: Meanings of
 Identification in Econometrics.''} \emph{Journal of Economic Literature}
@@ -1379,10 +1538,20 @@ by Step? Reasoning Emerges from the Locality of Experience.''}
 Robbins, Lionel. 1932. \emph{An Essay on the Nature and Significance of
 Economic Science}. Macmillan; Co., Limited.
 
+\bibitem[\citeproctext]{ref-sap2019socialiqa}
+Sap, Maarten, Hannah Rashkin, Derek Chen, Ronan LeBras, and Yejin Choi.
+2019. {``Socialiqa: Commonsense Reasoning about Social Interactions.''}
+\emph{arXiv Preprint arXiv:1904.09728}.
+
 \bibitem[\citeproctext]{ref-schaeffer2024emergent}
 Schaeffer, Rylan, Brando Miranda, and Sanmi Koyejo. 2024. {``Are
 Emergent Abilities of Large Language Models a Mirage?''} \emph{Advances
 in Neural Information Processing Systems} 36.
+
+\bibitem[\citeproctext]{ref-schmitt2019sherliic}
+Schmitt, Martin, and Hinrich Schütze. 2019. {``SherLIiC: A Typed
+Event-Focused Lexical Inference Benchmark for Evaluating Natural
+Language Inference.''} \emph{arXiv Preprint arXiv:1906.01393}.
 
 \bibitem[\citeproctext]{ref-searle1980minds}
 Searle, John R. 1980. {``Minds, Brains, and Programs.''}
@@ -1397,6 +1566,12 @@ Communication.''} \emph{The Bell System Technical Journal} 27 (3):
 Sims, Christopher A. 2003. {``Implications of Rational Inattention.''}
 \emph{Journal of Monetary Economics} 50 (3): 665--90.
 https://doi.org/\url{https://doi.org/10.1016/S0304-3932(03)00029-1}.
+
+\bibitem[\citeproctext]{ref-srivastava2022beyond}
+Srivastava, Aarohi, Abhinav Rastogi, Abhishek Rao, Abu Awal Md Shoeb,
+Abubakar Abid, Adam Fisch, Adam R Brown, et al. 2022. {``Beyond the
+Imitation Game: Quantifying and Extrapolating the Capabilities of
+Language Models.''} \emph{arXiv Preprint arXiv:2206.04615}.
 
 \bibitem[\citeproctext]{ref-stantcheva2023run}
 Stantcheva, Stefanie. 2023. {``How to Run Surveys: A Guide to Creating
