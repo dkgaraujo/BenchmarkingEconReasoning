@@ -165,7 +165,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Measuring economic reasoning in artificial intelligence models (Preliminary and incomplete)},
+  pdftitle={Benchmarking economic reasoning in artificial intelligence models (Preliminary: estimation in progress)},
   pdfauthor={Douglas K. G. Araujo},
   colorlinks=true,
   linkcolor={blue},
@@ -174,9 +174,11 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
-\title{Measuring economic reasoning in artificial intelligence models
-(Preliminary and incomplete)\thanks{This work represents my opinion and
-not necessarily that of the BIS.}}
+\title{Benchmarking economic reasoning in artificial intelligence models
+(Preliminary: estimation in progress)\thanks{This work represents my
+opinion and not necessarily that of the BIS. Note: estimation of the
+benchmark results in progress; results will be included in the first
+complete draft.}}
 
 
   \author{Douglas K. G. Araujo}
@@ -198,7 +200,7 @@ reasoning benchmark that (a) evolves over time in a non-trainable way;
 stochastic parroting) and (c) is measured in a continuous way to avoid
 false ability emergency results. Empirical estimations are being run.
 Preliminary results indicate the most advanced models have a dismal
-performance in reasoning. JEL codes: XXXXX, XXXXX
+performance in reasoning. JEL codes: C45, C69, C88, C59
 \end{abstract}
 
 \begin{quote}
@@ -208,30 +210,113 @@ can do'' - Herbert Simon, AI pioneer, in 1965
 
 \section{Introduction}\label{introduction}
 
-Language models (LMs), in particular those classified as generative
-artificial intelligence (gen AI), are finding increasing uses in finance
-and economics. These models are usually tested for their ability to
-reason, and seem to do well: for example, OpenAI's GPT-4 boats more than
-80\% correct results in academic and professional micro- and
-macroeconomics tests (Achiam et al. (2023)). Still, even such advanced
-models can fail miserably. Perez-Cruz and Shin (2024) demonstrate how
-the same model can correctly solve a logical puzzle requiring reasoning
-about higher order knowledge, only to fail when irrelevant details are
-changed. Building on results such as this and other examples that
-clearly illustrate the limits of rationality assumptions on LMs, this
-work discusses how to systematically measure \emph{economic} reasoning,
-combining literatures on economic thought and on computer science about
-gen AI benchmarking. In practical terms, the task at hand is to come up
-with testing mechanisms that estimate the level of economic reasoning of
-an LM by means of a prompt consisting of \(n \geq 0\) examples and a
-question with multiple answers.
+Large language models (LLMs), in particular those classified as
+generative artificial intelligence (gen AI), increasingly support use
+cases in finance and economics (Korinek (2023)), including in central
+banks (Araujo et al. (2024)). These models are tested for their ability
+to reason, often boasting seemingly incredible results: for example,
+OpenAI's GPT-4 boats human-like performance across tests of reasoning
+and more than 80\% correct results in academic and professional micro-
+and macroeconomics tests (Achiam et al. (2023)). Still, even such
+advanced models can fail miserably when it comes to reasoning: for
+example, an advanced model can correctly solve a logical puzzle
+requiring reasoning about higher order knowledge, only to fail when
+irrelevant details are changed (Perez-Cruz and Shin (2024)). Building on
+results such as this, this work discusses how to systematically measure
+\emph{economic} reasoning, combining literatures on economic thought and
+on computer science about gen AI benchmarking. In practical terms, the
+task at hand is to come up with a benchmark task for economic reasoning,
+a testing mechanism to measures in a comparable way the level of
+economic reasoning of an artificial intelligence (AI) model. This task
+is of first-order importance given the break-neck speed of evolution of
+LLMs (Yang et al. (2023)) and their potential risks (Danielsson, Macrae,
+and Uthemann (2022)).
 
-At its most essential form, testing for economic reasoning is the same
-as probing if the model is able to think in terms of logical operators.
-However, they can be subjective because (a) economic thought is always
-changing and (b) they are only as good as their abilites ot explain
-limited sets of reality (those that modern academics constantly see=
-rather than any other reality).
+Such benchmark tasks are crucial for the comparison of the abilities of
+AI models over time and in the cross-section. Results of benchmark tasks
+are now a staple of the evaluation of LLMs by developers when releasing
+a model, highlighting its evolution compared to previous versions and to
+the main peers. Third-party organisations also compile leaderboards with
+running results that allow the general public to keep track of the most
+performant models.\footnote{Commonly followed leaderboards include
+  LMSYS's ChatbotArena and Huggingface's Open LLM Leaderboard.}
+Benchmark tasks are useful because that they provide a comparable metric
+on which to track the state-of-the-art for the particular abilities that
+each task measures. Usually, this metric is the percentage of correct
+answers. However, even if specific tasks have evolved over time to
+become more challenging, a key challenge is to separate correct answers
+due to probabilistic association or ``stochastic parroting'' (Bender et
+al. (2021)) from those that are the result of a reasoning process.
+
+This paper proposes a working model of reasoning that can underlie an
+empirical benchmark task: when confronted with a prompt
+\(Q\),\footnote{Usually this will be a string of text, but more recent
+  models can take multi-model content, ie a combination of text, images,
+  videos, sounds, etc.} an AI is said to \emph{reason} correctly if it
+responds with an answer \(\alpha\) that simultaneously (a) interprets
+the prompt, identifying the relevant information for the task and
+filtering away everything else by ignoring or abstract away irrelevant
+details, (b) associates \(Q\) with any relevant existing commonsense
+knowledge \(\theta\) to answer the question, and (c) applies logical
+relations such as deduction and induction to \(Q\) and \(\theta\) to
+arrive at the correct answer. Formally, each answer is defined as a
+non-parametric function of the following steps: information filtering
+\(\phi = f(Q)\), knowledge curation \(\kappa = k(\phi, \theta)\) and
+logic attribution \(\lambda = l(\kappa, Q)\),
+\(\alpha = A(\lambda, Q)\), where \(A\) is the function that returns the
+correct answer from the prompt \(Q\). Each of those three steps above
+are sequential, and depend on the successful completion of the previous
+step. The goal is for this model to be simple and intuitive. Throughout
+the paper, I assume AIs respond to their best ability, meaning that they
+would reason instead of probabilistically choosing an answer
+\(\tilde{a} = \arg \max_{a} L(a | Q)\).
+
+The empirical version of this prompt-answering model is
+\(\hat{\alpha}(q) = \hat{\phi} \, \hat{\kappa}|(\phi=\hat{\phi}) \, \hat{\lambda}|(\phi=\hat{\phi}, \kappa=\hat{\kappa})\),
+where \(\phi = \mathbf{1} \prod_{i}^{M_f} f(q + \epsilon_i^f)\) and
+similarly for \(\kappa\) with \(k\) and \(\lambda\) with \(l\), \(M_f\),
+\(M_k\) and \(M_l\) are the number of variations \(\epsilon\) introduced
+in the seed question \(q\) that seek to identify the model's
+interpretation, knowledge association and logic attribution
+respectively; the hat denomination points to empirically estimated
+versions. This model is estimated by assessing answers from the same AI
+model to multiple versions of seed questions \(q \in \mathbf{Q}\), and
+\(\hat{\alpha}\) is only considered to be correct when all of the
+relevant variations for the same question are answered correctly - in
+other words, the AI model has evaded ``banana skins'' that try to trick
+it into revealing lack of information filtering, spurious knowledge
+association or faulty logics. The key idea is to leverage insights from
+the social economics literature and create identifying variation in the
+questions \(q\) presented to AI models, adapted from how this is done
+with human subjects (Stantcheva (2023)). The benchmark result is then
+\(R = M_{\mathbf{Q}}^{-1}\sum_{q \in \mathbf{Q}} \hat{\alpha}(q)\),
+where \(M_{\mathbf{Q}}\) is the number of different seed questions. By a
+similar token, each of the three steps can be measured separately,
+building on their empirical identifications
+\(R_{j \in (f, k, l)} = M_{j}^{-1}\sum_{q \in \mathbf{Q}} \hat{j}(q)\).
+Note that identification of \(\kappa\) and \(\lambda\) need the
+sequential conditionality on the previous steps \(\phi\) and
+\(\phi, \kappa\) respectively in order to be identified.
+
+This model can be used as a general abstraction for an AI reasoning
+ability, but two practical adaptations in \(Q\) can make it a model for
+economic reasoning more specifically. First, the scope of topics that
+are included in \(Q\) should ideally focus on issues of significance to
+economics. At its most essential form, testing for economic reasoning is
+the same as probing if the model is able to think in terms of logical
+operators on information that is of relevance to economics. However,
+this is subjective because economic thought constantly evolves. At the
+same time, including only ``classical'' economics carries a high risk of
+using material that is containd in the training set of AI models.
+Second, even for each given topic, the types of questions considered
+relevant in economics are specific. Both of these issues are dealt with
+in practice by using recent published academic work as source material
+to construct seed questions.\footnote{Similar adaptations could be
+  pursued for other fields.} These sources contain content whose topic
+and research questions are by definition of interest to the economics
+field, and moreover have the advantage of being novel by design,
+creating a natural check for the ability of AI models to generalise
+reasoning.
 
 While evidence amounts that large language models (LLMs) cannot perform
 advanced reasoning, at least not when fine-tuned or with access to
@@ -313,9 +398,15 @@ the benchmark counts with a mathematical adjustment that takes into
 account performance across perturbations, penalising results that vary
 with \ldots.
 
-This benchmark evaluation addresses a poignant issue for the economics
-profession: the lack of publicly available data about how these
-benchmarks are created and any, and toasted.
+This benchmark evaluation also addresses a poignant issue for the
+economics profession: the lack of publicly available data about how
+these benchmarks are created and any, and tested. For example, Achiam et
+al. (2023) are not clear about the academic and profession tests on
+micro- and macroeconomics that are used amongst various other tests to
+measure GPT-4's performance in those fields. Conversely, various other
+benchmark tasks do have a publicly available methodology and even
+evaluation interface, which greatly facilitates the engagement with
+model developers, general users and third-party model evaluators.
 
 A major inspiration in the design of the questions and how they can
 generate identifying variations is the social economics literature. A
@@ -329,27 +420,27 @@ this literature carry over naturally to the machine space.\footnote{Actually
 
 \subsection{Literature}\label{literature}
 
-Four streams of literature.
+This work builds on, and seeks to expand, three general literature
+streams. More technical aspects of this work are based on specific
+literatures that are discussed within each section.
 
-Benchmarking\ldots{} A substantial body of work creates and discusses
-benchmarking models in general. A very useful reference is Storks, Gao,
-and Chai (2020). Literature on benchmarking economic reasoning appears
-to be new, although other works have touched upon the topic from
-different angles.
+The first body of works is on benchmarking tasks for AI models. A
+substantial body of work creates and discusses model benchmarking in
+general; a voluminous and well-organised compilation of references is
+Storks, Gao, and Chai (2020).
 
-Social economics\ldots{}
-
-AI reasoning\ldots{} As other parts of AI development, it is informed
-and inspired by neuroscience as well (Hassabis et al. (2017)). An early
-and influential contribution is the Chinese room experiment by Searle
-(1980) and its resulting arguments that AI could not reason by itself.
-The influential works of Bubeck et al. (2023) and Wei, Tay, et al.
-(2022) hint at acquisition of advanced capabilities by large-scale
-language models such as GPT-4, although Bubeck et al. (2023) also point
-to many instances where reasoning breaks. Schaeffer, Miranda, and Koyejo
-(2024) present evidence that these ``emerging abilities'' that come with
-scale are actually a spurious by-product of the choice of metrics to
-emasure these abilities. Mitchell and Krakauer (2023) summarises the
+Secondly, this paper draws from insighs in the more general AI reasoning
+literature. As other parts of AI development, it is informed and
+inspired by neuroscience as well (Hassabis et al. (2017)). An early and
+influential contribution is the Chinese room experiment by Searle (1980)
+and its resulting arguments that AI could not reason by itself. The
+influential works of Bubeck et al. (2023) and Wei, Tay, et al. (2022)
+hint at acquisition of advanced capabilities by large-scale language
+models such as GPT-4, although Bubeck et al. (2023) also point to many
+instances where reasoning breaks. Schaeffer, Miranda, and Koyejo (2024)
+present evidence that these ``emerging abilities'' that come with scale
+are actually a spurious by-product of the choice of metrics to emasure
+these abilities. Mitchell and Krakauer (2023) summarises the
 disagreement in the AI academic and practitioner fields as to whether AI
 models have some form of understanding, and by implication, potentially
 also reasoning. Wei, Wang, et al. (2022) claim that writing the prompt
@@ -384,68 +475,6 @@ Similarly, Korinek (2023) report (in his Chat 23) that results from a
 technical prompt in economics are reasonable but also brittle, with
 answers changing when prompt wording changes or even simply if the tasks
 are re-ordered.
-
-\section{Lessons from human surveys}\label{lessons-from-human-surveys}
-
-I use a considerable amount of specific advice on human surveys from
-Stantcheva (2023) to generate identifying variation in the questions.
-Specifically:
-
-\begin{itemize}
-\tightlist
-\item
-  coeteris paribus questions
-\item
-  pre-testing
-\item
-  including possibilities for blank, indifferent or even recognise that
-  AI does not know
-\item
-  avoiding jargon
-\item
-  questions that check for ``attention'' and ``effort'' on the part of
-  the respondent
-\item
-  also including open ended questions (as in Ferrario and Stantcheva
-  (2022))
-
-  \begin{itemize}
-  \tightlist
-  \item
-    including follow-up questions (``are thre any other reasons'')
-  \item
-    going beyond Ferrario and Stantcheva (2022), in this paper I use
-    open ended questions that are similar in nature to closed end
-    questions and deploy large language models to interpret them.
-  \end{itemize}
-\item
-  question ordering
-
-  \begin{itemize}
-  \tightlist
-  \item
-    in particular, consideration is given to whether each question
-    should be presented to a separate instance of the LM, or the full
-    questionnaire could be shared in the same ``chat''.
-  \end{itemize}
-\item
-  take due consideration of how to address the different types of bias
-  associated with surveys (adapted for the machine context, naturally)
-\end{itemize}
-
-\section{Desirable characteristics of a
-benchmark}\label{desirable-characteristics-of-a-benchmark}
-
-\subsection{Evolve over time}\label{evolve-over-time}
-
-Economic reasoning evolves over time. For example, the Lucas critique
-(Lucas (1976)) was influential in shifting macroeconomic modelling,
-while the credibility revolution described in Angrist and Pischke (2008)
-was similarly influential in microeconomic work. Debreu (1984) describes
-the evolution of economic theory up until that point.
-
-A historical perspective on the thought about causality going back to
-the early 18th century is found in J. Heckman and Pinto (2015).
 
 \section{A model of economic
 reasoning}\label{a-model-of-economic-reasoning}
@@ -597,7 +626,7 @@ equation.
 \section{A structural model of
 reasoning}\label{a-structural-model-of-reasoning}
 
-\subsection{Perception modulation}\label{perception-modulation}
+\subsection{Information filtering}\label{information-filtering}
 
 Perception should be robust to irrelevant input.
 
@@ -631,12 +660,15 @@ Prystawski, Li, and Goodman (2024)'s finding that reasoning abilities in
 LLMs require ``locality'' in concepts until a final link between a
 prompt and its final answer (if far away) can be achieved. In a way,
 this is also similar to the small world network model (J. Kleinberg
-(2000)).\footnote{In humans, a related perspective is the information
-  bottleneck model (Zaslavsky et al. (2018)) where ideas are compressed
-  into words by a trade-off between lexicon complexity vs accuracy
-  (Chen, Futrell, and Mahowald (2023) also documents evidence that
-  consistency is another important factor, itself possibly a sign of the
-  manifold hypothesis.)}.
+(2000)). In humans, the literatures on rational inattention and
+neuroeconomics (Sims (2003), Caplin, Dean, and Leahy (2022), Dean and
+Neligh (2023), Hébert and Woodford (2021)) models human information
+processing as subject to a cost that grows with the informational
+content, which is a closer representation of how people actually process
+information. In linguistics, the information bottleneck literature
+discusses howideas are compressed into words by a trade-off between
+lexicon complexity vs accuracy (Zaslavsky et al. (2018)), and more
+recently also consistency (Chen, Futrell, and Mahowald (2023)).
 
 \subsection{Knowledge association}\label{knowledge-association}
 
@@ -646,13 +678,14 @@ prompt itself or from commonsense knowledge.
 
 Concept of knowledge association is related to cognition.
 
-Knowledge can be linguistic, common or commonsense. Mahowald et al.
-(2023) uses insights including from neuroscience to distinguish the
-first type of knowledge with the latter two (grouped as ``functional''
-knowledge), and argue that LLMs have essentially mastered the former
-while still having a spotty record on the latter. For example, LLMs
-learn grammar, semantic, hierarchical structures, abstractions and
-constructions that provide a realistic linguistic knowledge.
+Knowledge can be linguistic, common or commonsense (Davis and Marcus
+(2015)). Mahowald et al. (2023) uses insights including from
+neuroscience to distinguish the first type of knowledge with the latter
+two (grouped as ``functional'' knowledge), and argue that LLMs have
+essentially mastered the former while still having a spotty record on
+the latter. For example, LLMs learn grammar, semantic, hierarchical
+structures, abstractions and constructions that provide a realistic
+linguistic knowledge.
 
 Bransford and Johnson (1972) show in experiments that contextual
 knowledge (in this case akin to commonsense) are essential for proper
@@ -789,9 +822,9 @@ data can inform the estimation of models.
 
 The model above allows us to estimate reasoning while also breaking down
 some of its components to better understand them. For example, we can
-estimate any errors in reasoning into an issue with
-\textbf{interpretation}, \textbf{knowledge} and \textbf{logical
-thinking}. The empirical estimation follows.
+estimate any errors in reasoning into an issue with \textbf{information
+filtering}, \textbf{knowledge association} and \textbf{logic
+attribution}. The empirical estimation follows.
 
 Gilboa et al. (2022) distinguish between three types of inquity in
 economic theory: economics itself (analysis of economic phenomena),
@@ -877,6 +910,14 @@ with just changing the same words into another generic word. Comparing
 responses between both should indicate the level of knowledge used by
 the model (should it? need to think more)
 
+One way to test knowledge is to conduct the flip-flop experiment: simply
+asking LLMs to confirm their answers often make them switch answers,
+even if their original response was correct (Laban et al. (2023), Xie et
+al. (2023)). The key idea of these tests is to see if the response
+changes in the absence of any other changes to the knowledge base
+(neither on the original model weights obviously but also including the
+information content of the prompt).
+
 \subsection{Estimation formula}\label{estimation-formula}
 
 The main formula is akin to the linear probability model since \(a_{q}\)
@@ -890,32 +931,132 @@ Another idea to explore is whether these variations can actually
 instrument interpretation and knowledge. This would allow the formula to
 estimate the reasoning bit.
 
-\section{Operational characteristics}\label{operational-characteristics}
+\section{Practical considerations}\label{practical-considerations}
 
-\begin{itemize}
-\tightlist
-\item
-  avoid becoming part of training data
-\end{itemize}
+\subsection{Avoiding spillover into training
+data}\label{avoiding-spillover-into-training-data}
 
-Some drawbacks of using academic papers include:
+The strategy to use newly published academic papers as sources might
+broadly avoid that most of the content has been used in AI model
+training. However, most published papers in economics are previously
+published as working papers, which means they are potentially in the
+public domain at training time so cannot be guaranteed to be completely
+novel. While this is mitigated by the arguably low dissemination of
+secondary material about working papers (for example, one could
+reasonably conjecture that few recent working papers immediately become
+the topic of teaching notes or are referred to in more detail by other
+papers), a more robust practical strategy is needed, especially as the
+training dataset of many of the most advanced models is not publicly
+known.
 
-\begin{itemize}
-\tightlist
-\item
-  bias to report only positive findings (and to do so in a way that is
-  generous towards said findings)
-\item
-  Also, academic papers suffer from false negatives: many contributions
-  that are now considered classics have been previously rejected (Gans
-  and Shepherd (1994)).
-\end{itemize}
+One way of dealing with this is by introducing in a variation of the
+questions a random string that is almost guaranteed to be unique and
+that is not found in common text datasets used to train LLMs. This is of
+course not perfect, because it cannot guarantee that the original paper
+is not part of training data, but can at least ensure that if the seed
+questions themselves are for some reason used to train models, this
+could be identified by model developers (and if the training data is
+available, also by third-party evaluators).
+
+\subsection{Lessons from human
+surveys}\label{lessons-from-human-surveys}
+
+I use a considerable amount of specific advice on human surveys from
+Stantcheva (2023) to generate identifying variation in the questions.
+Specifically, all the questions avoid jargon to the best extent
+possible, and only include questions that are either of the coeteris
+paribus type, or that include as options assessments on the statements
+of the form ``correct'', ``incorrect'', ``equal'' or ``I don't
+know''.\footnote{Future versions of this benchmark could also include
+  open ended questions (as in Ferrario and Stantcheva (2022)), and even
+  follow-up questions (``are thre any other reasons''). These open-ended
+  questions that are similar in nature to closed-end questions could be
+  assessed by a fine-tuned LLM.} Particular care is taken with respect
+to introducing variations in the seed questions that can help measure
+each of the three reasoning components of information filtering,
+knowledge association and logic attribution.
+
+Consideration is given to whether each question should be presented to a
+separate instance of the LM, or the full questionnaire could be shared
+in the same ``chat'', which would be akin to the ``few-shot'' prompting.
+Another practical advice as part of the estimation is to prototype the
+questions (I used GPT-4 for the prototyping).
+
+\subsection{Desirable characteristics of a
+benchmark}\label{desirable-characteristics-of-a-benchmark}
+
+A benchmark task for economic reasoning should ideally have the
+following characteristics in order to be useful and maintain relevance
+even in a scenario where model developers are able to acquire a
+significant body of economically relevant texts (eg, new papers).
+
+\textbf{Inform performance on different components of reasoning}: An
+ideal benchmark can help practitioners intuitively grasp the performance
+of the models in each major ``task'' that is performed in the process of
+reasoning. This would help developers and users better understand what
+the models are good or bad at, and judge their adequateness accordingly.
+It can also support a more granular understanding of the acquisition of
+reasoning capabilities throughout the training process and scaling of
+language models (Biderman et al. (2023)).
+
+\textbf{Evolve over time}: Economic reasoning evolves over time. For
+example, the Lucas critique (Lucas (1976)) was influential in shifting
+macroeconomic modelling, while the credibility revolution described in
+Angrist and Pischke (2008) was similarly influential in microeconomic
+work. A historical perspective on the thought about causality going back
+to the early 18th century is found in J. Heckman and Pinto (2015), and
+Debreu (1984) describes the evolution of economic theory up until that
+point. Lewbel (2019) offers a historical perspective on the issue of
+identification. For this reason, it is important to consider new works
+as they are incorporated in the live economic debate. This can be most
+directly done by drawing from academic papers in general interest
+economic journals, which benefit from wide impact in the profession.
+However, there are two main drawbacks of using academic papers to proxy
+for the development of economic reasoning over time. The first is the
+widely discussed publication bias (Andrews and Kasy (2019)), but a
+perhaps equally important issue is that of unobserved false negatives:
+if many contributions that are now considered classics have been
+previously rejected (Gans and Shepherd (1994)), there are probably many
+others who will not be available for the incorporation as a benchmark
+task.
+
+\textbf{Cover different levels of economic reasoning}: An ideal economic
+reasoning benchmark tests whether the model is able to recognise
+increasingly sophisticated levels of economic reasoning. When faced with
+\(Q\) that contains a statemet of the economic problem, and a summary of
+the methodology and main findings, an AI model must recognise the type
+of analysis that was conducted. Drawing from the definitions more
+recently stated in J. J. Heckman and Pinto (2023), those are, in order
+of analytical prowess, (a) the impact of a given intervention in a
+specific environment; (b) understanding the mechanisms by which the
+intervention might work; (c) forecasting the effects of the same
+intervention in other environments or states of the world; and (d)
+forecasting the effects of never-before-implemented interventions in
+various environments.
+
+\textbf{Receive inputs from the public}: In order to truly reflect the
+breadth and diversity in economic thought, an ideal benchmark should be
+open to receiving suggested questions from the public. For example,
+economists publishing a new paper could suggest a source question based
+on their work. A practical way to achieve this is to create clear
+instructions and a standardised form that would be filled by that
+external user presenting the suggestion, coupled with a script that
+takes in the source quesiton(s) and introduces the necessary variations
+in information, knowledge and logic to achieve identification.
 
 The benchmark should also result in a metric that is not subject to the
 false ``emerging abilities'' results (Schaeffer, Miranda, and Koyejo
 (2024)), for example the Brier score (Brier (1950)).
 
-\section{Conclusions}\label{conclusions}
+\section[Preliminary considerations]{\texorpdfstring{Preliminary
+considerations\footnote{This section is the basis for the conclusions in
+  a future version after the empirical estimation is completed.}}{Preliminary considerations}}\label{preliminary-considerationsconcl}
+
+The model in this paper resembles the more sophisticated idea by LeCun
+(2022) that AIs require a combination of ``mental'' modules that can
+separably executve perception (eg, take in a prompt that might be
+text-only or text-and-image), calculate the cost of processing, and
+imagine action sequences.
 
 As economic agents and policymakers harness generative artificial
 intelligence (AI) to reap considerable efficiencies, and thus their
@@ -933,7 +1074,11 @@ Models that reason better can rise up to the challenge of learning
 actual metrics of interest instead of real-world measurements, because
 the latter have added noise from human cognitive and heuristics
 limitations, which are then amplified by multiple types of biases in
-data (CITE paper on multiple biases).
+data (CITE paper on multiple biases). And with the increasing linguistic
+prowess of language models, their use in the economic research process
+(Korinek (2023), Ludwig and Mullainathan (2024)) is likely to increase,
+putting a premium on the ability to measure how well these models can
+reason.
 
 Let me conclude with Ken Arrow's impossibility theorem (CITE), or rather
 the story of how he achieved this incredibly influential result. Arrow
@@ -978,7 +1123,7 @@ of bias like shame, etc).
 \begin{CSLReferences}{1}{0}
 \bibitem[\citeproctext]{ref-achiam2023gpt}
 Achiam, Josh, Steven Adler, Sandhini Agarwal, Lama Ahmad, Ilge Akkaya,
-Florencia Leoni Aleman, Diogo Almeida, et al. 2023. {``Gpt-4 Technical
+Florencia Leoni Aleman, Diogo Almeida, et al. 2023. {``GPT-4 Technical
 Report.''} \emph{arXiv Preprint arXiv:2303.08774}.
 
 \bibitem[\citeproctext]{ref-alzahrani2024benchmarks}
@@ -986,6 +1131,11 @@ Alzahrani, Norah, Hisham Abdullah Alyahya, Yazeed Alnumay, Sultan
 Alrashed, Shaykhah Alsubaie, Yusef Almushaykeh, Faisal Mirza, et al.
 2024. {``When Benchmarks Are Targets: Revealing the Sensitivity of Large
 Language Model Leaderboards.''} \emph{arXiv Preprint arXiv:2402.01781}.
+
+\bibitem[\citeproctext]{ref-andrews2019identification}
+Andrews, Isaiah, and Maximilian Kasy. 2019. {``Identification of and
+Correction for Publication Bias.''} \emph{American Economic Review} 109
+(8): 2766--94.
 
 \bibitem[\citeproctext]{ref-andrews2016geometric}
 Andrews, Isaiah, and Anna Mikusheva. 2016. {``A Geometric Approach to
@@ -996,10 +1146,21 @@ Angrist, Joshua D., and Jörn-Steffen Pischke. 2008. \emph{Mostly
 Harmless Econometrics: An Empiricist's Companion}. Princeton University
 Press.
 
+\bibitem[\citeproctext]{ref-araujo2024artificial}
+Araujo, Douglas Kiarelly Godoy de, Sebastian Doerr, Leonardo Gambacorta,
+and Bruno Tissot. 2024. {``Artificial Intelligence in Central
+Banking.''}
+
 \bibitem[\citeproctext]{ref-barlow1961possible}
 Barlow, Horace B et al. 1961. {``Possible Principles Underlying the
 Transformation of Sensory Messages.''} \emph{Sensory Communication} 1
 (01): 217--33.
+
+\bibitem[\citeproctext]{ref-bender2021dangers}
+Bender, Emily M, Timnit Gebru, Angelina McMillan-Major, and Shmargaret
+Shmitchell. 2021. {``On the Dangers of Stochastic Parrots: Can Language
+Models Be Too Big?🦜.''} In \emph{Proceedings of the 2021 ACM Conference
+on Fairness, Accountability, and Transparency}, 610--23.
 
 \bibitem[\citeproctext]{ref-bengio2013representation}
 Bengio, Yoshua, Aaron Courville, and Pascal Vincent. 2013.
@@ -1017,6 +1178,12 @@ https://doi.org/\url{https://doi.org/10.1016/j.jeconom.2011.06.003}.
 Bergemann, Dirk, Benjamin Brooks, and Stephen Morris. 2022.
 {``Counterfactuals with Latent Information.''} \emph{American Economic
 Review} 112 (1): 343--68.
+
+\bibitem[\citeproctext]{ref-biderman2023pythia}
+Biderman, Stella, Hailey Schoelkopf, Quentin Anthony, Herbie Bradley,
+Kyle O'Brien, Eric Hallahan, Mohammad Aflah Khan, et al. 2023.
+{``Pythia: A Suite for Analyzing Large Language Models Across Training
+and Scaling.''} \url{https://arxiv.org/abs/2304.01373}.
 
 \bibitem[\citeproctext]{ref-BRANSFORD1972717}
 Bransford, John D., and Marcia K. Johnson. 1972. {``Contextual
@@ -1045,6 +1212,11 @@ Eric Horvitz, Ece Kamar, Peter Lee, et al. 2023. {``Sparks of Artificial
 General Intelligence: Early Experiments with GPT-4.''}
 \url{https://arxiv.org/abs/2303.12712}.
 
+\bibitem[\citeproctext]{ref-caplin2022rationally}
+Caplin, Andrew, Mark Dean, and John Leahy. 2022. {``Rationally
+Inattentive Behavior: Characterizing and Generalizing Shannon
+Entropy.''} \emph{Journal of Political Economy} 130 (6): 1676--1715.
+
 \bibitem[\citeproctext]{ref-cayton2008algorithms}
 Cayton, Lawrence. 2008. {``Algorithms for Manifold Learning.''}
 eScholarship, University of California.
@@ -1053,6 +1225,21 @@ eScholarship, University of California.
 Chen, Sihan, Richard Futrell, and Kyle Mahowald. 2023. {``An
 Information-Theoretic Approach to the Typology of Spatial
 Demonstratives.''} \emph{Cognition} 240: 105505.
+
+\bibitem[\citeproctext]{ref-danielsson2022artificial}
+Danielsson, Jon, Robert Macrae, and Andreas Uthemann. 2022.
+{``Artificial Intelligence and Systemic Risk.''} \emph{Journal of
+Banking \& Finance} 140: 106290.
+
+\bibitem[\citeproctext]{ref-davis2015commonsense}
+Davis, Ernest, and Gary Marcus. 2015. {``Commonsense Reasoning and
+Commonsense Knowledge in Artificial Intelligence.''}
+\emph{Communications of the ACM} 58 (9): 92--103.
+
+\bibitem[\citeproctext]{ref-dean2023experimental}
+Dean, Mark, and Nathaniel Neligh. 2023. {``Experimental Tests of
+Rational Inattention.''} \emph{Journal of Political Economy} 131 (12):
+3415--61.
 
 \bibitem[\citeproctext]{ref-debreu1984economic}
 Debreu, Gerard. 1984. {``Economic Theory in the Mathematical Mode.''}
@@ -1109,6 +1296,11 @@ Botvinick. 2017. {``Neuroscience-Inspired Artificial Intelligence.''}
 \emph{Neuron} 95 (2): 245--58.
 https://doi.org/\url{https://doi.org/10.1016/j.neuron.2017.06.011}.
 
+\bibitem[\citeproctext]{ref-hebert2021neighborhood}
+Hébert, Benjamin, and Michael Woodford. 2021. {``Neighborhood-Based
+Information Costs.''} \emph{American Economic Review} 111 (10):
+3225--55. \url{https://doi.org/10.1257/aer.20200154}.
+
 \bibitem[\citeproctext]{ref-heckman2023econometric}
 Heckman, James J, and Rodrigo Pinto. 2023. {``Econometric Causality: The
 Central Role of Thought Experiments.''} National Bureau of Economic
@@ -1145,10 +1337,19 @@ and Implications for Economists.''} \emph{Journal of Economic
 Literature} 61 (4): 1281--1317.
 \url{https://doi.org/10.1257/jel.20231736}.
 
+\bibitem[\citeproctext]{ref-laban2023you}
+Laban, Philippe, Lidiya Murakhovs' ka, Caiming Xiong, and Chien-Sheng
+Wu. 2023. {``Are You Sure? Challenging Llms Leads to Performance Drops
+in the Flipflop Experiment.''} \emph{arXiv Preprint arXiv:2311.08596}.
+
 \bibitem[\citeproctext]{ref-larochelle2010learning}
 Larochelle, Hugo, and Geoffrey E Hinton. 2010. {``Learning to Combine
 Foveal Glimpses with a Third-Order Boltzmann Machine.''} \emph{Advances
 in Neural Information Processing Systems} 23.
+
+\bibitem[\citeproctext]{ref-lecun2022path}
+LeCun, Yann. 2022. {``A Path Towards Autonomous Machine Intelligence
+Version 0.9. 2, 2022-06-27.''} \emph{Open Review} 62.
 
 \bibitem[\citeproctext]{ref-lee2023geometric}
 Lee, Yonghyeon. 2023. {``A Geometric Perspective on Autoencoders.''}
@@ -1159,6 +1360,11 @@ Levina, Elizaveta, and Peter Bickel. 2004. {``Maximum Likelihood
 Estimation of Intrinsic Dimension.''} \emph{Advances in Neural
 Information Processing Systems} 17.
 
+\bibitem[\citeproctext]{ref-lewbel2019identification}
+Lewbel, Arthur. 2019. {``The Identification Zoo: Meanings of
+Identification in Econometrics.''} \emph{Journal of Economic Literature}
+57 (4): 835--903.
+
 \bibitem[\citeproctext]{ref-loh2014efficient}
 Loh, Lay Kuan, and Mihovil Bartulovic. 2014. {``Efficient Coding
 Hypothesis and an Introduction to Information Theory.''} \emph{Mimeo}.
@@ -1166,6 +1372,11 @@ Hypothesis and an Introduction to Information Theory.''} \emph{Mimeo}.
 \bibitem[\citeproctext]{ref-lucas1976econometric}
 Lucas, Robert E. 1976. {``Econometric Policy Evaluation: A Critique.''}
 \emph{Journal of Monetary Economics} 1 (2): 19--46.
+
+\bibitem[\citeproctext]{ref-ludwig2024machine}
+Ludwig, Jens, and Sendhil Mullainathan. 2024. {``{Machine Learning as a
+Tool for Hypothesis Generation*}.''} \emph{The Quarterly Journal of
+Economics}, January, qjad055. \url{https://doi.org/10.1093/qje/qjad055}.
 
 \bibitem[\citeproctext]{ref-mahowald2023dissociating}
 Mahowald, Kyle, Anna A. Ivanova, Idan A. Blank, Nancy Kanwisher, Joshua
@@ -1261,6 +1472,11 @@ Shleifer, Andrei. 2012. {``Psychologists at the Gate: A Review of Daniel
 Kahneman's Thinking, Fast and Slow.''} \emph{Journal of Economic
 Literature} 50 (4): 1080--91.
 
+\bibitem[\citeproctext]{ref-SIMS2003665}
+Sims, Christopher A. 2003. {``Implications of Rational Inattention.''}
+\emph{Journal of Monetary Economics} 50 (3): 665--90.
+https://doi.org/\url{https://doi.org/10.1016/S0304-3932(03)00029-1}.
+
 \bibitem[\citeproctext]{ref-stantcheva2023run}
 Stantcheva, Stefanie. 2023. {``How to Run Surveys: A Guide to Creating
 Your Own Identifying Variation and Revealing the Invisible.''}
@@ -1291,6 +1507,17 @@ Wei, Jason, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed
 Chi, Quoc V Le, Denny Zhou, et al. 2022. {``Chain-of-Thought Prompting
 Elicits Reasoning in Large Language Models.''} \emph{Advances in Neural
 Information Processing Systems} 35: 24824--37.
+
+\bibitem[\citeproctext]{ref-xie2023ask}
+Xie, Qiming, Zengzhi Wang, Yi Feng, and Rui Xia. 2023. {``Ask Again,
+Then Fail: Large Language Models' Vacillations in Judgement.''}
+\emph{arXiv Preprint arXiv:2310.02174}.
+
+\bibitem[\citeproctext]{ref-yang2023harnessing}
+Yang, Jingfeng, Hongye Jin, Ruixiang Tang, Xiaotian Han, Qizhang Feng,
+Haoming Jiang, Bing Yin, and Xia Hu. 2023. {``Harnessing the Power of
+LLMs in Practice: A Survey on Chatgpt and Beyond.''} \emph{arXiv
+Preprint arXiv:2304.13712}.
 
 \bibitem[\citeproctext]{ref-zaslavsky2018efficient}
 Zaslavsky, Noga, Charles Kemp, Terry Regier, and Naftali Tishby. 2018.
