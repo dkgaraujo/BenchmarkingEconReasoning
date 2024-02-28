@@ -109,6 +109,8 @@
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
+\usepackage{algpseudocode}
+\usepackage{algorithm}
 \usepackage[noblocks]
 {authblk}
 \renewcommand*{\Authsep}{, }
@@ -150,6 +152,17 @@
 \@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
 \floatname{codelisting}{Listing}
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\usepackage{amsthm}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{remark}
+\AtBeginDocument{\renewcommand*{\proofname}{Proof}}
+\newtheorem*{remark}{Remark}
+\newtheorem*{solution}{Solution}
+\newtheorem{refremark}{Remark}[section]
+\newtheorem{refsolution}{Solution}[section]
 \makeatother
 \makeatletter
 \makeatother
@@ -594,7 +607,8 @@ constructed.
   No economics-specific benchmark that I know of
 \end{itemize}
 
-\subsection{General comment}\label{general-comment}
+\section{Limitations of existing
+benchmarks}\label{limitations-of-existing-benchmarks}
 
 The result from existing benchmarks is largely, if not completely,
 directly related to the number of questions correctly answered. However,
@@ -607,6 +621,10 @@ necessary explicit information, the language model is a function
 \(\mathbf{M} : X \to y\). In order to show that it is done by reasoning,
 we need tests (and more specifically, measurements) that convey some
 information about the inner workings of this function.
+
+As identified by Srivastava et al. (2022), another limitation is that
+many benchmarks are not created from questions that are first created by
+experts. CONTINUE\ldots{}
 
 \section{A model of reasoning}\label{a-model-of-reasoning}
 
@@ -676,7 +694,7 @@ Neligh (2023), Hébert and Woodford (2021)) models human information
 processing as subject to a cost that grows with the informational
 content, which is a closer representation of how people actually process
 information. In linguistics, the information bottleneck literature
-discusses howideas are compressed into words by a trade-off between
+discusses how ideas are compressed into words by a trade-off between
 lexicon complexity vs accuracy (Zaslavsky et al. (2018)), and more
 recently also consistency (Chen, Futrell, and Mahowald (2023)).
 
@@ -745,13 +763,24 @@ association with the terms introduced to describe the pros and cons.
 Once a prompt has been correctly parsed to focus only on relevant
 information and the necessary knowledge has been associated with it, an
 AI model can assign specific logic relationships between different
-components to achieve inducive, deducive, analogy, abstraction,
-abductive, etc logic steps to different statements (Walton (2014),
-Johnson-Laird, Khemlani, and Goodwin (2015), Davis and Marcus (2015),
-Dziri et al. (2024)). Naturally, an essential condition for appropriate
-use of logical relationships is that the inputs \(\phi\) and \(\kappa\)
-are correct; otherwise, even the purest application of logic would
-either lead to a failure or to a correct answer by chance.
+components of a prompt and the existing knowledge. Commonly studied
+logic relationships are induction, deduction, analogy, abstraction,
+abduction(Walton (2014), Johnson-Laird, Khemlani, and Goodwin (2015),
+Davis and Marcus (2015), Dziri et al. (2024)), among others. Naturally,
+an essential condition for appropriate use of logical relationships is
+that the inputs \(\phi\) and \(\kappa\) are correct; otherwise, even the
+purest application of logic would either lead to a failure or to a
+correct answer by chance.
+
+\begin{definition}[Logic
+relationship]\protect\hypertarget{def-logic}{}\label{def-logic}
+
+A logic relationship is a \ldots{}
+
+\end{definition}
+
+Definition~\ref{def-logic} introduces the idea of logic relationships.
+One example\ldots{}
 
 Similar to many other social disciplines, economics requires the
 analytical judgment referred to by Robbins (1932) in the analyses of
@@ -841,6 +870,17 @@ away since the estimation is done for each AI. Finally, \(\hat{\phi}\)
 and \(\hat{\kappa}\) are used to condition the estimates of \(\lambda\)
 based on \(q + \epsilon_l\).
 
+\begin{theorem}[Identification of reasoning
+abilities]\protect\hypertarget{thm-identification}{}\label{thm-identification}
+
+If\ldots{}
+
+\end{theorem}
+
+\begin{proof}
+By induction.
+\end{proof}
+
 \section{Reasoning about economics}\label{reasoning-about-economics}
 
 The model above allows us to estimate reasoning while also breaking down
@@ -928,6 +968,35 @@ steps. This results in a collection of
 \(q\). The iterative filtering then proceeds as described above, until
 the performance of adversarial filters have degraded to an arbitrarily
 low point.
+
+\$
+
+\begin{algorithm}
+  \caption{Algorithm for finding server indices using OFG}
+
+  \begin{algorithmic}
+    \Statex \Comment { \%comment: servers[] contains the index of servers whose         data rate are sorted in descending order\%}
+    \State servers[]= index(of all servers) 
+    \State serverIndex[]=servers[0..K]
+    \State linearlyIndependentServerIndex[]=0
+    \State $[Z] \leftarrow 0$
+    \For  {$i=0$ to $serverIndex.length$} 
+    \Statex\Comment{ \%comment: find the equation corresponding the serverIndex        from the mapping at the File Server\%} 
+    \State        $eqn= equation(serverIndex[i])$ 
+    \Statex\Comment{ \%comment: try insert equation into Z using OFG\%} 
+
+    \EndFor end for 
+    \While{ ( linearlyIndependentServerIndex.length!=K ) } 
+    \Statex\Comment{\%comment: remove all the server index which were not inserted in Z\%}  
+    \State temp[]=serverIndex[]-linearlyIndependentServerIndex 
+    \If{  (linearlyIndependentServerIndex.length=K) }
+    \State break
+    \EndIf  
+    \EndWhile  
+  \end{algorithmic}
+\end{algorithm}
+
+\$
 
 \subsection{Variations related to information
 filtering}\label{variations-related-to-information-filtering}
@@ -1125,13 +1194,16 @@ various environments.
 
 \textbf{Receive inputs from the public}: In order to truly reflect the
 breadth and diversity in economic thought, an ideal benchmark should be
-open to receiving suggested questions from the public. For example,
-economists publishing a new paper could suggest a source question based
-on their work. A practical way to achieve this is to create clear
-instructions and a standardised form that would be filled by that
-external user presenting the suggestion, coupled with a script that
-takes in the source quesiton(s) and introduces the necessary variations
-in information, knowledge and logic to achieve identification.
+open to receiving suggested questions from the public.\footnote{This
+  approach was followed, for example, by Srivastava et al. (2022).} For
+example, economists publishing a new paper could suggest a source
+question based on their work. A practical way to achieve this is to
+create clear instructions and a standardised form that would be filled
+by that external user presenting the suggestion, coupled with a script
+that takes in the source quesiton(s) and introduces the necessary
+variations in information, knowledge and logic to achieve
+identification. The author or other maintainers of the benchmark will
+then review the submissions..
 
 \section{Results}\label{results}
 
