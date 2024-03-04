@@ -204,16 +204,20 @@ Settlements, douglas.araujo@bis.org
 \begin{document}
 \maketitle
 \begin{abstract}
-A structural model of economic reasoning combines information filtering,
-knowledge association and logic attribution to correctly answer prompts.
-The model is adapted for economics but can also be adapted to other
-sciences. The reasoning model, along with insights from social
-economics, informs the design of an economic reasoning benchmark that
-(a) evolves over time in a non-trainable way; (b) measures reasoning
-rather than accuracy (ie, disregarding luck and stochastic parroting)
-and (c) breaks down reasoning results into its constituent components.
-An accompanying training dataset will be publicly available at
-publication time, and interested users can submit task proposals. NB:
+A theory-informed model of economic reasoning combines information
+filtering, knowledge association and logic attribution to correctly
+answer prompts. The successful application of these steps defines a
+reasoned answer; all others are due to luck or probabilistic
+association. This paper describes how the model can inform the creation
+of a challenging and informative benchmark of reasoning ability in
+advanced artificial intelligence models. The reasoning model, along with
+insights from social economics, informs the design of an economic
+reasoning benchmark that (a) evolves over time in a non-trainable way;
+(b) measures reasoning rather than pure accuracy and (c) breaks down
+reasoning results into its constituent components. An accompanying
+training dataset will be publicly available at publication time, and
+interested users can submit task proposals. The benchmarking process is
+adapted for economics but can also be applied to other sciences. NB:
 Empirical estimations are being run. Keywords: Economic reasoning,
 benchmark, large language models, artificial intelligence. JEL codes:
 C45, C69, C88, C59
@@ -415,7 +419,10 @@ in a way that offers chain-of-thought examples improves the reasoning
 abilities of LLMs, although this was later demonstrated to be as
 generalisable (Dziri et al. (2024), Prystawski, Li, and Goodman (2024)).
 Browning and LeCun (2022) argue that AI models trained on written
-language alone will never be able to reason.
+language alone will never be able to reason. Wu et al. (2023), Lewis and
+Mitchell (2024), Perez-Cruz and Shin (2024) and other papers all use
+variations in prompts as some form of probing the degree to which LLMs
+are actually reasoning.
 
 A nascent literature on the evaluation of language models in economic
 settings. An early foray into questions related to AI's ability to
@@ -436,12 +443,12 @@ contrast to Mei et al. (2024), this paper and its empirical counterpart
 are more generall, and discuss reasoning as a whole. Another contrast to
 that paper is that the current benchmark is focused on reasoning ability
 only, not personality. Perez-Cruz and Shin (2024) illustrate the
-brittleness of a leading AI's reasoning, which has markedly lower
-performance when trivial details in the prompts are different.
-Similarly, Korinek (2023) report (in his Chat 23) that results from a
-technical prompt in economics are reasonable but also brittle, with
-answers changing when prompt wording changes or even simply if the tasks
-are re-ordered.
+brittleness of a leading AI's reasoning on higher-order knowledge, which
+has markedly lower performance when trivial details in the prompts are
+different. Similarly, Korinek (2023) report (in his Chat 23) that
+results from a technical prompt in economics are reasonable but also
+brittle, with answers changing when prompt wording changes or even
+simply if the tasks are re-ordered.
 
 \subsection{The challenges with reasoning: a simple
 illustration}\label{the-challenges-with-reasoning-a-simple-illustration}
@@ -629,9 +636,17 @@ experts. CONTINUE\ldots{}
 \section{A model of reasoning}\label{a-model-of-reasoning}
 
 The model presented in the Introduction is arguably simplistic, but is
-fundamented on considerable body f literature that combines sensory
-pathways, knowledge combination and the execution of logical. This
-section goes into more detail about the choices in the reasoning model.
+fundamented on considerable body of literature that combines sensory
+pathways, knowledge combination and the execution of logical.
+\footnote{The difference between this models and the ``world model''
+  concept found in some machine learning papers (eg, Wu et al. (2023)),
+  namely the conditions under which a mapping between prompt and output
+  answer are evaluated, is that the world model concept seems to
+  represent as one two concepts that are important to remain distinct:
+  that of the existence or not of reasoning abilities by models, and
+  conditional on that, the ability to correctly parse information and
+  link it to relevant knowledge.} This section goes into more detail
+about the choices in the reasoning model.
 
 \subsection{Information filtering}\label{information-filtering}
 
@@ -857,7 +872,12 @@ reasoning steps, identification of the model obtains from a combination
 of analysis to find how the values can be estimated empirically to be
 one or zero. This then leads to the creation of identifying variation
 during the question generating process as described in
-Section~\ref{sec-variation}.
+Section~\ref{sec-variation}.\footnote{The machine learning literature
+  often call these variations ``counterfactuals'', a term which has a
+  completely different meaning in economics of alternative (often
+  observed) outcome, or, more broadly, of a thought experiment (J. J.
+  Heckman and Pinto (2023)). The economic nomenclature is favoured in
+  this paper.}
 
 For each question \(q\), \(\phi\) only depends on the specific prompt at
 hand (ie, \(q + \epsilon_f\)) and is independent of the two other
@@ -945,7 +965,57 @@ the variations are organised into those that measure the stability of a
 response to adversarial interpretation answers, and those that measure
 the stability across the knowledge dimension. In practice, each task has
 hundreds of different \(q\). These groups are described in more detail
-next.
+in the next section.
+
+To illustrate these procedures, this section uses randomly selected
+papers from the current issues (as of drafting) of leading
+English-language journals as source material to create seed
+questions.\footnote{These journals were selected for this preliminary
+  version as a mix of their wide impact and general interest audience.
+  Other ways of measuring impact lead to different rankings. See Auer,
+  Cornelli, and Zimmermann (2023) for a recent example focused on
+  central banking-related topics.} In alphabetic order by journal, these
+are the \emph{American Economic Review} (Houmark, Ronda, and Rosholm
+(2024) - henceforth P1), \emph{Econometrica} (Gomez and Gouin-Bonenfant
+(2024) - P2), \emph{Journal of Financial Economics} (Ardia et al. (2024)
+- P3), \emph{Journal of Monetary Economics} (Dyrda, Hong, and Steinberg
+(2024) - P4), \emph{Journal of Political Economy} (Giovanni, Levchenko,
+and Mejean (2024) - P5), \emph{Review of Economic Studies} (D. W. K.
+Andrews and Kwon (2023) - P6) and \emph{Quarterly Journal of Economics}
+(Risch (2023) - P7). Table~\ref{tbl-papers} presents the characteristics
+of the sampled papers.
+
+\begin{longtable}[]{@{}llll@{}}
+\caption{Sample of randomly selected papers from current issues of
+English-language, high-impact academic journals in
+economics.}\label{tbl-papers}\tabularnewline
+\toprule\noalign{}
+Paper ID & No of authors & Affiliation countries & JEL codes \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Paper ID & No of authors & Affiliation countries & JEL codes \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+P1 & 3 & DK, DE & I24, I26, J12, J13, J24 \\
+P2 & 2 & US & N/A \\
+P3 & 4 & CA, CH, LU & C55, C58, G11, G12, G23 \\
+P4 & 3 & CA & E6, F23, H25, H27 \\
+P5 & 3 & FR, US & N/A \\
+P6 & 2 & US & C10, C12 \\
+P7 & 1 & US & H22, H25, H32, J21, J31 \\
+\end{longtable}
+
+\subsection{Process overview}\label{process-overview}
+
+Each paper \(P\) undergoes the following process:\footnote{NB: the
+  author is currently fine-tuning the process during the estimation
+  phase and for this reason this section in next versions might be
+  different.} first, the paper is read, with a focus on the
+introduction, which in economics papers usually covers the main material
+of each manuscript.
 
 \subsection{Adjusted adversarial
 filtering}\label{adjusted-adversarial-filtering}
@@ -1015,11 +1085,23 @@ common but unordered answer choice symbols.
 
 \textbf{Word variations}: The main idea here is to introduce or change
 words that are irrelevant and not part of the main concept. This is
-along the lines of the test conducted by Perez-Cruz and Shin (2024).
-Once a human annotates a seed question to identify words that can be
-safely changed without changing the underlying reasoning task for
-questin \(q\), an adversarial filtering model would create multiple
-alternatives from real and when needed simulated words.
+along the lines of the tests conducted by Perez-Cruz and Shin (2024) and
+Lewis and Mitchell (2024): varying unimportant information while keeping
+the core details requiring reasoning constant causes machine accuracy to
+degrade.\footnote{Lewis and Mitchell (2024) calls this test
+  ``counterfactual analogy tests''; while analogy is a form of logic, in
+  this current framework I associate these types of tests more with the
+  information-filtering ability of models. Once a model with ideal
+  resoning ability can show that it recognises what information is
+  really needed and consequently knows to abstract from everything else,
+  it could then (depending on the context and knowledge it has about the
+  problem) use analogy as one of the logic steps to finalise its
+  reasoning about a problem.} Humans in the other hand, continue to
+perform well in the face of such problems. In the current benchmark, a
+human annotates the seed question to identify words that can be safely
+changed without changing the underlying reasoning task for questin
+\(q\), an adversarial filtering model would create multiple alternatives
+from real and when needed simulated words.
 
 \textbf{Irrelevant information}: The same seed question can be augmented
 to include irrelevant information to varying degrees, including flooding
@@ -1079,6 +1161,17 @@ the incoming information, the response shouldn't change since no other
 change has occurred in the AI models' filtering ability or knowledge
 base (neither on the original model weights obviously but also including
 the information content of the prompt).
+
+A few studies concentrate on evaluating the abilities of LLMs to reason
+by analogy. Webb, Holyoak, and Lu (2023) documents evidence that LLMs
+are able to reason due to their performance on various types of analogy
+tests related to sequences of letters, words or digits, including a
+novel test that was completely new to the LLM.
+
+\subsection{Variations related to economic
+inference}\label{variations-related-to-economic-inference}
+
+J. J. Heckman and Pinto (2023) Four questions
 
 \section{Practical considerations}\label{practical-considerations}
 
@@ -1162,7 +1255,7 @@ directly done by drawing from academic papers in general interest
 economic journals, which benefit from wide impact in the profession.
 However, there are two main drawbacks of using academic papers to proxy
 for the development of economic reasoning over time. The first is the
-widely discussed publication bias (Andrews and Kasy (2019)), but a
+widely discussed publication bias (I. Andrews and Kasy (2019)), but a
 perhaps equally important issue is that of unobserved false negatives:
 if many contributions that are now considered classics have been
 previously rejected (Gans and Shepherd (1994)), there are probably many
@@ -1222,6 +1315,13 @@ sophisticated idea by LeCun (2022) that AIs require a combination of
 ``mental'' modules that can separably executve perception (eg, take in a
 prompt that might be text-only or text-and-image), calculate the cost of
 processing, and imagine action sequences.
+
+This model is placed in a growing consensus in the scientific community
+that reasoning is evidenced by certain characteristics: abstracting away
+the unnecessary details, matching that with explicit and implicit
+relevant knowledge, and then deploying logic operations to achieve the
+correct prompt. This paper elaborates such a model in more detail, and
+offers an empirical strategy to estimate each of its components.
 
 Understanding AI models' ability to reason and go beyond a pure
 probabilistic exercise is crucial as these models have an increasing
@@ -1284,6 +1384,12 @@ Alrashed, Shaykhah Alsubaie, Yusef Almushaykeh, Faisal Mirza, et al.
 2024. {``When Benchmarks Are Targets: Revealing the Sensitivity of Large
 Language Model Leaderboards.''} \emph{arXiv Preprint arXiv:2402.01781}.
 
+\bibitem[\citeproctext]{ref-andrews2023misspecified}
+Andrews, Donald W K, and Soonwoo Kwon. 2023. {``{Misspecified Moment
+Inequality Models: Inference and Diagnostics}.''} \emph{The Review of
+Economic Studies} 91 (1): 45--76.
+\url{https://doi.org/10.1093/restud/rdad033}.
+
 \bibitem[\citeproctext]{ref-andrews2019identification}
 Andrews, Isaiah, and Maximilian Kasy. 2019. {``Identification of and
 Correction for Publication Bias.''} \emph{American Economic Review} 109
@@ -1299,9 +1405,19 @@ Araujo, Douglas Kiarelly Godoy de, Sebastian Doerr, Leonardo Gambacorta,
 and Bruno Tissot. 2024. {``Artificial Intelligence in Central
 Banking.''}
 
+\bibitem[\citeproctext]{ref-ARDIA2024103805}
+Ardia, David, Laurent Barras, Patrick Gagliardini, and Olivier Scaillet.
+2024. {``Is It Alpha or Beta? Decomposing Hedge Fund Returns When Models
+Are Misspecified.''} \emph{Journal of Financial Economics} 154: 103805.
+https://doi.org/\url{https://doi.org/10.1016/j.jfineco.2024.103805}.
+
 \bibitem[\citeproctext]{ref-arrow1950difficulty}
 Arrow, Kenneth J. 1950. {``A Difficulty in the Concept of Social
 Welfare.''} \emph{Journal of Political Economy} 58 (4): 328--46.
+
+\bibitem[\citeproctext]{ref-auer2023journal}
+Auer, Raphael, Giulio Cornelli, and Christian Zimmermann. 2023. {``A
+Journal Ranking Based on Central Bank Citations.''}
 
 \bibitem[\citeproctext]{ref-barlow1961possible}
 Barlow, Horace B et al. 1961. {``Possible Principles Underlying the
@@ -1403,6 +1519,12 @@ Rational Inattention.''} \emph{Journal of Political Economy} 131 (12):
 Debreu, Gerard. 1984. {``Economic Theory in the Mathematical Mode.''}
 \emph{The American Economic Review} 74 (3): 267--78.
 
+\bibitem[\citeproctext]{ref-DYRDA202474}
+Dyrda, Sebastian, Guangbin Hong, and Joseph B. Steinberg. 2024.
+{``Optimal Taxation of Multinational Enterprises: A Ramsey Approach.''}
+\emph{Journal of Monetary Economics} 141: 74--97.
+https://doi.org/\url{https://doi.org/10.1016/j.jmoneco.2023.10.003}.
+
 \bibitem[\citeproctext]{ref-dziri2024faith}
 Dziri, Nouha, Ximing Lu, Melanie Sclar, Xiang Lorraine Li, Liwei Jiang,
 Bill Yuchen Lin, Sean Welleck, et al. 2024. {``Faith and Fate: Limits of
@@ -1444,6 +1566,17 @@ Likelihood: An Axiomatic Approach.''} \emph{Journal of Economic Theory}
 145 (5): 1757--75.
 https://doi.org/\url{https://doi.org/10.1016/j.jet.2010.03.010}.
 
+\bibitem[\citeproctext]{ref-digiovanni2024foreign}
+Giovanni, Julian di, Andrei A. Levchenko, and Isabelle Mejean. 2024.
+{``Foreign Shocks as Granular Fluctuations.''} \emph{Journal of
+Political Economy} 132 (2): 391--433.
+\url{https://doi.org/10.1086/726235}.
+
+\bibitem[\citeproctext]{ref-gomez2024wealth}
+Gomez, Matthieu, and Émilien Gouin-Bonenfant. 2024. {``Wealth Inequality
+in a Low Rate Environment.''} \emph{Econometrica} 92 (1): 201--46.
+https://doi.org/\url{https://doi.org/10.3982/ECTA19092}.
+
 \bibitem[\citeproctext]{ref-HASSABIS2017245}
 Hassabis, Demis, Dharshan Kumaran, Christopher Summerfield, and Matthew
 Botvinick. 2017. {``Neuroscience-Inspired Artificial Intelligence.''}
@@ -1463,6 +1596,12 @@ Research.
 \bibitem[\citeproctext]{ref-heckman2015causal}
 Heckman, James, and Rodrigo Pinto. 2015. {``Causal Analysis After
 Haavelmo.''} \emph{Econometric Theory} 31 (1): 115--51.
+
+\bibitem[\citeproctext]{ref-houmark2024nurture}
+Houmark, Mikkel Aagaard, Victor Ronda, and Michael Rosholm. 2024. {``The
+Nurture of Nature and the Nature of Nurture: How Genes and Investments
+Interact in the Formation of Skills.''} \emph{American Economic Review}
+114 (2): 385--425. \url{https://doi.org/10.1257/aer.20220456}.
 
 \bibitem[\citeproctext]{ref-johnson2015logic}
 Johnson-Laird, Philip N, Sangeet S Khemlani, and Geoffrey P Goodwin.
@@ -1517,6 +1656,11 @@ Conference on the Principles of Knowledge Representation and Reasoning}.
 Lewbel, Arthur. 2019. {``The Identification Zoo: Meanings of
 Identification in Econometrics.''} \emph{Journal of Economic Literature}
 57 (4): 835--903.
+
+\bibitem[\citeproctext]{ref-lewis2024using}
+Lewis, Martha, and Melanie Mitchell. 2024. {``Using Counterfactual Tasks
+to Evaluate the Generality of Analogical Reasoning in Large Language
+Models.''} \url{https://arxiv.org/abs/2402.08955}.
 
 \bibitem[\citeproctext]{ref-loh2014efficient}
 Loh, Lay Kuan, and Mihovil Bartulovic. 2014. {``Efficient Coding
@@ -1606,6 +1750,12 @@ Prystawski, Ben, Michael Li, and Noah Goodman. 2024. {``Why Think Step
 by Step? Reasoning Emerges from the Locality of Experience.''}
 \emph{Advances in Neural Information Processing Systems} 36.
 
+\bibitem[\citeproctext]{ref-risch2023taxing}
+Risch, Max. 2023. {``{Does Taxing Business Owners Affect Employees?
+Evidence From A Change in the Top Marginal Tax Rate*}.''} \emph{The
+Quarterly Journal of Economics} 139 (1): 637--92.
+\url{https://doi.org/10.1093/qje/qjad040}.
+
 \bibitem[\citeproctext]{ref-robbins1932essay}
 Robbins, Lionel. 1932. \emph{An Essay on the Nature and Significance of
 Economic Science}. Macmillan; Co., Limited.
@@ -1669,6 +1819,11 @@ Jones, Aidan N. Gomez, Lukasz Kaiser, and Illia Polosukhin. 2023.
 Walton, Douglas. 2014. \emph{Abductive Reasoning}. University of Alabama
 Press.
 
+\bibitem[\citeproctext]{ref-webb2023emergent}
+Webb, Taylor, Keith J Holyoak, and Hongjing Lu. 2023. {``Emergent
+Analogical Reasoning in Large Language Models.''} \emph{Nature Human
+Behaviour} 7 (9): 1526--41.
+
 \bibitem[\citeproctext]{ref-wei2022emergent}
 Wei, Jason, Yi Tay, Rishi Bommasani, Colin Raffel, Barret Zoph,
 Sebastian Borgeaud, Dani Yogatama, et al. 2022. {``Emergent Abilities of
@@ -1679,6 +1834,12 @@ Wei, Jason, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed
 Chi, Quoc V Le, Denny Zhou, et al. 2022. {``Chain-of-Thought Prompting
 Elicits Reasoning in Large Language Models.''} \emph{Advances in Neural
 Information Processing Systems} 35: 24824--37.
+
+\bibitem[\citeproctext]{ref-wu2023reasoning}
+Wu, Zhaofeng, Linlu Qiu, Alexis Ross, Ekin Akyürek, Boyuan Chen, Bailin
+Wang, Najoung Kim, Jacob Andreas, and Yoon Kim. 2023. {``Reasoning or
+Reciting? Exploring the Capabilities and Limitations of Language Models
+Through Counterfactual Tasks.''} \url{https://arxiv.org/abs/2307.02477}.
 
 \bibitem[\citeproctext]{ref-xie2023ask}
 Xie, Qiming, Zengzhi Wang, Yi Feng, and Rui Xia. 2023. {``Ask Again,
