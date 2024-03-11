@@ -152,17 +152,6 @@
 \@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
 \floatname{codelisting}{Listing}
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
-\usepackage{amsthm}
-\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[section]
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\theoremstyle{remark}
-\AtBeginDocument{\renewcommand*{\proofname}{Proof}}
-\newtheorem*{remark}{Remark}
-\newtheorem*{solution}{Solution}
-\newtheorem{refremark}{Remark}[section]
-\newtheorem{refsolution}{Solution}[section]
 \makeatother
 \makeatletter
 \makeatother
@@ -204,23 +193,28 @@ Settlements, douglas.araujo@bis.org
 \begin{document}
 \maketitle
 \begin{abstract}
-A theory-informed model of economic reasoning combines information
-filtering, knowledge association and logic attribution to correctly
-answer prompts. The successful application of these steps defines a
-reasoned answer; all others are due to luck or probabilistic
-association. This paper describes how the model can inform the creation
-of a challenging and informative benchmark of reasoning ability in
-advanced artificial intelligence models. The reasoning model, along with
-insights from social economics, informs the design of an economic
-reasoning benchmark that (a) evolves over time in a non-trainable way;
-(b) measures reasoning rather than pure accuracy and (c) breaks down
-reasoning results into its constituent components. An accompanying
-training dataset will be publicly available at publication time, and
-interested users can submit task proposals. The benchmarking process is
-adapted for economics but can also be applied to other sciences. NB:
-Empirical estimations are being run. Keywords: Economic reasoning,
-benchmark, large language models, artificial intelligence. JEL codes:
-C45, C69, C88, C59
+A theory-informed test of reasoning in artificial intelligence (AI)
+combines three sequential steps to consider correct answers as the
+result of a reasoning process as opposed to luck of probabilistic word
+matching. The first step is information filtering, where an AI model
+that reasons must distinguish the relevant information in a prompt from
+trivia. In the second step, knowledge association, the AI combines
+implicit or explicit knowledge with the relevant prompt information. And
+finally in the third step of logic attribution, a reasoning AI assigns
+correct logic operations for deducive, inducive, and other types of
+logic to uncover the corret answer. In economic settings, the logic
+steps involve different levels of counterfactual considerations and
+policy-relevant thought experiments. This paper leverages insights from
+the large language model benchmarking literature and the social
+economics literature to inform the design of benchmarking tests that are
+challenging, robust, evolving over time and informative about any type
+of reasoning shortcomings. The benchmarking process can be adapted to
+other sciences. An accompanying training dataset is available to help AI
+developers improve reasoninig in their models, and interested users can
+submit proposals for material to create questions. NB: Empirical
+estimations are being run. Keywords: Economic reasoning, benchmark,
+large language models, artificial intelligence. JEL codes: C45, C69,
+C88, C59
 \end{abstract}
 
 \begin{quote}
@@ -231,93 +225,260 @@ can do'' - Herbert Simon, AI pioneer, in 1965
 \section{Introduction}\label{introduction}
 
 Large language models (LLMs), in particular those classified as
-generative artificial intelligence (gen AI), increasingly support use
-cases in finance and economics (Korinek (2023)), including in central
-banks (Araujo et al. (2024)). These models are tested for their ability
-to reason, often boasting seemingly incredible results: for example,
+generative artificial intelligence (AI), increasingly support use cases
+in finance and economics (Korinek (2023)), including in central banks
+(Araujo et al. (2024)). These models are tested for their ability to
+reason, often boasting seemingly impressive results: for example,
 OpenAI's GPT-4 boats human-like performance across tests of reasoning
 and more than 80\% correct results in academic and professional micro-
 and macroeconomics tests (Achiam et al. (2023)). Still, even such
 advanced models can fail miserably when it comes to reasoning: for
-example, an advanced model can correctly solve a logical puzzle
-requiring reasoning about higher order knowledge, only to fail when
-irrelevant details are changed (Perez-Cruz and Shin (2024)). Building on
-results such as this, this work discusses how to systematically measure
-\emph{economic} reasoning, combining literatures on economic thought and
-on computer science about gen AI benchmarking. In practical terms, the
-task at hand is to come up with a benchmark task for economic reasoning,
-a testing mechanism to measures in a comparable way the level of
-economic reasoning of an artificial intelligence (AI) model. This task
-is of first-order importance given the break-neck speed of evolution of
-LLMs (Yang et al. (2023)) and their potential risks (Danielsson, Macrae,
-and Uthemann (2022)).
+example, the same model can correctly solve a logical puzzle requiring
+reasoning about higher order knowledge but fails when irrelevant details
+are changed (Perez-Cruz and Shin (2024)). Building on results such as
+this, this work discusses how to systematically measure \emph{economic}
+reasoning, combining literatures from economics and computer science. In
+practical terms, the task at hand is to come up with a benchmark task
+that can help measure economic reasoning in AI models in a comparable
+way. This task is of first-order importance given the break-neck speed
+of evolution of LLMs (Yang et al. (2023)) and their potential risks
+(Danielsson, Macrae, and Uthemann (2022)).
 
 Such benchmark tasks are crucial for the comparison of the abilities of
 AI models over time and in the cross-section. Results of benchmark tasks
-are now a staple of the evaluation of LLMs by developers when releasing
-a model, highlighting its evolution compared to previous versions and to
-the main peers. Third-party organisations also compile leaderboards with
+are now a staple of the evaluation of LLMs by developers when developing
+and releasing a model, as the results highlight the model's evolution
+compared to previous versions and its performance when stacked against
+other models. Third-party organisations also compile leaderboards with
 running results that allow the general public to keep track of the most
 performant models.\footnote{Commonly followed leaderboards include
-  LMSYS's ChatbotArena and Huggingface's Open LLM Leaderboard.}
-Benchmark tasks are useful because that they provide a comparable metric
-on which to track the state-of-the-art for the particular abilities that
-each task measures. Usually, this metric is the percentage of correct
-answers. However, even if specific tasks have evolved over time to
-become more challenging, a key challenge is to separate correct answers
-due to probabilistic association or ``stochastic parroting'' (Bender et
-al. (2021)) from those that are the result of a reasoning process.
+  LMSYS's ChatbotArena and Huggingface's Open LLM Leaderboard.} In
+short, benchmark tasks are useful because they provide a comparable
+metric on which to track the state-of-the-art for the particular
+abilities that each task measures. Usually, this metric is the
+percentage of correct answers. However, even if specific tasks have
+evolved over time to become more challenging for AI models, in many
+cases it is not straightforward to separate correct answers due to
+probabilistic association or ``stochastic parroting'' (Bender et al.
+(2021)) from those that are the result of a ``reasoning process''.
 
-This paper proposes a working model of reasoning that can underlie an
-empirical benchmark task: when confronted with a prompt
-\(Q\),\footnote{Usually this will be a string of text, but more recent
-  models can take multi-model content, ie a combination of text, images,
-  videos, sounds, etc.} an AI is said to \emph{reason} correctly if it
-responds with an answer \(\alpha\) that simultaneously (a) interprets
-the prompt, identifying the relevant information for the task and
-filtering away everything else by ignoring or abstract away irrelevant
-details, (b) associates \(Q\) with any relevant existing commonsense
-knowledge \(\theta\) to answer the question, and (c) applies logical
-relations such as deduction and induction to \(Q\) and \(\theta\) to
-arrive at the correct answer. Formally, each answer is defined as a
-non-parametric function of the following steps: information filtering
-\(\phi = f(Q)\), knowledge curation \(\kappa = k(\phi, \theta)\) and
-logic attribution \(\lambda = l(\kappa, Q)\),
-\(\alpha = A(\lambda, Q)\), where \(A\) is the function that returns the
-correct answer from the prompt \(Q\) given a successful implementation
-of the component steps. Each of those three steps above are sequential,
-and depend on the successful completion of the previous one. The goal is
-for this model to be simple and intuitive. Throughout the paper, I
-assume AIs respond to their best ability, meaning that they would reason
-instead of probabilistically choosing an answer
-\(\tilde{a} = \arg \max_{a} L(a | Q)\).
+This paper proposes a working model of reasoning that is simple and
+intuitive, yet results in a challenging benchmark test for AI systems.
+This reasoning model underlies the empirical benchmark task introduced
+in this paper. When a user confronts an AI system with a prompt \(Q\)
+requiring a given response \(\alpha \in \mathcal{A}\),\footnote{Usually
+  \(Q\) will be a string of text, but more recent models can take
+  multi-model content that combines text, images, videos, sounds, etc.}
+where \(\mathcal{A}_C \subseteq \mathcal{A}\) is the set of correct
+answer(s) and \(\mathcal{A}_I = \mathcal{A} \setminus \mathcal{A}_C\) is
+the set of incorrect choices, the accuracy of an AI's response (ie,
+\(\mathbb{1}(\hat{\alpha} \in \mathcal{A}_C)\)) reflects only one of
+three possible answering processes: chance, probabilistic assignment or
+a correct \emph{reasoning} process. The first one is simply
+\(P(\hat{\alpha} \in \mathcal{A}_C) = \#\mathcal{A}_C / \#\mathcal{A}\),
+and the second process depends on a measure of some distance
+\(d(\cdot)\) between \((Q, \mathcal{A})\) and the AI's training data
+\(D\):
+\(P(\hat{\alpha} \in \mathcal{A}_C) = P(\hat{\alpha} \in \mathcal{A}_C|d((Q, \mathcal{A}), D))\).
 
-The empirical version of this prompt-answering model is
+The third, and most interesting answering process is \emph{reasoning}.
+It can only be said to occur if \(\hat{\alpha}\) results from the
+successful application of three sequential steps. First comes
+\emph{information filtering}, where the AI filters the relevant
+information in \(Q\), distinguishing it from trivia that is not
+important for finding at least one \(\hat{\alpha} \in \mathcal{A}_C\),
+\(\phi = f(Q)\). The second step, \emph{knowledge association}, involves
+the retrieval of implicit or explicit knowledge \(\theta\) to augment
+the filtered prompt information, if necessary:
+\(\kappa = k(\phi, \theta)\). And the third step is \emph{logic
+attribution}: applying logic operations (deducive, inducive, and other
+types of logic) on the filtered prompt information augmented with
+\(\theta\) to uncover the corret answer:
+\(\alpha = l(Q, \mathcal{A}, \kappa)\). Only AIs that demonstrate the
+ability of completing these three steps can reason. Intuitively,
+answering a question correctly based on reasoning requires each of these
+steps in sequence: if one of them fails (even if it is the last step), a
+correct answer will necessarily be a result of chance or probabilistic
+association.
 
-\begin{equation}\phantomsection\label{eq-empiric}{\hat{\alpha}(q) = \hat{\phi} \, \hat{\kappa}|(\phi=\hat{\phi}) \, \hat{\lambda}|(\phi=\hat{\phi}, \kappa=\hat{\kappa}),
+The discussion above relates to reasoning in general, but it can also
+apply to arbitrary subsets of the set of all \(f, k, l\). To measure
+\emph{economic reasoning}, field-specific criteria can be applied to
+each of these three steps. For example, the same prompt \(Q\) might
+contain some information that is relevant to the reasoning process of a
+veterinarian and some other for an economist, even if they both
+ultimately reach the correct answer. Or the implicit and explicit
+knowledge that augments the prompt, enabling the correct logic
+attribution, could be different. And finally, the logic steps can
+involve different levels of counterfactual considerations and relevant
+thought experiments. This implies that there are several ways to filter
+information, of which the ``economics'' way is one of them
+(\(\exists f_{\text{economics}} \in F\)), and similarly with knowledgde
+association (\(\exists k_{\text{economics}} \in K\)) and logic
+attribution \(\exists l_{\text{economics}} \in L\)).\footnote{Or rather,
+  in practice there are several ways professionals in the same field
+  would reason but they would arguably tend to be more similar to each
+  other than to professionals of other sciences.} Therefore, the model
+described in this paper can be generalised to other fields of knowledge,
+or made more specific to measure reasoning in sub-fields such as
+monetary policy. The paper drops the field-specific notation to avoid
+cluter, but it is always implicit in the functions named above.
+
+From the informal definitions of the answering processes described
+above, measuring reasoning in practice requires assessing
+\(\mathbb{1}(\hat{\alpha} \in \mathcal{A}_C)\) multiple times for the
+same AI. While this is not possible with human subjects due to factors
+like learning or priming, AI systems can be easily started fresh or
+respawned and so it is trivial to test whether accuracy is due to chance
+alone. But it is still difficult to separate probabilistic answering
+from reasoning without a ``structural'' model of reasoning, especially
+since \(D\) is not observed in advanced AI systems due to commercial
+protection or simply because it is very large and difficult to analyse.
+The main contribution of this paper is precisely in offering a model of
+reasoning that can be sufficiently rich to reflect theoretical and
+empirical knowledge about reasoning and AI systems, while staying simple
+enough that it can be engineered into a benchmark test to allow
+diagnosing current and future AI systems.
+
+Functions \(f\), \(k\) and \(l\) are interesting by themselves, but the
+goal of this paper is to identify when they are successfully put to use
+by AI systems, rather than probing their inner workings. This is because
+the measurement of reasoning capabilities in AI systems requires only
+the demonstation that these functions are part of the answering process.
+For notation simplicity, call
+\(\phi^*, \kappa^*, \lambda^* \in \{0, 1\}\) the indicators that each of
+these functions was used to find \(\hat{\alpha}\). These indicators
+allow the estimation of whether or not reasoning was the basis for a
+correct answer to \(Q\):
+\(\rho^*(\hat{\alpha} \in \mathcal{A}_C) = \phi^* \kappa^* \lambda^*\)
+(\(\rho^*\) is not determined in cases where
+\(\hat{\alpha} \in \mathcal{A}_I\)). The empirical version of the
+reasoning prompt-answering model for a given AI system is then:
+
+\begin{equation}\phantomsection\label{eq-empiric}{
+\hat{\rho}^* = \hat{\phi}^* \hat{\kappa}^* \hat{\lambda}^*,
 }\end{equation}
 
-where \(\phi = \mathbf{1} \prod_{i}^{M_f} f(q + \epsilon_i^f)\) and
-similarly for \(\kappa\) with \(k\) and \(\lambda\) with \(l\), \(M_f\),
-\(M_k\) and \(M_l\) are the number of variations \(\epsilon\) introduced
-in the seed question \(q\) that seek to identify the model's
-interpretation, knowledge association and logic attribution
-respectively; the hat denomination points to empirically estimated
-versions. This model is estimated by assessing answers from the same AI
-model to multiple versions of seed questions \(q \in \mathbf{Q}\), and
-\(\hat{\alpha}\) is only considered to be correct when all of the
-relevant variations for the same question are answered correctly - in
-other words, the AI model has evaded ``banana skins'' that try to trick
-it into revealing lack of information filtering, spurious knowledge
-association or faulty logics. The key idea is to leverage insights from
-the social economics literature and create identifying variation in the
-questions \(q\) presented to AI models, adapted from how this is done
-with human subjects (Stantcheva (2023)). The benchmark result is then
-\(R = M_{\mathbf{Q}}^{-1}\sum_{q \in \mathbf{Q}} \hat{\alpha}(q)\),
-where \(M_{\mathbf{Q}}\) is the number of different seed questions. By a
-similar token, each of the three steps can be measured separately,
+where the identification of the right-hand side factors depends on
+variations of the prompt \(Q\). The key idea is to leverage insights
+from the social economics and expectation formation literatures and
+create identifying variation in \(Q\), adapted from how this is done
+with human subjects to study their own reasoning functions about
+economic problems (see Stantcheva (2023), Fuster and Zafar (2023) and
+the works cited in these papers). Specifically:
+
+\begin{equation}\phantomsection\label{eq-empiricsyst}{
+\begin{aligned}
+\hat{\phi}^* &= \prod_{i}^{M_f} \mathbf{1}(f(Q + \epsilon_i^f) = f(Q)) \\
+\hat{\kappa}^*(\hat{\phi}^*=1) &= \prod_{i}^{M_k} \mathbf{1}(k(Q + \epsilon_i^k) = k(Q)) \\
+\hat{\lambda}^*(\hat{\phi}^* =1,\hat{\kappa}^*=1) &= \prod_{i}^{M_l} \mathbf{1}(l(Q + \epsilon_i^l) = l(Q)),
+\end{aligned}
+}\end{equation}
+
+with \(\epsilon_i^j\) one of the \(M_j\) variations introduced in the
+seed question \(Q\) to identify the use of an information filtering
+function (\(j=f\)), knowledge association (\(j=k\)) or logic attribution
+(\(j=l\)). For example, the tests described in Perez-Cruz and Shin
+(2024) comprise variations of unimportant details of the puzzle while
+leaving the key details unchanged; I interpret them as \(\epsilon^f\)
+variations to the same prompt because this exercise probes the ability
+of ChatGPT to recognise the truly important information and abastract
+from everything else. \(\hat{\kappa}^*\) and \(\hat{\lambda}^*\) are
+only estimated upon the successful completion of the previous steps. In
+other words, estimation is the result of evaluating answers by the same
+AI system to multiple versions of seed question \(Q \in \mathcal{Q}\),
+where each version is an \(\epsilon^j\)-neighbourhood of \(Q\) that
+should prompt the same result if an AI system is using the same
+\(j \in \{f, k, l\}\) function.\footnote{Note the estimation equations
+  do not have residue terms because the equalities are directly
+  observed.} Ultimately, \(\hat{\alpha}(Q)\) is only considered to be
+the result of a reasoning process when all of the relevant variations
+for the same question are answered correctly - in other words, the AI
+model has evaded ``banana skins'' that try to trick it into revealing
+lack of information filtering, spurious knowledge association or faulty
+logics.
+
+The empirical challenge is then in creating the \(Q + \epsilon^j\)
+variations for each step \(j\). There are several classes of variations
+that can help test an AI systems' \(f\). The key principle to generate
+\(\epsilon^f\) for these identifying variations is to keep core
+information intact while varying the order of content or of answer
+options; change, include or remove trivial content; or including random
+symbols in lieu of non-important actual such as the codes identifying
+each response (ie, using country flags instead of alphabetic letters to
+identify options). Because the core information is always constant in
+all these \(M_f\) variations of \(Q\), an AI system that filters
+information adequately would continue to concentrate on the main
+information, which is intact. As for testing \(k\) (conditional on
+\(\hat{\phi}^*=1\)), the variations \(Q + \epsilon_i^k\) include
+different degrees of explanation of important concepts for the task at
+hand, up until a level where no or almost no explicit knowledge is
+included and the model must rely on commonsense knowledge. Importantly,
+alternatives also vary in how much they use common vs jargon words,
+leveraging the fact that common words might have more than one meaning
+and therefore more easily trigger an AI system into falsely assigning a
+wrong knowledge space with it. Another source of variation to probe
+\(k\) is to include words related to alternative views about the
+question, which serves to probe how the AI system uses knowledge it has
+access to from the prompt. Finally, anther way to probe knowledge is to
+change clear important keywords for their pronouns, since recognising
+referents require considerable amount of commonsense knowledge. And as
+for logic attribution, the variations include those are related to the
+``flip-flop'' experiment: simply asking AI systems to confirm their
+answers often make them switch answers, even if their original response
+was correct (Laban et al. (2023), Xie et al. (2023)). Relatedly, these
+tests can to follow up a response with a reply that either asks for
+confirmation (``are you sure?'') or that doubts the AI system's answer
+in some way, even if it was originally corrected. Another way to create
+variation that identifies logic attribution is to change the possible
+answers - for example, from having the correct answer be one in a list
+of other categories to a question asking how likely it is that the
+correct answer is in a given set. Another source of prompt variation to
+probe \(l\) is analogical prompting (Yasunaga et al. (2023)), whereby
+the prompt includes instructions for the AI system to generate examples
+of similar situation at hand. These variation types are discussed in
+more detail in a specific section.
+
+In addition to the collection of variations described above, three
+practical adaptations in \(\mathcal{Q}\) make it a benchmark for
+economic reasoning. First, the scope of topics that are included in
+\(\mathcal{Q}\) should ideally focus on issues of significance to
+economics. At its most essential form, testing for economic reasoning is
+the same as probing if the model is able to think in terms of logical
+operators on information that is of relevance to economics. However,
+this is subjective because economic thought constantly evolves. At the
+same time, including only ``classical'' economics carries a high risk of
+using material that is containd in the training set of AI systems.
+Second, even for each given topic, the types of questions considered
+relevant in economics are specific. Both of these issues are dealt with
+in practice by using recent published academic work as source material
+to construct seed questions. These sources contain content whose topic
+and research questions are by definition of interest to the economics
+field, and moreover have the advantage of being novel by design,
+creating a natural check for the ability of AI models to generalise
+reasoning. The third adaptation is to design logic attribution questions
+related to economic thought. For example, J. J. Heckman and Pinto (2023)
+posit that policy problems - ie, the subject of considerable if not most
+or all of economics - can be analysed in four different levels. The
+first one is impact of a policy on the environment it was implemented
+in; the next level is to understand the mechanisms (or ``channels'') by
+which these effects occur. The third level of reasoning is to forecast
+the policy impact in environments that have not yet seen the policy,
+while the fourth and most sophisticated is to forecast policy effects
+that were never implemented before.
+
+Most of the above discussions relate to the answering process of an AI
+system to a single prompt, \(Q\). But in practice the useful way to
+measure reasoning abilities is to measure \(\hat{\rho}^*\) extensively
+in a broad range of economic questions and in a comparable way. This is
+done by establishing a benchmark task \(\mathcal{T}\), ie compiling all
+the prompt variations for a reasonable amount of seed prompts \(Q\). The
+benchmark result is then
+\(R = M_{\mathbf{Q}}^{-1}\sum_{Q \in \mathcal{Q}} \hat{\rho}^*(Q)\),
+where \(M_{\mathbf{Q}}\) is the number of different seed questions. By
+the same token, each of the three steps can be measured separately,
 building on their empirical identifications
-\(R_{j \in (f, k, l)} = M_{j}^{-1}\sum_{q \in \mathbf{Q}} \hat{j}(q)\).
+\(R_{j \in (f, k, l)} = M_{j}^{-1}\sum_{Q \in \mathcal{Q}} \hat{j}^*(Q)\).
 Note that identification of \(\kappa\) and \(\lambda\) need the
 sequential conditionality on the previous steps \(\phi\) and
 \(\phi, \kappa\) respectively in order to be identified.\footnote{The
@@ -325,26 +486,6 @@ sequential conditionality on the previous steps \(\phi\) and
   subject to the false ``emerging abilities'' results (Schaeffer,
   Miranda, and Koyejo (2024)), for example the Brier score (Brier
   (1950)).}
-
-This model can be used as a general abstraction for an AI reasoning
-ability, but two practical adaptations in \(Q\) can make it a model for
-economic reasoning more specifically. First, the scope of topics that
-are included in \(Q\) should ideally focus on issues of significance to
-economics. At its most essential form, testing for economic reasoning is
-the same as probing if the model is able to think in terms of logical
-operators on information that is of relevance to economics. However,
-this is subjective because economic thought constantly evolves. At the
-same time, including only ``classical'' economics carries a high risk of
-using material that is containd in the training set of AI models.
-Second, even for each given topic, the types of questions considered
-relevant in economics are specific. Both of these issues are dealt with
-in practice by using recent published academic work as source material
-to construct seed questions.\footnote{Similar adaptations could be
-  pursued for other fields.} These sources contain content whose topic
-and research questions are by definition of interest to the economics
-field, and moreover have the advantage of being novel by design,
-creating a natural check for the ability of AI models to generalise
-reasoning.
 
 This benchmark task is, by design, more difficult than others due to its
 sequential conditioning. Is it really necessary to have such a
@@ -377,19 +518,9 @@ benchmark tasks do have a publicly available methodology and even
 evaluation interface, which greatly facilitates the engagement with
 model developers, general users and third-party model evaluators.
 
-A major inspiration in the design of the questions and how they can
-generate identifying variations is the social economics literature. A
-key reference is Stantcheva (2023). The idea here is that the design of
-the questionnaire itself can elicit responses that allow for insight
-into non-observable traits such as reasoning. Many of the insights of
-this literature carry over naturally to the machine space.\footnote{Actually
-  testing whether LMs \emph{do not} parrot or ``organically'' exhibit
-  biases or other behaviours that are assumed to be exclusively human
-  would be an interesting line of research.}
-
 \subsection{Literature}\label{literature}
 
-This work builds on, and seeks to expand, three general literature
+This work builds on, and seeks to expand, two general literature
 streams. More technical aspects of this work are based on specific
 literatures that are discussed within each section.
 
@@ -398,13 +529,14 @@ substantial body of work creates and discusses model benchmarking in
 general; a voluminous and well-organised compilation of references is
 Storks, Gao, and Chai (2020). Interested readers are strongly encouraged
 to that paper for space considerations, while selected benchmarks are
-described in Section~\ref{sec-bench}.
-
-Secondly, this paper draws from insighs in the more general AI reasoning
-literature. As other parts of AI development, it is informed and
-inspired by neuroscience as well (Hassabis et al. (2017)). An early and
-influential contribution is the Chinese room experiment by Searle (1980)
-and its resulting arguments that AI could not reason by itself. The
+described in Section~\ref{sec-bench}. This paper draws from insighs in
+the more general AI reasoning literature. As other parts of AI
+development, it is informed and inspired by neuroscience as well
+(Hassabis et al. (2017)). An early and influential contribution is the
+Chinese room experiment by Searle (1980) and its resulting arguments
+that AI could not reason by itself. Chollet (2019) offers a wide review
+of the literature and insightful perspectives on definitions of AI
+intelligence and how it should influence the design of benchmarks. The
 influential works of Bubeck et al. (2023) and Wei, Tay, et al. (2022)
 hint at acquisition of advanced capabilities by large-scale language
 models such as GPT-4, although Bubeck et al. (2023) also point to many
@@ -419,36 +551,40 @@ in a way that offers chain-of-thought examples improves the reasoning
 abilities of LLMs, although this was later demonstrated to be as
 generalisable (Dziri et al. (2024), Prystawski, Li, and Goodman (2024)).
 Browning and LeCun (2022) argue that AI models trained on written
-language alone will never be able to reason. Wu et al. (2023), Lewis and
-Mitchell (2024), Perez-Cruz and Shin (2024) and other papers all use
-variations in prompts as some form of probing the degree to which LLMs
-are actually reasoning.
+language alone will never be able to reason, and Moskvichev, Odouard,
+and Mitchell (2023) show that humans outperform advanced AI systems in
+terms of abstract thinking. Shiffrin and Mitchell (2023) argues for
+better understanding of why AI systems succeed or fail in tests. Wu et
+al. (2023), Lewis and Mitchell (2024), Perez-Cruz and Shin (2024), S.
+Srivastava et al. (2024) and other papers all use variations in prompts
+as some form of probing the degree to which LLMs are actually reasoning.
 
-A nascent literature on the evaluation of language models in economic
-settings. An early foray into questions related to AI's ability to
-conduct economic reasoning is due to Parkes and Wellman (2015). But
-their angle is more on how AIs can be used to estimate synthetic
-economic agents - machina oeconomicus - ideal versions of purely
-rational agents, rather than on the measurement and the implications of
-AIs acquiring economic reasoning abilities. In any case, Parkes and
-Wellman (2015) see economic reasoning as the ability to understand and
-solve complex game-theoretical environments (eg, the poker example). Mei
-et al. (2024) do an extensive comparison of personality traits from the
-behaviour of ChatGPT with human behaviour in games that require
-cooperation, finding that its performance is consistent with humans, and
-when it deviates the AI models tend to behave in the altruistic and
-cooperative than the mass distribution of humans. Interestingly, ChatGPT
-responds differently to different formulations of the same situation. In
-contrast to Mei et al. (2024), this paper and its empirical counterpart
-are more generall, and discuss reasoning as a whole. Another contrast to
-that paper is that the current benchmark is focused on reasoning ability
-only, not personality. Perez-Cruz and Shin (2024) illustrate the
-brittleness of a leading AI's reasoning on higher-order knowledge, which
-has markedly lower performance when trivial details in the prompts are
-different. Similarly, Korinek (2023) report (in his Chat 23) that
-results from a technical prompt in economics are reasonable but also
-brittle, with answers changing when prompt wording changes or even
-simply if the tasks are re-ordered.
+Another literature this papers draws from is the nascent corpus on the
+evaluation of AI systems such as LLMs in economic settings. An early
+foray into questions related to AI's ability to conduct economic
+reasoning is due to Parkes and Wellman (2015). But their angle is more
+on how AIs can be used to estimate synthetic economic agents - machina
+oeconomicus - ideal versions of purely rational agents, rather than on
+the measurement and the implications of AIs acquiring economic reasoning
+abilities. In any case, Parkes and Wellman (2015) see economic reasoning
+as the ability to understand and solve complex game-theoretical
+environments (eg, the poker example). Mei et al. (2024) do an extensive
+comparison of personality traits from the behaviour of ChatGPT with
+human behaviour in games that require cooperation, finding that its
+performance is consistent with humans, and when it deviates the AI
+models tend to behave in the altruistic and cooperative than the mass
+distribution of humans. Interestingly, ChatGPT responds differently to
+different formulations of the same situation. In contrast to Mei et al.
+(2024), this paper and its empirical counterpart are more generall, and
+discuss reasoning as a whole. Another contrast to that paper is that the
+current benchmark is focused on reasoning ability only, not personality.
+Perez-Cruz and Shin (2024) illustrate the brittleness of a leading AI's
+reasoning on higher-order knowledge, which has markedly lower
+performance when trivial details in the prompts are different.
+Similarly, Korinek (2023) report (in his Chat 23) that results from a
+technical prompt in economics are reasonable but also brittle, with
+answers changing when prompt wording changes or even simply if the tasks
+are re-ordered.
 
 \subsection{The challenges with reasoning: a simple
 illustration}\label{the-challenges-with-reasoning-a-simple-illustration}
@@ -481,157 +617,86 @@ the main ones in each type, to further illustrate why a new benchmark is
 needed and more specifically how one geared towards economics can be
 constructed.
 
-\subsection{Reference resolution}\label{reference-resolution}
+\textbf{Reference resolution}: these benchmarks measure the ability to
+identify referents (ie, linguistic mentions, pronouns). Because of the
+ambiguities involved with resolving references, these benchmarks are
+very complicate to solve, requiring intense commonsense knowledge.
+Typically these benchmarks require handcrafted data, and therefore the
+datasets tend to be smaller compared to other benchmarks that are more
+automatable. Primary examples are Winograd and WinoGrande (Levesque,
+Davis, and Morgenstern (2012)). Browning and LeCun (2023) see the
+failure of these challenges to present a serious challenge to modern
+LLMs as a sign that lingusitic tests are unlikely to be good proxies for
+reasoning abilities.
 
-\begin{itemize}
-\tightlist
-\item
-  Measures ability to identify referents (ie, linguistic mentions)
-\item
-  Complicated task due to ambiguities, requires intense commonsense
-  knowledge
-\item
-  Needs typically handcrafted data
-\item
-  Datasets tend to be smaller than other benchmarks
-\item
-  Examples: Winograd, WinoGrande (Levesque, Davis, and Morgenstern
-  (2012))
-\item
-  Browning and LeCun (2023) see the failure of these challenges to
-  present a serious challenge to modern LLMs as a sign that lingusitic
-  tests are unlikely to be good proxies for reasoning abilities.
-\end{itemize}
+\textbf{Question answering}: those are benchmarks that combine language
+processing and reasoning skills. But most of these benchmarks can be
+successfully solved without deep understanding of the concepts at hand
+or without reasoning, ie only from linguistic context and knowledge.
+However, there is a number of benchmarks in this group that typically
+requires external knowledge. The premier example is the ARC (Clark et
+al. (2018)), while there are many other examples: MCTest, RACE,
+NarrativeQA, MCScript, ProPara, MultiRC, ARCT, SQuAD 2.0, CoQA, QuAC,
+and many others.
 
-\subsection{Question answering}\label{question-answering}
+\textbf{Textual entailment}: another type of benchmarks tests whether AI
+systems can correctly find the ``entailment'', or the second part of a
+complete logical statement, starting generally with a hypothesis. Some
+of these benchmarks also test ability to recognise contradiction. As can
+be expected, such tasks requires substantial amount of commonsense
+knowledge. The highlighted example: SherLlic (Schmitt and Schütze
+(2019)), although like in other cases, examples abound: Other examples
+include RTE, conversational entailment, SICK, SNLI, MultiNLI, SCITail,
+and others.
 
-\begin{itemize}
-\tightlist
-\item
-  Mixes language processing and reasoning skills
-\item
-  Some benchmarks can be solved without deep understanding, only from
-  linguistic context
-\item
-  But many Q\&As require external knowledge
-\item
-  Highlighted example: ARC (Clark et al. (2018))
-\item
-  Other examples: MCTest, RACE, NarrativeQA, MCScript, ProPara, MultiRC,
-  ARCT, SQuAD 2.0, CoQA, QuAC, and many others
-\end{itemize}
+\textbf{Intuitive psychology}: other benchmarks focus on the ability of
+AI systems to conduct inference based on emotions and intensions,
+conditional on behaviour as described in the prompt. This test also
+requires considerable commonsense knowledge. A key example in this group
+is the benchmark test ``SocialIQA''. (Sap et al. (2019)). Other examples
+include Triangle-COPA, ROCStories, Event2Mind.Interestigly results of
+increasing performance in other tests suggest some level of commonsense
+knowledge is learnable through data.
 
-\subsection{Textual entailment}\label{textual-entailment}
+\textbf{Plausible inference}: there are benchmarks also that concentrate
+on measuring logic, and more specifically abductive logic, ie reaching
+hypothetical, intermediate certainty or even uncertain conclusions based
+on a limited context. These benchmarks require linguistic, common and
+commonsense knowledge. Highlighted examples are the SWAG (Zellers et al.
+(2018)) and HellaSWAG (Zellers et al. (2019)) benchmarks, while other
+examples include COPA, CBT, ROCStories, LAMBADA, JOCI, CLOTH, ReCoRD,
+AlphaNLI.
 
-\begin{itemize}
-\tightlist
-\item
-  Entailment: a directional relationship between a statement and a
-  hypothesis where a typical person would infer the hypothesis to be
-  true given the statement
-\item
-  Some benchmarks also test ability to recognise contradiction
-\item
-  Requires substantial commonsense knowledge
-\item
-  Highlighted example: SherLlic (Schmitt and Schütze (2019))
-\item
-  Other examples: RTE, conversational entailment, SICK, SNLI, MultiNLI,
-  SCITail, and others
-\end{itemize}
+\textbf{Multiple tasks}: some of them include some tasks requiring some
+economics-specific knowledge but as part of a much larger suite of
+tasks. More recently, BIG Bench (A. Srivastava et al. (2022)) a large,
+crowd-sourced benchmark exercise gathered considerable amount of
+questions to comprehensively test models; other examples are: bAbI,
+Inference Is Everything, DNC, GLUE, SuperGLUE.
 
-\subsection{Intuitive psychology}\label{intuitive-psychology}
+\textbf{Expert tasks}: as can be expected, those benchmarks are geared
+towards field-specific knowledge (eg, law, medicine). They usually
+include publicly available test datasets. In any case, successfully
+filling them usually require substantial common and commonsense
+knowledge. Crucially for this paper, there is no economics-specific
+benchmark that I know of.
 
-\begin{itemize}
-\tightlist
-\item
-  Inference of emotions and intensions conditional on description of
-  behaviour
-\item
-  Requires substantial commonsense knowledge
-\item
-  Highlighted example: SocialIQA (Sap et al. (2019))
-
-  \begin{itemize}
-  \tightlist
-  \item
-    results of increasing performance in other tests suggest some level
-    of commonsense knowledge is learnable through data
-  \end{itemize}
-\item
-  Other examples: Triangle-COPA, ROCStories, Event2Mind
-\end{itemize}
-
-\subsection{Plausible inference}\label{plausible-inference}
-
-\begin{itemize}
-\tightlist
-\item
-  Associated with abductive reasoning
-\item
-  Hypothetical, intermediate certainty or even uncertain conclusions
-  based on a limited context
-\item
-  Requires linguistic, common and commonsense knowledge
-\item
-  Highlighted examples: SWAG (Zellers et al. (2018)), HellaSWAG (Zellers
-  et al. (2019))
-\item
-  Examples: COPA, CBT, ROCStories, LAMBADA, JOCI, CLOTH, ReCoRD,
-  AlphaNLI
-\end{itemize}
-
-\subsection{Multiple tasks}\label{multiple-tasks}
-
-\begin{itemize}
-\tightlist
-\item
-  Some of them include some tasks requiring some economics-specific
-  knowledge
-\item
-  Examples: bAbI, Inference Is Everything, DNC, GLUE, SuperGLUE
-\item
-  More recently, BIG Bench (Srivastava et al. (2022))
-
-  \begin{itemize}
-  \tightlist
-  \item
-    BIG = ``Beyond the Imitation Game''
-  \end{itemize}
-\end{itemize}
-
-\subsection{Expert tasks}\label{expert-tasks}
-
-\begin{itemize}
-\tightlist
-\item
-  Geared towards field-specific knowledge (eg, law, medicine)
-\item
-  Publicly available tests
-\item
-  Usually require substantial common and commonsense knowledge
-\item
-  No economics-specific benchmark that I know of
-\end{itemize}
-
-\section{Limitations of existing
-benchmarks}\label{limitations-of-existing-benchmarks}
-
-The result from existing benchmarks is largely, if not completely,
-directly related to the number of questions correctly answered. However,
-this measures only the model's ability to answer correctly, \emph{not
-necessarily} its reasoning capabilities. The latter are part of a latent
-state space sitting between the input prompt and the answer. More
-concretely, for an input prompt \(X\), which includes a question and any
-necessary explicit information, the language model is a function
-\(\mathbf{M}\) that maps it to a given response:
-\(\mathbf{M} : X \to y\). In order to show that it is done by reasoning,
-we need tests (and more specifically, measurements) that convey some
-information about the inner workings of this function.
-
-As identified by Srivastava et al. (2022), another limitation is that
-many benchmarks are not created from questions that are first created by
-experts. CONTINUE\ldots{}
+The roster of benchmarks is impressive, including tests that focus on
+various types of knowledge (ie, linguistic, common and commonsense),
+evaluation of likely psychological state and logic attribution. However,
+a main point that is missing is the ability to attribute correct results
+to reasoning as opposed to even chance. The result from existing
+benchmarks is largely, if not completely, directly related to the number
+of questions correctly answered. However, this measures only the model's
+ability to answer correctly, \emph{not necessarily} its reasoning
+capabilities. The latter are part of a latent state space sitting
+between the input prompt and the answer. More concretely, for an input
+prompt \(Q\), which includes a question and any necessary explicit
+information, the language model is a function \(m\) that maps it to a
+given response: \(m : X \to y\). In order to show that it is done by
+reasoning, we need tests (and more specifically, measurements) that
+convey some information about the inner workings of this function. In
+addition, most benchmarks are the not derived from specialists' words.
 
 \section{A model of reasoning}\label{a-model-of-reasoning}
 
@@ -773,6 +838,9 @@ knowledge (given the theoretical model that it is a function of existing
 knowledge graph) versus response flipping due to probabilistic
 association with the terms introduced to describe the pros and cons.
 
+Information provision experiments (Fuster and Zafar (2023)) can help
+elucidate the knowledge needed by the AI.
+
 \subsection{Logic attribution}\label{logic-attribution}
 
 Once a prompt has been correctly parsed to focus only on relevant
@@ -786,16 +854,6 @@ an essential condition for appropriate use of logical relationships is
 that the inputs \(\phi\) and \(\kappa\) are correct; otherwise, even the
 purest application of logic would either lead to a failure or to a
 correct answer by chance.
-
-\begin{definition}[Logic
-relationship]\protect\hypertarget{def-logic}{}\label{def-logic}
-
-A logic relationship is a \ldots{}
-
-\end{definition}
-
-Definition~\ref{def-logic} introduces the idea of logic relationships.
-One example\ldots{}
 
 Similar to many other social disciplines, economics requires the
 analytical judgment referred to by Robbins (1932) in the analyses of
@@ -864,43 +922,6 @@ itself entails some dimensionality reduction, in line with the existence
 of evidence that some real-world data are in fact realisations of a
 manifold (Pope et al. (2021)).
 
-\subsection{Identification}\label{identification}
-
-Due to the sequential nature of Equation~\ref{eq-empiric} and the
-desirability of measuring an AI model's performance across the three
-reasoning steps, identification of the model obtains from a combination
-of analysis to find how the values can be estimated empirically to be
-one or zero. This then leads to the creation of identifying variation
-during the question generating process as described in
-Section~\ref{sec-variation}.\footnote{The machine learning literature
-  often call these variations ``counterfactuals'', a term which has a
-  completely different meaning in economics of alternative (often
-  observed) outcome, or, more broadly, of a thought experiment (J. J.
-  Heckman and Pinto (2023)). The economic nomenclature is favoured in
-  this paper.}
-
-For each question \(q\), \(\phi\) only depends on the specific prompt at
-hand (ie, \(q + \epsilon_f\)) and is independent of the two other
-values. When estimated from the question data it is also independent of
-the AI model's knowledge set \(\theta\). Once an estimate for
-\(\hat{\phi}\) is available, it can be used to condition \(\kappa\)
-along with the AI's fixed knowledge set, which does not change across
-observations of \(q\) or \(q + \epsilon_k\), and therefore is absorbed
-away since the estimation is done for each AI. Finally, \(\hat{\phi}\)
-and \(\hat{\kappa}\) are used to condition the estimates of \(\lambda\)
-based on \(q + \epsilon_l\).
-
-\begin{theorem}[Identification of reasoning
-abilities]\protect\hypertarget{thm-identification}{}\label{thm-identification}
-
-If\ldots{}
-
-\end{theorem}
-
-\begin{proof}
-By induction.
-\end{proof}
-
 \section{Reasoning about economics}\label{reasoning-about-economics}
 
 The model above allows us to estimate reasoning while also breaking down
@@ -953,7 +974,7 @@ any type of meaningful economic reasoning.
 \section{Empirical estimation}\label{sec-variation}
 
 Recall from Equation~\ref{eq-empiric} that estimation requires an
-evaluation of several variations of the same seed question \(q\) for
+evaluation of several variations of the same seed question \(Q\) for
 each component. These variations form the empirical data. Questions vary
 with respect to their adversarial aspect; it is this variation within
 each question that allows the empirical estimation of the effects
@@ -1039,41 +1060,20 @@ steps. This results in a collection of
 the performance of adversarial filters have degraded to an arbitrarily
 low point.
 
-\$
-
-\begin{algorithm}
-  \caption{Algorithm for finding server indices using OFG}
-
-  \begin{algorithmic}
-    \Statex \Comment { \%comment: servers[] contains the index of servers whose         data rate are sorted in descending order\%}
-    \State servers[]= index(of all servers) 
-    \State serverIndex[]=servers[0..K]
-    \State linearlyIndependentServerIndex[]=0
-    \State $[Z] \leftarrow 0$
-    \For  {$i=0$ to $serverIndex.length$} 
-    \Statex\Comment{ \%comment: find the equation corresponding the serverIndex        from the mapping at the File Server\%} 
-    \State        $eqn= equation(serverIndex[i])$ 
-    \Statex\Comment{ \%comment: try insert equation into Z using OFG\%} 
-
-    \EndFor end for 
-    \While{ ( linearlyIndependentServerIndex.length!=K ) } 
-    \Statex\Comment{\%comment: remove all the server index which were not inserted in Z\%}  
-    \State temp[]=serverIndex[]-linearlyIndependentServerIndex 
-    \If{  (linearlyIndependentServerIndex.length=K) }
-    \State break
-    \EndIf  
-    \EndWhile  
-  \end{algorithmic}
-\end{algorithm}
-
-\$
-
 \subsection{Variations related to information
 filtering}\label{variations-related-to-information-filtering}
 
 There are several classes of variations that can help test an AI model'
 interpretation of the input, ie which information to focus versus to
-ignore.
+ignore or to abstract away. The key principle of these identifying
+variations is to keep core information intact while varying the order of
+content or of answer options; change, include or remove trivial content;
+or including random symbols in lieu of non-important actual such as the
+codes identifying each response (ie, using country flags instead of
+alphabetic letters to identify options). Because the core information is
+always constant in all these \(M_f\) variations of \(Q\), an AI system
+that filters would capture these changes and continue to concentrate on
+the main information, which is intact.
 
 \textbf{Choice variations}: In this dimension, each variation of a seed
 question would have the same set of choices, but in varying order.
@@ -1171,7 +1171,20 @@ novel test that was completely new to the LLM.
 \subsection{Variations related to economic
 inference}\label{variations-related-to-economic-inference}
 
-J. J. Heckman and Pinto (2023) Four questions
+In addition to the variations described above, one type of question
+variantion that can help estimate reasoning in AI systems is the type
+that explores the four policy-related quesitons organised by J. J.
+Heckman and Pinto (2023). These questions, mentioned above, provide the
+inspiration for the variations on reasoning that are associated with
+measuring economic reasoning. In short, these variations essentially
+ensure that the benchmark asks questions recognising the effect of
+interest that is measured in each paper, and questions about the
+specific mechanisms. Other more sophisticated quesitons, which can also
+be created for each seed question paper if the original manuscript
+contains the necessary content, are about the forecast of policy effect
+in different environments, and of policies that were not implemented
+(ie, completely generalising and forming a structural ``model of the
+world'').
 
 \section{Practical considerations}\label{practical-considerations}
 
@@ -1288,8 +1301,8 @@ various environments.
 \textbf{Receive inputs from the public}: In order to truly reflect the
 breadth and diversity in economic thought, an ideal benchmark should be
 open to receiving suggested questions from the public.\footnote{This
-  approach was followed, for example, by Srivastava et al. (2022).} For
-example, economists publishing a new paper could suggest a source
+  approach was followed, for example, by A. Srivastava et al. (2022).}
+For example, economists publishing a new paper could suggest a source
 question based on their work. A practical way to achieve this is to
 create clear instructions and a standardised form that would be filled
 by that external user presenting the suggestion, coupled with a script
@@ -1314,14 +1327,13 @@ reach a correct answer. The model in this paper resembles the more
 sophisticated idea by LeCun (2022) that AIs require a combination of
 ``mental'' modules that can separably executve perception (eg, take in a
 prompt that might be text-only or text-and-image), calculate the cost of
-processing, and imagine action sequences.
-
-This model is placed in a growing consensus in the scientific community
-that reasoning is evidenced by certain characteristics: abstracting away
-the unnecessary details, matching that with explicit and implicit
-relevant knowledge, and then deploying logic operations to achieve the
-correct prompt. This paper elaborates such a model in more detail, and
-offers an empirical strategy to estimate each of its components.
+processing, and imagine action sequences. This model is placed in a
+growing consensus in the scientific community that reasoning is
+evidenced by certain characteristics: abstracting away the unnecessary
+details, matching that with explicit and implicit relevant knowledge,
+and then deploying logic operations to achieve the correct prompt. This
+paper elaborates such a model in more detail, and offers an empirical
+strategy to estimate each of its components.
 
 Understanding AI models' ability to reason and go beyond a pure
 probabilistic exercise is crucial as these models have an increasing
@@ -1333,11 +1345,10 @@ Models that reason better can rise up to the challenge of learning
 actual metrics of interest instead of real-world measurements, because
 the latter have added noise from human cognitive and heuristics
 limitations, which are then amplified by multiple types of biases in
-data (CITE paper on multiple biases). And with the increasing linguistic
-prowess of language models, their use in the economic research process
-(Korinek (2023), Ludwig and Mullainathan (2024)) is likely to increase,
-putting a premium on the ability to measure how well these models can
-reason.
+data. And with the increasing linguistic prowess of language models,
+their use in the economic research process (Korinek (2023), Ludwig and
+Mullainathan (2024)) is likely to increase, putting a premium on the
+ability to measure how well these models can reason.
 
 As economic agents and policymakers harness generative artificial
 intelligence (AI) to reap considerable efficiencies, and thus their
@@ -1345,7 +1356,14 @@ societal footprint becomes larger, a benchmark for economic reasoning is
 needed. I suggest ways to implement such a benchmark, and measure the
 current performance of a selected list of LMs. This benchmark is
 designed from the beginning to be continuously challenging for AI models
-to solve, anticipating further gains in their performance.
+to solve, anticipating further gains in their performance. In another
+avenue, it would be interesting to use the model in this paper as a
+basis for further exploring the functional forms of \(f\), \(k\) and
+\(l\). This could offer new paths to explore the seemingly high
+performance of these models. In turn, greater understanding of these
+models could support their further use in economic settings such as
+research. For example, the work in Bybee (2023) relies on the ability of
+LLMs to read financial news and explain their thought process.
 
 Let me conclude with Ken Arrow's impossibility theorem (Arrow (1950)),
 or rather the story of how he achieved this incredibly influential
@@ -1480,6 +1498,10 @@ Eric Horvitz, Ece Kamar, Peter Lee, et al. 2023. {``Sparks of Artificial
 General Intelligence: Early Experiments with GPT-4.''}
 \url{https://arxiv.org/abs/2303.12712}.
 
+\bibitem[\citeproctext]{ref-bybee2023ghost}
+Bybee, J Leland. 2023. {``The Ghost in the Machine: Generating Beliefs
+with Large Language Models.''} Technical report, Working Paper.
+
 \bibitem[\citeproctext]{ref-caplin2022rationally}
 Caplin, Andrew, Mark Dean, and John Leahy. 2022. {``Rationally
 Inattentive Behavior: Characterizing and Generalizing Shannon
@@ -1493,6 +1515,10 @@ eScholarship, University of California.
 Chen, Sihan, Richard Futrell, and Kyle Mahowald. 2023. {``An
 Information-Theoretic Approach to the Typology of Spatial
 Demonstratives.''} \emph{Cognition} 240: 105505.
+
+\bibitem[\citeproctext]{ref-chollet2019measure}
+Chollet, François. 2019. {``On the Measure of Intelligence.''}
+\emph{arXiv Preprint arXiv:1911.01547}.
 
 \bibitem[\citeproctext]{ref-clark2018think}
 Clark, Peter, Isaac Cowhey, Oren Etzioni, Tushar Khot, Ashish Sabharwal,
@@ -1536,6 +1562,15 @@ Ferrario, Beatrice, and Stefanie Stantcheva. 2022. {``Eliciting People's
 First-Order Concerns: Text Analysis of Open-Ended Survey Questions.''}
 In \emph{AEA Papers and Proceedings}, 112:163--69. American Economic
 Association 2014 Broadway, Suite 305, Nashville, TN 37203.
+
+\bibitem[\citeproctext]{ref-FUSTER2023107}
+Fuster, Andreas, and Basit Zafar. 2023. {``Chapter 4 - Survey
+Experiments on Economic Expectations☆☆we Thank the Editors and
+Participants at the Handbook Conference for Helpful Comments and
+Suggestions.''} In \emph{Handbook of Economic Expectations}, edited by
+Rüdiger Bachmann, Giorgio Topa, and Wilbert van der Klaauw, 107--30.
+Academic Press.
+https://doi.org/\url{https://doi.org/10.1016/B978-0-12-822927-9.00010-0}.
 
 \bibitem[\citeproctext]{ref-mighty1994fallen}
 Gans, Joshua S., and George B. Shepherd. 1994. {``How Are the Mighty
@@ -1722,6 +1757,11 @@ Lars Peter Hansen, James J. Heckman, and Rosa L. Matzkin, 7:355--486.
 Handbook of Econometrics. Elsevier.
 https://doi.org/\url{https://doi.org/10.1016/bs.hoe.2020.05.002}.
 
+\bibitem[\citeproctext]{ref-moskvichev2023conceptarc}
+Moskvichev, Arseny, Victor Vikram Odouard, and Melanie Mitchell. 2023.
+{``The ConceptARC Benchmark: Evaluating Understanding and Generalization
+in the ARC Domain.''} \emph{arXiv Preprint arXiv:2305.07141}.
+
 \bibitem[\citeproctext]{ref-olshausen1996natural}
 Olshausen, Bruno A, and David J Field. 1996. {``Natural Image Statistics
 and Efficient Coding.''} \emph{Network: Computation in Neural Systems} 7
@@ -1784,6 +1824,11 @@ Shannon, Claude Elwood. 1948. {``A Mathematical Theory of
 Communication.''} \emph{The Bell System Technical Journal} 27 (3):
 379--423.
 
+\bibitem[\citeproctext]{ref-shiffrin2023probing}
+Shiffrin, Richard, and Melanie Mitchell. 2023. {``Probing the Psychology
+of AI Models.''} \emph{Proceedings of the National Academy of Sciences}
+120 (10): e2300963120.
+
 \bibitem[\citeproctext]{ref-SIMS2003665}
 Sims, Christopher A. 2003. {``Implications of Rational Inattention.''}
 \emph{Journal of Monetary Economics} 50 (3): 665--90.
@@ -1794,6 +1839,13 @@ Srivastava, Aarohi, Abhinav Rastogi, Abhishek Rao, Abu Awal Md Shoeb,
 Abubakar Abid, Adam Fisch, Adam R Brown, et al. 2022. {``Beyond the
 Imitation Game: Quantifying and Extrapolating the Capabilities of
 Language Models.''} \emph{arXiv Preprint arXiv:2206.04615}.
+
+\bibitem[\citeproctext]{ref-srivastava2024functional}
+Srivastava, Saurabh, Annarose M B, Anto P V au2, Shashank Menon, Ajay
+Sukumar, Adwaith Samod T, Alan Philipose, Stevin Prince, and Sooraj
+Thomas. 2024. {``Functional Benchmarks for Robust Evaluation of
+Reasoning Performance, and the Reasoning Gap.''}
+\url{https://arxiv.org/abs/2402.19450}.
 
 \bibitem[\citeproctext]{ref-stantcheva2023run}
 Stantcheva, Stefanie. 2023. {``How to Run Surveys: A Guide to Creating
@@ -1851,6 +1903,12 @@ Yang, Jingfeng, Hongye Jin, Ruixiang Tang, Xiaotian Han, Qizhang Feng,
 Haoming Jiang, Bing Yin, and Xia Hu. 2023. {``Harnessing the Power of
 LLMs in Practice: A Survey on Chatgpt and Beyond.''} \emph{arXiv
 Preprint arXiv:2304.13712}.
+
+\bibitem[\citeproctext]{ref-yasunaga2023large}
+Yasunaga, Michihiro, Xinyun Chen, Yujia Li, Panupong Pasupat, Jure
+Leskovec, Percy Liang, Ed H. Chi, and Denny Zhou. 2023. {``Large
+Language Models as Analogical Reasoners.''}
+\url{https://arxiv.org/abs/2310.01714}.
 
 \bibitem[\citeproctext]{ref-zaslavsky2018efficient}
 Zaslavsky, Noga, Charles Kemp, Terry Regier, and Naftali Tishby. 2018.
