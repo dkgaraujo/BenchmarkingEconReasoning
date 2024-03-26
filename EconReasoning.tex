@@ -543,21 +543,26 @@ models such as GPT-4, although Bubeck et al. (2023) also point to many
 instances where reasoning breaks. Schaeffer, Miranda, and Koyejo (2024)
 present evidence that these ``emerging abilities'' that come with scale
 are actually a spurious by-product of the choice of metrics to emasure
-these abilities. Mitchell and Krakauer (2023) summarises the
-disagreement in the AI academic and practitioner fields as to whether AI
-models have some form of understanding, and by implication, potentially
-also reasoning. Wei, Wang, et al. (2022) claim that writing the prompt
-in a way that offers chain-of-thought examples improves the reasoning
-abilities of LLMs, although this was later demonstrated to be as
-generalisable (Dziri et al. (2024), Prystawski, Li, and Goodman (2024)).
-Browning and LeCun (2022) argue that AI models trained on written
-language alone will never be able to reason, and Moskvichev, Odouard,
-and Mitchell (2023) show that humans outperform advanced AI systems in
-terms of abstract thinking. Shiffrin and Mitchell (2023) argues for
-better understanding of why AI systems succeed or fail in tests. Wu et
-al. (2023), Lewis and Mitchell (2024), Perez-Cruz and Shin (2024), S.
-Srivastava et al. (2024) and other papers all use variations in prompts
-as some form of probing the degree to which LLMs are actually reasoning.
+these abilities.
+
+Mitchell and Krakauer (2023) summarises the disagreement in the AI
+academic and practitioner fields as to whether AI models have some form
+of understanding, and by implication, potentially also reasoning. Wei,
+Wang, et al. (2022) claim that writing the prompt in a way that offers
+chain-of-thought examples improves the reasoning abilities of LLMs,
+although this was later demonstrated to be as generalisable (Dziri et
+al. (2024), Prystawski, Li, and Goodman (2024)). Browning and LeCun
+(2022) argue that AI models trained on written language alone will never
+be able to reason, and Moskvichev, Odouard, and Mitchell (2023) show
+that humans outperform advanced AI systems in terms of abstract
+thinking. Shiffrin and Mitchell (2023) argues for better understanding
+of why AI systems succeed or fail in tests. Wu et al. (2023), Lewis and
+Mitchell (2024), Perez-Cruz and Shin (2024), S. Srivastava et al. (2024)
+and other papers all use variations in prompts as some form of probing
+the degree to which LLMs are actually reasoning. And more recently, Luo
+et al. (2024) present results of forward-looking benchmarks in the field
+of neuroscience, suggesting that LLMs can form some reasoning ability
+after fine-tuned on academic literature.
 
 Another literature this papers draws from is the nascent corpus on the
 evaluation of AI systems such as LLMs in economic settings. An early
@@ -697,6 +702,9 @@ given response: \(m : X \to y\). In order to show that it is done by
 reasoning, we need tests (and more specifically, measurements) that
 convey some information about the inner workings of this function. In
 addition, most benchmarks are the not derived from specialists' words.
+
+A more advanced benchmark, along the lines described inthis work, is
+Tarunesh, Aditya, and Choudhury (2023).
 
 \section{A model of reasoning}\label{a-model-of-reasoning}
 
@@ -1348,22 +1356,27 @@ limitations, which are then amplified by multiple types of biases in
 data. And with the increasing linguistic prowess of language models,
 their use in the economic research process (Korinek (2023), Ludwig and
 Mullainathan (2024)) is likely to increase, putting a premium on the
-ability to measure how well these models can reason.
+ability to measure how well these models can reason. Of course, this
+should also be done with care, given results from the human literature
+pointing to the inability to actually benchmark skills (J. J. Heckman
+and Zhou (2022)).
 
 As economic agents and policymakers harness generative artificial
-intelligence (AI) to reap considerable efficiencies, and thus their
-societal footprint becomes larger, a benchmark for economic reasoning is
-needed. I suggest ways to implement such a benchmark, and measure the
-current performance of a selected list of LMs. This benchmark is
-designed from the beginning to be continuously challenging for AI models
-to solve, anticipating further gains in their performance. In another
-avenue, it would be interesting to use the model in this paper as a
-basis for further exploring the functional forms of \(f\), \(k\) and
-\(l\). This could offer new paths to explore the seemingly high
-performance of these models. In turn, greater understanding of these
-models could support their further use in economic settings such as
-research. For example, the work in Bybee (2023) relies on the ability of
-LLMs to read financial news and explain their thought process.
+intelligence (AI) to reap considerable efficiencies,\footnote{Including
+  by teaming up of human and AI economists, as suggested by Luo et al.
+  (2024) in the field of neuroscience.} and thus their societal
+footprint becomes larger, a benchmark for economic reasoning is needed.
+I suggest ways to implement such a benchmark, and measure the current
+performance of a selected list of LMs. This benchmark is designed from
+the beginning to be continuously challenging for AI models to solve,
+anticipating further gains in their performance. In another avenue, it
+would be interesting to use the model in this paper as a basis for
+further exploring the functional forms of \(f\), \(k\) and \(l\). This
+could offer new paths to explore the seemingly high performance of these
+models. In turn, greater understanding of these models could support
+their further use in economic settings such as research. For example,
+the work in Bybee (2023) relies on the ability of LLMs to read financial
+news and explain their thought process.
 
 Let me conclude with Ken Arrow's impossibility theorem (Arrow (1950)),
 or rather the story of how he achieved this incredibly influential
@@ -1628,6 +1641,10 @@ Heckman, James J, and Rodrigo Pinto. 2023. {``Econometric Causality: The
 Central Role of Thought Experiments.''} National Bureau of Economic
 Research.
 
+\bibitem[\citeproctext]{ref-heckman2022measuring}
+Heckman, James J, and Jin Zhou. 2022. {``Measuring Knowledge and
+Learning.''} National Bureau of Economic Research.
+
 \bibitem[\citeproctext]{ref-heckman2015causal}
 Heckman, James, and Rodrigo Pinto. 2015. {``Causal Analysis After
 Haavelmo.''} \emph{Econometric Theory} 31 (1): 115--51.
@@ -1709,6 +1726,12 @@ Lucas, Robert E. 1976. {``Econometric Policy Evaluation: A Critique.''}
 Ludwig, Jens, and Sendhil Mullainathan. 2024. {``{Machine Learning as a
 Tool for Hypothesis Generation*}.''} \emph{The Quarterly Journal of
 Economics}, January, qjad055. \url{https://doi.org/10.1093/qje/qjad055}.
+
+\bibitem[\citeproctext]{ref-luo2024large}
+Luo, Xiaoliang, Akilles Rechardt, Guangzhi Sun, Kevin K. Nejad, Felipe
+Yáñez, Bati Yilmaz, Kangjoo Lee, et al. 2024. {``Large Language Models
+Surpass Human Experts in Predicting Neuroscience Results.''}
+\url{https://arxiv.org/abs/2403.03230}.
 
 \bibitem[\citeproctext]{ref-mahowald2023dissociating}
 Mahowald, Kyle, Anna A. Ivanova, Idan A. Blank, Nancy Kanwisher, Joshua
@@ -1856,6 +1879,11 @@ Your Own Identifying Variation and Revealing the Invisible.''}
 Storks, Shane, Qiaozi Gao, and Joyce Y. Chai. 2020. {``Recent Advances
 in Natural Language Inference: A Survey of Benchmarks, Resources, and
 Approaches.''} \url{https://arxiv.org/abs/1904.01172}.
+
+\bibitem[\citeproctext]{ref-tarunesh2023lonli}
+Tarunesh, Ishan, Somak Aditya, and Monojit Choudhury. 2023. {``Lonli: An
+Extensible Framework for Testing Diverse Logical Reasoning Capabilities
+for Nli.''} \emph{Language Resources and Evaluation}, 1--32.
 
 \bibitem[\citeproctext]{ref-tenenbaum2000global}
 Tenenbaum, Joshua B, Vin de Silva, and John C Langford. 2000. {``A
