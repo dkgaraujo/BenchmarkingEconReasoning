@@ -1,0 +1,31 @@
+that simultaneously (a) interprets the prompt, identifying the relevant information for the task and filtering away everything else by ignoring or abstract away irrelevant details, (b) associates $Q$ with any relevant existing commonsense knowledge $\theta$ to answer the question, and (c) applies logical relations such as deduction and induction to $Q$ and $\theta$ to arrive at the correct answer. Formally, each answer is defined as a non-parametric function of the following steps: information filtering $\phi = f(Q)$, knowledge curation $\kappa = k(\phi, \theta)$ and logic attribution $\lambda = l(\kappa, Q)$, $\alpha = A(\lambda, Q)$, where $A$ is the function that returns the correct answer from the prompt $Q$ given a successful implementation of the component steps. Each of those three steps above are sequential, and depend on the successful completion of the previous one. The goal is for this model to be simple and intuitive. Throughout the paper, I assume AIs respond to their best ability, meaning that they would reason instead of probabilistically choosing an answer $\tilde{a} = \arg \max_{a} L(a | Q)$.
+
+
+
+
+$
+\begin{algorithm}
+  \caption{Algorithm for finding server indices using OFG}
+
+  \begin{algorithmic}
+    \Statex \Comment { \%comment: servers[] contains the index of servers whose         data rate are sorted in descending order\%}
+    \State servers[]= index(of all servers) 
+    \State serverIndex[]=servers[0..K]
+    \State linearlyIndependentServerIndex[]=0
+    \State $[Z] \leftarrow 0$
+    \For  {$i=0$ to $serverIndex.length$} 
+    \Statex\Comment{ \%comment: find the equation corresponding the serverIndex        from the mapping at the File Server\%} 
+    \State        $eqn= equation(serverIndex[i])$ 
+    \Statex\Comment{ \%comment: try insert equation into Z using OFG\%} 
+
+    \EndFor end for 
+    \While{ ( linearlyIndependentServerIndex.length!=K ) } 
+    \Statex\Comment{\%comment: remove all the server index which were not inserted in Z\%}  
+    \State temp[]=serverIndex[]-linearlyIndependentServerIndex 
+    \If{  (linearlyIndependentServerIndex.length=K) }
+    \State break
+    \EndIf  
+    \EndWhile  
+  \end{algorithmic}
+\end{algorithm}
+$
