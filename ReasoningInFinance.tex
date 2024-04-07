@@ -152,6 +152,15 @@
 \@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
 \floatname{codelisting}{Listing}
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{remark}
+\AtBeginDocument{\renewcommand*{\proofname}{Proof}}
+\newtheorem*{remark}{Remark}
+\newtheorem*{solution}{Solution}
+\newtheorem{refremark}{Remark}[section]
+\newtheorem{refsolution}{Solution}[section]
 \makeatother
 \makeatletter
 \makeatother
@@ -263,6 +272,132 @@ resource take-up from technology adoption\ldots{}
 Uthemann (2022).
 
 \section{Model}\label{model}
+
+The model draws from the setup in Szkup and Trevino (2021), with
+important additions. First, the cost of technology adoption is subject
+to a flat supply curve, resulting in cost changes that introduce another
+strategic complementarity. Second, the technology itself evolves over
+time, and responds to factor prices as well. And third, the process by
+which AI improves the signal is laid out in more detail to highlight the
+cases where the technology can absorb more text but cannot yet
+\emph{reason} about it.
+
+\subsection{Setup}\label{setup}
+
+The simplest version of the model is as follows.
+
+The state of economic fundamentals is a random variable with normal
+distribution \(\theta \sim N(\mu_\theta, \sigma_\theta^2)\). \(\theta\)
+is only observed indirectly by each investor \(i\) as a noisy signal,
+\(x_i = \theta + \sigma_i \epsilon_i\). An AI technology \(\alpha > 0\)
+uses \(R > 0\) finite specialised resources (eg, AI scientists, data
+engineers, graphics processing units chips - GPUs, etc) to improve the
+precision of the signal of the existing data: with
+\(\alpha_R' > 0, \alpha_R'' < 0\), and each individual precision defined
+as \(\sigma_i = \sigma / \alpha_i(R)\).
+
+However, unless the AI model can actually reason (as in Araujo, 2024;
+described further below), very precise signals (low \(\sigma_i\)) also
+come with the risk of belieavable misinterpretation (``hallucinations'')
+or other forms of ``silent mistakes'', which bias the investor's
+perception about fundamentals. Such a problem is of course compounded by
+the high confidence the investor has in the signal given its acquired
+low \(\sigma_i\). This is modelled through a \emph{reasoning filter}
+\(\phi\) (see Section~\ref{sec-reasoning}). This function is the
+identity function if the AI cannot reason and 0 if it can reason. Having
+\(\eta \sim N(0, \sigma_\eta)\) as the baseline level of
+noise\footnote{Reflecting, for example, technology frictions in the
+  production and dissemination of data, or more fundamentally even the
+  sparsity in the actual signal from the manifold hypothesis.} for all
+private signals, then
+\(\epsilon_i = \eta + \phi(e^{\lambda \alpha_i(R)})\) (\(\lambda\) is an
+inconsequential scaling constant). Putting all of this together, the
+private signal about the fundamentals is:
+
+\begin{equation}\phantomsection\label{eq-privatesignals}{
+x_i = \theta + (\eta + \phi(e^{\lambda \alpha_i(R)})) \sigma / \alpha_i(R)
+}\end{equation}
+
+\begin{itemize}
+\tightlist
+\item
+  Two ex ante identical investors, \(i \in \{1,2\}\) choose how much to
+  invest in AI
+\end{itemize}
+
+\subsection{Equilibrium in financial and AI
+investments}\label{equilibrium-in-financial-and-ai-investments}
+
+After the decisions to invest in AI is taken, the second stage involves
+an investment in the financial asset. This step resembles a traditional
+global game (Morris and Shin 2003), but where players choose the
+precision of their own information (Yang 2015, Szkup and Trevino
+(2021)).
+
+\subsection{Tentative calculations}\label{tentative-calculations}
+
+First, note there is exactly one value of \(\alpha_i\) that results in
+an unbiased private signal.
+
+\begin{definition}[AI use with minimal bias in private
+signal]\protect\hypertarget{def-alphainvestunbiased}{}\label{def-alphainvestunbiased}
+
+There is only one specific value \(\alpha^*\) for which the private
+signal is the closest to \(\theta\) in expectation. The subscript is
+irrelevant because all investors are ex ante similar.
+
+\end{definition}
+
+See Definition~\ref{def-alphainvestunbiased}.
+
+\begin{proof}
+The first order condition only holds for one value of \(\alpha_i > 0\).
+Isolating \(\alpha^*\) in the numerator to the left side yields \[
+\frac{d}{d \alpha^*} (\eta + \phi(e^{\lambda \alpha^*})) \sigma / \alpha^* = 0,
+\]
+
+which can be manipulated to
+
+\[
+\frac{\lambda e^{\lambda \alpha^*} \sigma}{\alpha} - \frac{e^{\lambda \alpha^*}\sigma}{(\alpha^*)^2} = \frac{\eta \sigma}{(\alpha^*)^2}.
+\]
+
+Multiplying both sides by \((\alpha^*)^2\) obtains
+
+\[
+\lambda \alpha^* e^{\lambda \alpha^*} \sigma - e^{\lambda \alpha^*}\sigma = \eta \sigma,
+\]
+
+which is the same as
+
+\[
+e^{\lambda \alpha^*} (\lambda \alpha^* - 1)= \eta,
+\]
+
+and thus the only possible solution is \(\alpha^* = 1/\lambda\).
+
+The second order condition obtained by substituting this equality above
+is positive, confirming that \(\alpha^*\) minimises the bias on the
+signal:
+
+\[
+\frac{d^2}{d (1/\lambda)^2} (\eta + \phi(e)) \sigma \lambda > 0
+\]
+\end{proof}
+
+The problem is, higher levels of \(R\) monotonically increase precision
+but there is only one level of \(R\) that minimises bias in information.
+
+\section{Reasoning}\label{sec-reasoning}
+
+Note that \(\phi\) itself is not dependent on the performance of the AI.
+This is in line with compiling evidence that while the increasing power
+of AI affords it new abilities, including some that resemble reasoning,
+ultimately it is even questionable if a robust for of reasoning can be
+obtained by continuing to scale a technique that involves memorisation
+rather than actual abstract thinking (LeCun\ldots)
+
+\subsection{Equilibrium}\label{equilibrium}
 
 Equilibrium D. M. Frankel, Morris, and Pauzner (2003).
 
