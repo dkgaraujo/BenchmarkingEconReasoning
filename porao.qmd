@@ -29,3 +29,6 @@ $
   \end{algorithmic}
 \end{algorithm}
 $
+
+
+In this game, a strategy is a function $s : \mathbf{R} \to \{0, 1\}$.

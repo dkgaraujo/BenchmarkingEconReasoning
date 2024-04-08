@@ -153,8 +153,8 @@
 \floatname{codelisting}{Listing}
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \usepackage{amsthm}
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}[section]
 \theoremstyle{remark}
 \AtBeginDocument{\renewcommand*{\proofname}{Proof}}
 \newtheorem*{remark}{Remark}
@@ -176,7 +176,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Imperfect reasoning abilities of artificial intelligence models and asset prices (Early stage work)},
+  pdftitle={Information acquisition through artificial intelligence in financial markets (Early stage work)},
   pdfauthor={Douglas K. G. Araujo},
   colorlinks=true,
   linkcolor={blue},
@@ -185,8 +185,8 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
-\title{Imperfect reasoning abilities of artificial intelligence models
-and asset prices (Early stage work)\thanks{This work represents my
+\title{Information acquisition through artificial intelligence in
+financial markets (Early stage work)\thanks{This work represents my
 opinion and not necessarily that of the BIS.}}
 
 
@@ -200,37 +200,57 @@ Settlements, douglas.araujo@bis.org
 \begin{document}
 \maketitle
 \begin{abstract}
-Market participants choose the level of costly deployment of artificial
-intelligence models, such as large language models, to better extract
-signal about fundamentals from a noisy and multidimensional common data
-space. The monotonically increasing technology frontier evolves over
-time but actual adoption depends on the use of scarce resources that
-influence costs, mimicking constraints in human resources and parallel
-computing. Participants make decisions based on a `double global game'
-with simultaneous higher-order beliefs about asset prices and technology
-adoption by peers. Similar to the traditional case with assets,
-participants overinvest in AI because they think others might be doing
-so, etc. But while this overinvestment in AI reduces the noise about
-fundamentals, the higher-order beliefs that everyone else also observes
-lower noise ends up leading to the same theme of overinvestment in the
-asset as well. If the technology envelope does not include a properly
-reasoning AI model, which is able to robustly ignore noise about
-fundamentals, the equilibrium outcome is a self-reinforcing
-overinvestment both in the asset and in the AI-related resources. In
-contrast, the emergence of a reasoning model brings the noise to zero
-and agents coordinate perfectly. JEL codes: C45, C69, C88, C59.
+Investors choose the level of costly deployment of artificial
+intelligence (AI) models, such as large language models, to better
+extract signal about fundamentals from a noisy and multidimensional
+common data space. The monotonically increasing technology evolves over
+time but both this evolution and the actual adoption depends on the use
+of scarce resources, mimicking constraints in human resources and
+parallel computing. Investors decide to invest on a risky asset with
+strategic complementarities on information and on the level of
+technology adoption by peers. The model features the possibility of
+hallucinations or other silent mistakes in information processing. The
+model is simple but allows inference on important topics related to the
+adoption of AI in finance, including the effect of hallucinations on the
+coordination of investors, the role of a closed versus open AI model,
+the potentially outsized effects of cyber security or other operational
+risk incidents, and supply chain shocks in the AI chip industry. JEL
+codes: D82, G14.
 \end{abstract}
+
+``\emph{Firms making investment decisions are starting to emulate the
+hair-trigger behaviour of financial investors. That means that a growing
+part of the economy may be starting to act like a financial market, with
+all that implies---like the potential for bubbles and panics. One could
+argue that far from making the economy more stable, the rapid responses
+of today's corporations make their investment in equipment and software
+vulnerable to the kind of self-fulfilling pessimism that used to be
+possible only for investment in paper assets.}'' - Krugman (2001)
 
 \section{Introduction}\label{introduction}
 
 The increasing capabilities of large language models (LLM) and other
-artificial intelligence (AI) models create expectations that they can be
-useful for forecasting and trading (eg, Lopez-Lira and Tang (2023)). But
-if all market participants expect others to improve their own
-signal-to-noise ratio by adopting a common technology, a coordination
-situation with higher-order beliefs similar to the canonical global
-games arises, in conjunction with the original coordination issue. This
-paper explores the equilibrium outcome when such a technology evolves
+artificial intelligence (AI) models unlock useful new ways to transform
+data into actionable information, expanding the ``data envelope''
+(Bonney et al. (2024)). These sophisticated models have been posited to
+be useful even for forecasting and stock trading (eg, Lopez-Lira and
+Tang (2023)), adding further momentum to the use of these technologies.
+But while AI may better transform data into information, increasing
+precision about a private signal, it also can output silent errors, such
+as hallucinations, that are hard to identify. For example, LLMs might
+provide human-like answers that fail to correctly identify trivial
+aspects of tasks (Perez-Cruz and Shin (2024)). Another consideration is
+the cost of investing in edge AI applications for deployment at scale.
+And since AI-specific resources such as skilled labour force and
+adequate chips are very limited, even AI developers might be affected.
+
+All these issues add to the usual incomplete information setting that is
+traditionally studied in financial markets (Morris and Shin (2002),
+Morris and Shin (2003), Szkup and Trevino (2020)). If each investor
+expects others to improve their own signal-to-noise ratio by adopting a
+common technology, a coordination situation similar to the canonical
+global games arises, playing out together with the original coordination
+issue. This paper explores such games when a technology evolves
 according to availability of resources that are also deployed at a cost
 by market participants to improve their signal.
 
@@ -254,75 +274,206 @@ overinvestment both in the asset and in the AI-related resources. In
 contrast, the emergence of a reasoning model brings the noise to zero
 and agents coordinate perfectly.
 
-\section{Literature}\label{literature}
+The model is simple enough to represent the main dynamics of investors'
+indirect acquisition of information through their investment in AI. At
+the same time, it contains rich enough representations that allow the
+study of questions of interest. In this paper I explore four of them.
+First, the model allows for an AI to fully reason with respect to an
+input and task. Second, given discussions around the wisedom of open
+source versus closed source models, the mode shines a light on the role
+of a closed versus open AI model. Third, analyses demonstrate the
+potentially outsized effects of cyber security or other operational risk
+incidents, and finally the supply chain shocks in the AI chip industry
+are simulated.
 
-This work relates to the literatures on
+\subsection{Literature}\label{literature}
 
+This work relates to the literatures on information acquisition in
+incomplete information games, and on AI and data in finance.
 \textbf{Coordination with information acquisition}. Angeletos and Lian
 (2016), Szkup and Trevino (2015b), Szkup and Trevino (2015a), Szkup and
 Trevino (2021). Reshidi et al. (2021) study the individual and
 collective information acquisition. Technology adoption canonical model
 D. Frankel and Pauzner (2000). Private aquisition of information
 (processing), Hellwig and Veldkamp (2009) and Colombo, Femminis, and
-Pavan (2014). In contrast with that literature, here the AI technology
-frontier also develops endogenously and responds (negatively) to the
-resource take-up from technology adoption\ldots{}
+Pavan (2014). Colombo, Femminis, and Pavan (2014) highlights the
+difference between effiencies in information acquisition and its usage.
+In contrast with that literature, here the AI technology frontier also
+develops endogenously and responds (negatively) to the resource take-up
+from technology adoption\ldots{} \textbf{Global games}. Carlsson and Van
+Damme (1993). Morris and Shin (2002), Morris and Shin (2003).
 
-\textbf{AI in finance, including risks.} Danielsson, Macrae, and
-Uthemann (2022).
+\textbf{Data in finance} Farboodi et al. (2022) models the extraction by
+investors of \emph{information} on assets from \emph{data}, and how the
+value of data is related also to characteristics of the asset itself.
+Begenau, Farboodi, and Veldkamp (2018) argues that the existence of more
+data to larger firms favours them over others. \textbf{AI in finance,
+including risks.} AI can read information better (Araujo et al. (n.d.),
+Araujo et al. (2024)), and especially the more sophisticated type of
+models - large language models (LLMs) can further increase the ability
+to use data (Korinek (2023)). Lopez-Lira and Tang (2023) show evidence
+that ChatGPT, the flagship LLM, can successfully pick stocks.
+Danielsson, Macrae, and Uthemann (2022) discuss risks.
 
 \section{Model}\label{model}
 
 The model draws from the setup in Szkup and Trevino (2021), with
 important additions. First, the cost of technology adoption is subject
 to a flat supply curve, resulting in cost changes that introduce another
-strategic complementarity. Second, the technology itself evolves over
-time, and responds to factor prices as well. And third, the process by
-which AI improves the signal is laid out in more detail to highlight the
-cases where the technology can absorb more text but cannot yet
-\emph{reason} about it.
+strategic complementarity. Second, the technology itself evolves
+stochastically over time, including in response to factor prices as
+well. And third, the process by which AI improves the signal is laid out
+in more detail to highlight the cases where the technology can transform
+more data text into inormation but cannot yet \emph{reason} about it.
 
 \subsection{Setup}\label{setup}
 
-The simplest version of the model is as follows.
+The simplest version of the model is a two-investor setup as follows.
 
 The state of economic fundamentals is a random variable with normal
 distribution \(\theta \sim N(\mu_\theta, \sigma_\theta^2)\). \(\theta\)
 is only observed indirectly by each investor \(i\) as a noisy signal,
-\(x_i = \theta + \sigma_i \epsilon_i\). An AI technology \(\alpha > 0\)
-uses \(R > 0\) finite specialised resources (eg, AI scientists, data
-engineers, graphics processing units chips - GPUs, etc) to improve the
-precision of the signal of the existing data: with
-\(\alpha_R' > 0, \alpha_R'' < 0\), and each individual precision defined
-as \(\sigma_i = \sigma / \alpha_i(R)\).
+\(x_i = \theta + \sigma_i \epsilon_i\). An AI technology
+\(\alpha(R) > 0\) uses finite specialised resources \(R\) (eg, AI
+scientists, data engineers, graphics processing units chips - GPUs, etc)
+to improve the precision of the signal of the existing data. The total
+amount of these resources is divided into AI developers and the
+investors: \(R = R_{\text{AI}} + \sum_{i} R_i\) for
+\(R_{\text{AI}} > 0\) and \(\forall R_i \geq 0\). The technology has
+decreasing returns to scale with \(\alpha_R' > 0, \alpha_R'' < 0\), and
+each individual precision defined as
+\(\sigma_i = \sigma / \alpha(R_i)\). \(\alpha\) itself is common amongst
+players, reflecting the current relevance of open source and open weight
+models in the high end AI market. However, section
+Section~\ref{sec-closedmodels} relaxes this definition so that investors
+can also purchase a unique \(\alpha_i\) technology.
 
-However, unless the AI model can actually reason (as in Araujo, 2024;
-described further below), very precise signals (low \(\sigma_i\)) also
-come with the risk of belieavable misinterpretation (``hallucinations'')
-or other forms of ``silent mistakes'', which bias the investor's
-perception about fundamentals. Such a problem is of course compounded by
-the high confidence the investor has in the signal given its acquired
-low \(\sigma_i\). This is modelled through a \emph{reasoning filter}
-\(\phi\) (see Section~\ref{sec-reasoning}). This function is the
-identity function if the AI cannot reason and 0 if it can reason. Having
-\(\eta \sim N(0, \sigma_\eta)\) as the baseline level of
-noise\footnote{Reflecting, for example, technology frictions in the
+However, unless the AI model can actually reason, very precise signals
+(low \(\sigma_i\)) also increase the risk of belieavable wrong answers
+(such as ``hallucinations'') or other forms of ``silent mistakes'',
+which bias the investor's perception about fundamentals. Such a problem
+is of course compounded by the high confidence the investor has in the
+signal given its acquired low \(\sigma_i\). This is modelled through a
+\emph{reasoning filter} \(\phi\) (see Section~\ref{sec-reasoning}). This
+function is the identity function if the AI cannot reason and 0 if it
+can reason. Having \(\eta \sim N(0, \sigma_\eta)\) as the baseline level
+of noise\footnote{Reflecting, for example, technology frictions in the
   production and dissemination of data, or more fundamentally even the
   sparsity in the actual signal from the manifold hypothesis.} for all
-private signals, then
-\(\epsilon_i = \eta + \phi(e^{\lambda \alpha_i(R)})\) (\(\lambda\) is an
-inconsequential scaling constant). Putting all of this together, the
-private signal about the fundamentals is:
+private signals, then each investor will observe
+\(\epsilon_i = \eta + \phi(e^{\lambda \alpha_i(R)})\), in which
+\(\lambda\) is an inconsequential positive constant for scaling only.
+Putting all of this together, the private signal about the fundamentals
+is:
 
 \begin{equation}\phantomsection\label{eq-privatesignals}{
-x_i = \theta + (\eta + \phi(e^{\lambda \alpha_i(R)})) \sigma / \alpha_i(R)
+x_i = \theta + (\eta + \phi(e^{\lambda \alpha(R_i)})) \sigma / \alpha(R_i)
 }\end{equation}
 
+Given this scenario for technology investment, two ex ante identical
+investors \(i \in \{1,2\}\) choose how much \(R_i\) to acquire. Because
+resources are finite and technologists pick up the residual resources
+not acquired by investors, the investors face a supply curve and the
+technologists are assumed for simplicity to be price takers. Given this
+structure, prices are normalised as the proportion of resources taken by
+investors, \(\rho = (1/R)\sum_i R_i\).\footnote{The actual prices could
+  be proportional to this ratio, but the added clutter to notation does
+  not justify it.}. The prices are public information and the market for
+AI resources clear.
+
+The two investors decide in the first stage how much of their endowment
+to invest in AI usage, with the remainder available for the next stage
+where they decide whether or not to invest, \(a_i \in \{0, 1\}\). This
+equality is represented as \(E_i = R_i + I_i\). In the second period,
+the investors decide how to allocate \(I_i\), in a safe or risky asset
+(the allocation is binary). The safe asset does not have a cost, and
+yields zero regardless of \(\theta\) or the number of investors who
+choose it. Conversely, the risk asset's payoff can be successful in
+either of the following situations: (a) if \(\theta \geq \bar{\theta}\)
+or (b) if \(\theta \geq \underline{\theta}\) and \(a_i = a_j = 1\).
+While this payoff structure follows Szkup and Trevino (2021) closely,
+the current model differs from that one because investors only allocates
+\(I_i\). Because investing in the risky asset entails a cost \(T\), the
+risky asset yields \(\theta I_i - T\) in case of success or
+alternatively, \(-T\).
+
+Each investor's choice \(a_i\) depends on the observed signal \(x_i\)
+and the level of use of AI chosen in the preceding step, \(R_i\). As in
+Szkup and Trevino (2021), the level of precision (from the investment in
+AI resources) is common knowledge in this simple game, but here it is
+only incidentally so: this settings comports only two investors and a
+common price that reflects their joint AI investments.\footnote{A richer
+  setting would see not only more investors, including atomic ones, but
+  also have only the global AI resource expense be public, not its
+  distribution to investors. The type of challenge it would bring to the
+  current model includes for example a non-trivial correlation between
+  the use of AI and the perceived signal. This interesting case demands
+  a dedicated exposition and not further dealt with in this paper.} Each
+investor's utility is a mapping of the form
+\(u : \{0, 1\} \times \{0, 1\} \times \mathbf{R} \times [0, 1] \to \mathbf{R}\),
+with \(u(a_i, a_j, x_i, R_i)\) representing investor \(i\)'s pay-off as
+a function of their own action, the other investor's action, the signal
+observed by \(i\), and its investment in the AI technology.
+
+In concrete terms,
+
+\begin{equation}\phantomsection\label{eq-utility}{
+u(a_i, a_j, x_i, R_i) = (\mathbf{1}[\theta \geq \bar{\theta}|x_i] + \mathbf{1}[x_i \geq x_i^*|\theta]a_j)a_i(\theta I_i - T) - R_i,
+}\end{equation}
+
+from which the indifference threshold with respect to investing or not
+investing depending on the signal is set. {[}to add, equilibrium{]}
+
+Innovations in AI reasoning happen in between periods: after investors
+have decided \(\rho\), the remainder \(R_{\text{AI}}\) determines the
+probability of a major breakthrough in reasoning ability. This is
+modelled as follows.\footnote{Recall that \(\phi\) determines the
+  reasoning ability in a way that is orthogonal to model performance.}
+Two independent random draws from U(0, 1),
+\(\pi_{\text{idea}}, \pi_{\text{obstacle}}\), correspond respectively to
+innovative ideas and to practical obstacles to innovation related to
+those ideas. The idea requires resources for implementation, and thus a
+technological advance only happens if the idea, once actually
+implemented, overcomes the barrier to innovation. Formally:
+
+\begin{equation}\phantomsection\label{eq-tech}{
+p = \text{max}(0, \underbrace{\pi_{\text{idea}} * (1-\rho)}_{\text{Implemented idea}} - \pi_{\text{obstacle}}).
+}\end{equation}
+
+With \(p\) the level of actual innovation in AI reasoning, the next step
+is to define the simple connection between the potential technology jump
+after allocation of the AI-specific resources and the innovation
+outcome. And so, through the equation
+
+\begin{equation}\phantomsection\label{eq-reasoning}{
+\phi(x) = (1 - p)x,
+}\end{equation}
+
+\(\phi\) tapers off the noisiness to help the private signal get closer
+to \(\theta + \eta\). Note that the only chance of a full shutdown of
+the added noise by the AI model - for example, through the concept of
+\emph{artificial generalised intelligence}, is ruled out and would
+require all of the AI-related resources to the technologists only.
+
+One important observation about the effect of AI on financial
+investments is consistent with a classical result in the global games
+literature (Morris and Shin (2002), Morris and Shin (2003)): the price
+\(\rho\) of AI resources has an outsized impact on outcomes by virtue of
+its public nature.
+
+\subsection{AI as a technique to read
+information}\label{ai-as-a-technique-to-read-information}
+
 \begin{itemize}
-\tightlist
 \item
-  Two ex ante identical investors, \(i \in \{1,2\}\) choose how much to
-  invest in AI
+  Increased availability of data Veldkamp and Chung (2019) and lower
+  cost across data pipeline Goldfarb and Tucker (2019). This facilitates
+  the use of new data, or data in a compound way, due to the
+  ``discovery'' of new data by newer technologies Hirshleifer (1978).
+\item
+  An early reference is Ranco et al. (2015). The idea is simple: new
+  techniques not only process more data more effectively, but they also
+  expand the envelope of data that can be analysed to look for signal.
 \end{itemize}
 
 \subsection{Equilibrium in financial and AI
@@ -330,33 +481,31 @@ investments}\label{equilibrium-in-financial-and-ai-investments}
 
 After the decisions to invest in AI is taken, the second stage involves
 an investment in the financial asset. This step resembles a traditional
-global game (Morris and Shin 2003), but where players choose the
-precision of their own information (Yang 2015, Szkup and Trevino
-(2021)).
+global game (Morris and Shin (2003)), but where players choose the
+precision of their own information as in, for example, Yang (2015),
+Szkup and Trevino (2021). The tendency of the game to a unique outcome,
+due to the limit uniqueness (D. M. Frankel, Morris, and Pauzner (2003)).
 
-\subsection{Tentative calculations}\label{tentative-calculations}
+First, note there is exactly one value of \(\alpha(R_i)\) that results
+in an minimally biased private signal.
 
-First, note there is exactly one value of \(\alpha_i\) that results in
-an unbiased private signal.
+\begin{proposition}[AI use with minimal bias in private
+signal]\protect\hypertarget{prp-alphainvestunbiased}{}\label{prp-alphainvestunbiased}
 
-\begin{definition}[AI use with minimal bias in private
-signal]\protect\hypertarget{def-alphainvestunbiased}{}\label{def-alphainvestunbiased}
+There is only one specific value \(\alpha^* = \alpha(R^*)\) for which
+the private signal is the closest to \(\theta\) in expectation. The
+subscript is irrelevant because all investors are ex ante similar.
 
-There is only one specific value \(\alpha^*\) for which the private
-signal is the closest to \(\theta\) in expectation. The subscript is
-irrelevant because all investors are ex ante similar.
-
-\end{definition}
-
-See Definition~\ref{def-alphainvestunbiased}.
+\end{proposition}
 
 \begin{proof}
-The first order condition only holds for one value of \(\alpha_i > 0\).
-Isolating \(\alpha^*\) in the numerator to the left side yields \[
-\frac{d}{d \alpha^*} (\eta + \phi(e^{\lambda \alpha^*})) \sigma / \alpha^* = 0,
+The first order condition only holds for one value of \(\alpha > 0\).
+Starting with the first derivative, \[
+\frac{d}{d \alpha^*} (\eta + \phi(e^{\lambda \alpha^*})) \sigma / \alpha^* = 0
 \]
 
-which can be manipulated to
+the expression can be manipulated to facilitate isolating \(\alpha^*\)
+in the numerator to the left side:
 
 \[
 \frac{\lambda e^{\lambda \alpha^*} \sigma}{\alpha} - \frac{e^{\lambda \alpha^*}\sigma}{(\alpha^*)^2} = \frac{\eta \sigma}{(\alpha^*)^2}.
@@ -374,21 +523,47 @@ which is the same as
 e^{\lambda \alpha^*} (\lambda \alpha^* - 1)= \eta,
 \]
 
-and thus the only possible solution is \(\alpha^* = 1/\lambda\).
+and thus the only possible solution with a positive value is
+\(\alpha^* = 1/\lambda\).
 
-The second order condition obtained by substituting this equality above
-is positive, confirming that \(\alpha^*\) minimises the bias on the
-signal:
+The second derivative obtained by substituting this equality above is
+positive, confirming that \(\alpha^*\) minimises the bias on the signal.
 
 \[
-\frac{d^2}{d (1/\lambda)^2} (\eta + \phi(e)) \sigma \lambda > 0
+\frac{d^2}{d (1/\lambda)^2} (\eta + \phi(e)) \sigma \lambda = (\sigma \lambda^2 e + \sigma \lambda e)\lambda^3 \\
 \]
 \end{proof}
 
-The problem is, higher levels of \(R\) monotonically increase precision
-but there is only one level of \(R\) that minimises bias in information.
+Proposition~\ref{prp-alphainvestunbiased} highlights the problem with AI
+investment as a technology to process information: optimising on
+precision alone (lowering \(\sigma_i\)) exposes the investors to more
+biases in the signal at very high levels of technology adoption. Higher
+levels of \(R_i\) monotonically increase precision but there is only one
+level of \(R\) that minimises bias in information.
+
+Note also that it seems to be a repetition of the classical
+bias-variance trade-off (BVTO) but it is in fact a different phenomenon.
+BVTO implies that more flexible and complex models would lead to lower
+bias and high out-of-sample variance, as more sophisticated models
+obtain a better fit to existing data at the risk of not generalising too
+well. The current setting shines a light on a different problem that
+incorporates economic and information- and game-theoretic elements: even
+if the model obtains lower variance by usefully increasing out-of-sample
+precision (real life examples include the ability to digest unstructured
+data such as text to improve signal pickup), the fact it \emph{can}
+hallucinate and at the same time is increasingly trusted both by its
+practicality and precision, introduces uncertainty in the model.
 
 \section{Reasoning}\label{sec-reasoning}
+
+This section discusses the elements of \(\phi\) that can be interpreted
+as an AI model's reasoning ability. It draws from Araujo (2024), where a
+more thorough discussion of rationality of AI models from an economics
+perspective can be found.
+
+Recall from Equation~\ref{eq-privatesignals} that \(\phi\) outputs the
+additional noise components, except if the model is able to reason. At
+this point, \(\phi\) is a gate that filters those noises.
 
 Note that \(\phi\) itself is not dependent on the performance of the AI.
 This is in line with compiling evidence that while the increasing power
@@ -397,15 +572,75 @@ ultimately it is even questionable if a robust for of reasoning can be
 obtained by continuing to scale a technique that involves memorisation
 rather than actual abstract thinking (LeCun\ldots)
 
-\subsection{Equilibrium}\label{equilibrium}
-
-Equilibrium D. M. Frankel, Morris, and Pauzner (2003).
-
 \section{Statistics}\label{statistics}
 
 Szkup (2020) show that only the direct effect is important.
 
-\section{Conclusions}\label{conclusions}
+\section{Open vs closed models}\label{sec-closedmodels}
+
+What is the influence, if any, of the possibility of investors to use
+exclusive, closed models to the equilibrium outcomes laid out above?
+This section relaxes the definition of \(\alpha\) to allow for the
+possibility that investors spend some money in the first period to
+acquire or develop such models.
+
+Assume that the development of a closed-model entails a cost \(C > 0\)
+whereas the use of a public-knowledge open model is free (consistent
+with real life). In this case, then investors would choose the
+closed-model if \(\alpha_i(R_i) > \alpha(R_i)\) and the final net payoff
+would still be positive even with the safe.
+
+\section{Operational risks (eg, cyber disruptions and AI vendor
+dependence)}\label{operational-risks-eg-cyber-disruptions-and-ai-vendor-dependence}
+
+Suppose now that \(\alpha\) has a small but nonzero chance of being set
+to zero during the investment stage. Such a scenario would be akin to an
+operational risk incident, such as a cyber attack. Building on financial
+supervisors' work on risks from third party service providers, such as
+AI providers,\footnote{For example, the Basel Committee on Banking
+  Supervision recently (2022) exorted banks to address risks related to
+  concentration of third party service providers.} this section explores
+AI shutdown effects that are proportional to \(\rho\).
+
+Take Equation~\ref{eq-privatesignals}, but now assume that \(\mu\) is a
+constant that always multiplies \(\alpha\). The constant goes to zero
+with probability \(\rho\), representing an operational incident.
+
+\section{Supply chain disruptions}\label{supply-chain-disruptions}
+
+A shock during the investment phase that equivalently increases the
+price of the AI factors \(\rho\) or decreases their yield \(\alpha\).
+
+\section[Preliminary considerations]{\texorpdfstring{Preliminary
+considerations\footnote{This section will become the conclusion section.}}{Preliminary considerations}}\label{preliminary-considerationsconcl}
+
+\begin{itemize}
+\item
+  Introducing the use of AI to process information entails both an
+  increase in precision, in line with past literature, but also changes
+  that reflect hallucinations and other silent mistakes.
+\item
+  Once investors use AI, its impact on prices is outsized. This is due
+  to information on its adoption transpiring (eg, through the prices of
+  AI resource) and also due to the spillovers that technology adoption
+  have on innovation itself.
+\item
+  The model is simple but sufficiently rich to capture an important set
+  of equilibrium characteristics. For example, this model can help
+  estimate the effects of hallucinations, closed vs open model mandates,
+  operational risk issues and others.
+\end{itemize}
+
+\section{Discussion}\label{discussion}
+
+The idea that the market might overreact to the knowledge about
+deployment of AI by firms is not new (Morris and Shin (2002)).
+
+More broadly, this model extends the work of Szkup and Trevino (2015b).
+That paper establishes important results with respect to the symmetric
+nature of the outcome of games that allow for information aquisition,
+and the relatively amenable conditions under which equilibrium is
+unique.
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
@@ -417,6 +652,41 @@ Angeletos, G-M, and Chen Lian. 2016. {``Incomplete Information in
 Macroeconomics: Accommodating Frictions in Coordination.''} In
 \emph{Handbook of Macroeconomics}, 2:1065--1240. Elsevier.
 
+\bibitem[\citeproctext]{ref-Araujo2024reasoning}
+Araujo, Douglas Kiarelly Godoy. 2024. {``Economic Reasoning in
+Artificial Intelligence Models.''}
+
+\bibitem[\citeproctext]{ref-araujo2023data}
+Araujo, Douglas Kiarelly Godoy, Giuseppe Bruno, Juri Marcucci, Rafael
+Schmidt, and Bruno Tissot. n.d. {``Data Science in Central Banking:
+Applications and Tools.''}
+
+\bibitem[\citeproctext]{ref-araujo2024artificial}
+Araujo, Douglas Kiarelly Godoy, Sebastian Doerr, Leonardo Gambacorta,
+and Bruno Tissot. 2024. {``Artificial Intelligence in Central
+Banking.''}
+
+\bibitem[\citeproctext]{ref-bcbs2022tpsp}
+Basel Committee on Banking Supervision. 2022. {``{Newsletter on Third-
+and Fourth-Party Risk Management and Concentration Risk}.''} {Bank for
+International Settlements}. \url{https://www.bis.org}.
+
+\bibitem[\citeproctext]{ref-begenau2018big}
+Begenau, Juliane, Maryam Farboodi, and Laura Veldkamp. 2018. {``Big Data
+in Finance and the Growth of Large Firms.''} \emph{Journal of Monetary
+Economics} 97: 71--87.
+
+\bibitem[\citeproctext]{ref-bonney2024tracking}
+Bonney, Kathryn, Cory Breaux, Catherine Buffington, Emin Dinlersoz,
+Lucia Foster, Nathan Goldschlag, John Haltiwanger, Zachary Kroff, and
+Keith Savage. 2024. {``Tracking Firm Use of AI in Real Time: A Snapshot
+from the Business Trends and Outlook Survey.''}
+
+\bibitem[\citeproctext]{ref-carlsson1993global}
+Carlsson, Hans, and Eric Van Damme. 1993. {``Global Games and
+Equilibrium Selection.''} \emph{Econometrica: Journal of the Econometric
+Society}, 989--1018.
+
 \bibitem[\citeproctext]{ref-colombo2014information}
 Colombo, Luca, Gianluca Femminis, and Alessandro Pavan. 2014.
 {``Information Acquisition and Welfare.''} \emph{The Review of Economic
@@ -426,6 +696,11 @@ Studies} 81 (4): 1438--83.
 Danielsson, Jon, Robert Macrae, and Andreas Uthemann. 2022.
 {``Artificial Intelligence and Systemic Risk.''} \emph{Journal of
 Banking \& Finance} 140: 106290.
+
+\bibitem[\citeproctext]{ref-farboodi2022has}
+Farboodi, Maryam, Adrien Matray, Laura Veldkamp, and Venky
+Venkateswaran. 2022. {``Where Has All the Data Gone?''} \emph{The Review
+of Financial Studies} 35 (7): 3101--38.
 
 \bibitem[\citeproctext]{ref-frankel2003equilibrium}
 Frankel, David M, Stephen Morris, and Ady Pauzner. 2003. {``Equilibrium
@@ -438,15 +713,51 @@ Dynamic Settings: The Role of Shocks*}.''} \emph{The Quarterly Journal
 of Economics} 115 (1): 285--304.
 \url{https://doi.org/10.1162/003355300554746}.
 
+\bibitem[\citeproctext]{ref-goldfarb2019digital}
+Goldfarb, Avi, and Catherine Tucker. 2019. {``Digital Economics.''}
+\emph{Journal of Economic Literature} 57 (1): 3--43.
+
 \bibitem[\citeproctext]{ref-hellwig2009knowing}
 Hellwig, Christian, and Laura Veldkamp. 2009. {``Knowing What Others
 Know: Coordination Motives in Information Acquisition.''} \emph{The
 Review of Economic Studies} 76 (1): 223--51.
 
+\bibitem[\citeproctext]{ref-hirshleifer1978private}
+Hirshleifer, Jack. 1978. {``The Private and Social Value of Information
+and the Reward to Inventive Activity.''} In \emph{Uncertainty in
+Economics}, 541--56. Elsevier.
+
+\bibitem[\citeproctext]{ref-korinek2023gen}
+Korinek, Anton. 2023. {``Generative AI for Economic Research: Use Cases
+and Implications for Economists.''} \emph{Journal of Economic
+Literature} 61 (4): 1281--1317.
+\url{https://doi.org/10.1257/jel.20231736}.
+
+\bibitem[\citeproctext]{ref-krugman2001out}
+Krugman, Paul. 2001. {``Out of the Loop.''} \emph{New York Times}, 15.
+
 \bibitem[\citeproctext]{ref-lopez2023can}
 Lopez-Lira, Alejandro, and Yuehua Tang. 2023. {``Can Chatgpt Forecast
 Stock Price Movements? Return Predictability and Large Language
 Models.''} \emph{arXiv Preprint arXiv:2304.07619}.
+
+\bibitem[\citeproctext]{ref-morris2003global}
+Morris, Stephen, and HS Shin. 2003. {``Global Games: Theory and
+Applications. Advances in Economics and Econometrics, m Dewatripont, l
+Hansen, and s Turnovsky.''} Cambridge University Press, NY.
+
+\bibitem[\citeproctext]{ref-morris2002social}
+Morris, Stephen, and Hyun Song Shin. 2002. {``Social Value of Public
+Information.''} \emph{American Economic Review} 92 (5): 1521--34.
+
+\bibitem[\citeproctext]{ref-perez2024testing}
+Perez-Cruz, Fernando, and Hyun Song Shin. 2024. {``Testing the Cognitive
+Limits of Large Language Models.''} Bank for International Settlements.
+
+\bibitem[\citeproctext]{ref-ranco2015effects}
+Ranco, Gabriele, Darko Aleksovski, Guido Caldarelli, Miha Grčar, and
+Igor Mozetič. 2015. {``The Effects of Twitter Sentiment on Stock Price
+Returns.''} \emph{PloS One} 10 (9): e0138441.
 
 \bibitem[\citeproctext]{ref-reshidi2021individual}
 Reshidi, Pëllumb, Alessandro Lizzeri, Leeat Yariv, Jimmy H Chan, and
@@ -467,9 +778,22 @@ Transparency in Global Games.''} \emph{Journal of Economic Theory} 160:
 ---------. 2015b. {``Information Acquisition in Global Games of Regime
 Change.''} \emph{Journal of Economic Theory} 160: 387--428.
 
+\bibitem[\citeproctext]{ref-szkup2020sentiments}
+---------. 2020. {``Sentiments, Strategic Uncertainty, and Information
+Structures in Coordination Games.''} \emph{Games and Economic Behavior}
+124: 534--53.
+
 \bibitem[\citeproctext]{ref-szkup2021information}
 ---------. 2021. {``Information Acquisition and Self-Selection in
 Coordination Games.''} mimeo.
+
+\bibitem[\citeproctext]{ref-veldkamp2019data}
+Veldkamp, Laura, and Cindy Chung. 2019. {``Data and the Aggregate
+Economy.''} \emph{Journal of Economic Literature}.
+
+\bibitem[\citeproctext]{ref-yang2015coordination}
+Yang, Ming. 2015. {``Coordination with Flexible Information
+Acquisition.''} \emph{Journal of Economic Theory} 158: 721--38.
 
 \end{CSLReferences}
 
