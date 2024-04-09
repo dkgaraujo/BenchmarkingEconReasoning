@@ -153,6 +153,8 @@
 \floatname{codelisting}{Listing}
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
 \theoremstyle{plain}
 \newtheorem{proposition}{Proposition}[section]
 \theoremstyle{remark}
@@ -342,10 +344,10 @@ Danielsson, Macrae, and Uthemann (2022) discuss risks. Increased
 availability of data (Veldkamp and Chung (2019)) and lower cost across
 data pipeline (Goldfarb and Tucker (2019)). This facilitates the use of
 new data, or data in a compound way, due to the ``discovery'' of new
-data by newer technologies (\textbf{hirshleifer1978private?}). An early
-reference is Ranco et al. (2015). New techniques not only process more
-data more effectively, but they also expand the envelope of data that
-can be analysed to look for signal.
+data by newer technologies Hirshlelfer (1971). An early reference is
+Ranco et al. (2015). New techniques not only process more data more
+effectively, but they also expand the envelope of data that can be
+analysed to look for signal.
 
 \section{Model}\label{model}
 
@@ -497,7 +499,7 @@ First, note there is exactly one value of \(\alpha(R_i)\) that results
 in an minimally biased private signal.
 
 \begin{proposition}[AI use with minimal bias in private
-signal]\protect\hypertarget{prp-alphainvestunbiased}{}\label{prp-alphainvestunbiased}
+signal]\protect\hypertarget{prp-alphainvestlowestbias}{}\label{prp-alphainvestlowestbias}
 
 There is only one specific value \(\alpha^* = \alpha(R^*)\) for which
 the private signal is the closest to \(\theta\) in expectation. The
@@ -541,8 +543,8 @@ positive, confirming that \(\alpha^*\) minimises the bias on the signal.
 \]
 \end{proof}
 
-Proposition~\ref{prp-alphainvestunbiased} highlights the problem with AI
-investment as a technology to process information: optimising on
+Proposition~\ref{prp-alphainvestlowestbias} highlights the problem with
+AI investment as a technology to process information: optimising on
 precision alone (lowering \(\sigma_i\)) exposes the investors to more
 biases in the signal at very high levels of technology adoption. Higher
 levels of \(R_i\) monotonically increase precision but there is only one
@@ -597,17 +599,126 @@ univalent mapping to a unique outcome.
 
 \section{Equilibrium}\label{equilibrium-1}
 
-The equilibrium is found by backward induction. Starting with the
-financial investment stage, collect a vector \(r=\{R_i, R_j, R_{AI}\}\)
-with the allocations of \(R\). Investor strategies
-\(A : \mathbf{R} \times [0,1]^3 \times (0,1]\to \{0,1\}\) map the
-private signal, the vector \(r\) and the AI reasoning ability \(\phi\)
-to a binary investment decision, where \(1\) is associated with the
-investing choice.
+The equilibrium is found by backward induction, starting with the
+financial investment stage. Collect the allocations of \(R\) in
+\(r=\{R_i, R_j, R_{AI}\}\). Investor strategies
+\(A : \mathbb{R} \times [0,1]^3 \times (0,1]\to \{0,1\}\) map the
+private signal, the allocation \(r\) and the AI reasoning ability
+\(\phi\) to a binary investment decision, where \(1\) is associated with
+the investing choice. Using the global games' threshold strategies and
+the uniquess of equilibrium outcomes due to Szkup and Trevino (2021)
+extending the results from Van Zandt and Vives (2007), the investor
+decides to invest if the private signal is higher than a specific
+threshold, as in
 
-Using the global games' threshold strategies and the uniquess of
-equilibrium outcomes due to Szkup and Trevino (2021) and Van Zandt and
-Vives (2007).
+\begin{equation}\phantomsection\label{eq-strategies}{
+A(x_i;r;\phi) = \mathbf{1}[x_i \geq x_i^*(r, \phi)].
+}\end{equation}
+
+The value \(x_i^*\) in Equation~\ref{eq-strategies} that makes the
+investor indifferent to investing or not investing is the optimal
+threshold. The following specification considers both the scenario in
+which fundamentals are intermediate and the investment requires
+coordination, and the scenario in which fundamentals are good enough
+that success does not necessitate coordination. The equation
+
+\begin{equation}\phantomsection\label{eq-optimthresh}{
+E[\theta I_i \text{Pr}(A_j(\theta) = 1)|x_i = x_i^*, \theta \in [\underline{\theta}, \bar{\theta})] + E[\theta I_i|x_i = x_i^*, \theta \geq \bar{\theta}] = T
+}\end{equation}
+
+represents the situation where the expected payoff of an \(I_i\)
+investment is set to zero. Now moving backwards to the AI investment
+stage, consider \(\nu_i(\cdot)\) as the expected investment payoff to
+\(i\) afer observing their own private signal \(x_i\) and believing that
+investor \(j\) will also optimise. Consider also a belief function
+\(\mu_i : [0, 1] \to [0, 1]\) as \(i\)'s belief on the probability that
+\(j\) chose a specific value of \(R_j\). In general terms, the expected
+utility of each investor is:
+
+\begin{equation}\phantomsection\label{eq-expectedutil}{
+U_i(r) = E[\mathbf{1}[x_i \geq x_i^*(e, \phi)] \nu_i(x_i, xj^*(r, \phi); r)]f(x_i;R_i, \phi)dx_i.
+}\end{equation}
+
+All elements to define the equilibrium are now in place.
+
+\begin{definition}[Pure strategy Bayesian Nash
+equilibrium]\protect\hypertarget{def-equilibrium}{}\label{def-equilibrium}
+
+A vector of AI investment allocations
+\(r^* = \{R_i^*, R_j^*, R_{AI}^*\}\), belief function \(\mu_i\), and
+optimal financial investment decision \(A_i(x_i;r;\phi)\) is a pure
+streategy Bayesian Nash equilibrium if, for each \(i \in \{1,2\}\), it
+complies with the conditions below:
+
+\textbf{C1 - no incentives to deviate}.
+\(U_i(r^*) \geq U_i(r') \forall r' \neq r^*\),
+
+\textbf{C2 - correct strategic anticipation}.
+\(\mu_i(R_j^*)=1, \mu_i(R_j^{'}) = 0, r' \neq r^*\); and
+
+\textbf{C3 - optimal financial investment even if sub-optimal AI
+investment}.
+
+\[
+A(x_i;r;\phi) = \mathbf{1}[x_i \geq x_i(\{R_i, R_j^*, R_{AI}\}, \phi)], \text{s.t.  }
+\] \[
+x_i^* \in \{x_i : \nu(x_i(\{R_i, R_j^*, R_{AI}\}, \phi), x_j^*(r^*, \phi); r) = 0 \}
+\]
+
+\end{definition}
+
+The first condition, C1, lays out that no investor has an incentive to
+deviate from the equilibrium because they will not extract a higher
+utility. C2 is necessary to ensure that the equiibrium obtains from a
+situation that each investor assigns positive probability to the amounts
+of AI investment that the other investor would choose. And the third
+condition pins down the idea that the signal threshold associated with
+the investment action can also be associated with of each investors' own
+AI investment that is not necessarily the optimal.
+
+\begin{proposition}[Equilibrium]\protect\hypertarget{prp-equilibrium}{}\label{prp-equilibrium}
+
+The equilibrium as defined in Definition~\ref{def-equilibrium} exists
+and is unique.
+
+\end{proposition}
+
+\subsection{Information-efficient use of
+AI}\label{information-efficient-use-of-ai}
+
+In the base scenario that AI models do not reason robustly, they always
+let at least \emph{some} hallucination pass through (\(\phi > 0\)). A
+natural question is whether the value of AI investment that minimises
+bias in the private signal (from
+Proposition~\ref{prp-alphainvestlowestbias}) is consistent with the
+equilibrium outcomes. The following exercise focuses on the case of
+intermediate fundamental values, as they require coordination for
+success.
+
+Define \(r^§ = \{R_i^§, R_j^*, R_{AI}^§\}\) as a the AI investment by
+investor \(i\) driven only by their need to optimise the private signal,
+while \(j\) continues to allocate their investment according to the
+full-game perspective. Assume C2 and C3 of
+Definition~\ref{def-equilibrium} hold. Then it suffices to check if C1
+still holds, but with \(r^§\). In particular, whether:
+
+\[
+E[\theta I_i^§ \text{Pr}(A_j(\theta)=1) | x_i = x_i*, \theta \in [\underline{\theta}, \bar{\theta})]] = E[\theta I_j^* \text{Pr}(A_i(\theta)=1) | x_j = x_j*, \theta \in [\underline{\theta}, \bar{\theta})]].
+\]
+
+Factoring out the common expectation components related to \(\theta\),
+we have:
+
+\[
+I_i^§ \text{Pr}(A_j(\theta)=1) = I_j^* \text{Pr}(A_i(\theta)=1),
+\]
+
+which are the same since the equilibrium values are robust to AI
+investment misspecification (C3), and therefore the right hand side
+stays the same. Since \(I_i^§ > 0\) the equation still holds, and from
+the threshold strategies, the two probabilities are equal, thus also
+\(I_i^§ = I_j^*§*\), confirming the value of \(r\) that is consistent
+with the equilibrium outcome is \(r^* = r^§\).
 
 \section{Open vs closed models}\label{sec-closedmodels}
 
@@ -642,22 +753,26 @@ with probability \(\rho\), representing an operational incident.
 \section[Preliminary considerations]{\texorpdfstring{Preliminary
 considerations\footnote{This section will become the conclusion section.}}{Preliminary considerations}}\label{preliminary-considerationsconcl}
 
-\begin{itemize}
-\item
-  Introducing the use of AI to process information entails both an
-  increase in precision, in line with past literature, but also changes
-  that reflect hallucinations and other silent mistakes.
-\item
-  Once investors use AI, its impact on prices is outsized. This is due
-  to information on its adoption transpiring (eg, through the prices of
-  AI resource) and also due to the spillovers that technology adoption
-  have on innovation itself.
-\item
-  The model is simple but sufficiently rich to capture an important set
-  of equilibrium characteristics. For example, this model can help
-  estimate the effects of hallucinations, closed vs open model mandates,
-  operational risk issues and others.
-\end{itemize}
+AI is not simply a generic information technology. In addition to
+resource distribution considerations, introducing the use of AI to
+process information entails both an increase in precision (in line with
+existing information acquisition models), but also changes that reflect
+hallucinations and other silent mistakes and a chance for stochastic
+technology improvements that agents may expect to take place.
+
+The present model is simple but sufficiently rich to enable studies of
+important phenomena of interest at the intersection of AI and finance.
+For example, this model can help estimate the effects of hallucinations,
+operational risk issues, welfare implications from closed vs open models
+and others.
+
+The joint determination in equilibrium of AI investment in finance
+industry and academia, together with the levels and returns of financial
+investments, bear interesting results. This paper shows that the global
+game results in AI take-up that is consistent with the minimisation of
+private noise in expectation. This is an interesting result because the
+game-level result itself is the risk-dominant strategy, not the most
+efficient payoff-dominant.
 
 \section{Discussion}\label{discussion}
 
