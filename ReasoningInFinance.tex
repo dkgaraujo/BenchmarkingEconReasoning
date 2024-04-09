@@ -75,28 +75,38 @@
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
 \newlength{\csllabelwidth}
 \setlength{\csllabelwidth}{3em}
-\newlength{\cslentryspacingunit} % times entry-spacing
-\setlength{\cslentryspacingunit}{\parskip}
-\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
- {% don't indent paragraphs
-  \setlength{\parindent}{0pt}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
   % turn on hanging indent if param 1 is 1
   \ifodd #1
-  \let\oldpar\par
-  \def\par{\hangindent=\cslhangindent\oldpar}
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
   \fi
   % set entry spacing
-  \setlength{\parskip}{#2\cslentryspacingunit}
- }%
- {}
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
 \usepackage{calc}
-\newcommand{\CSLBlock}[1]{#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
 \usepackage{algpseudocode}
@@ -108,10 +118,6 @@
 \renewcommand*{\Authands}{, }
 \renewcommand\Affilfont{\small}
 \DeclareMathOperator*{\argmin}{arg\,min}
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -153,25 +159,20 @@
 \AtBeginDocument{\renewcommand*{\proofname}{Proof}}
 \newtheorem*{remark}{Remark}
 \newtheorem*{solution}{Solution}
+\newtheorem{refremark}{Remark}[section]
+\newtheorem{refsolution}{Solution}[section]
+\makeatother
+\makeatletter
 \makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
-\makeatother
-\makeatletter
-\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
@@ -216,7 +217,6 @@ the potentially outsized effects of cyber security or other operational
 risk incidents, and supply chain shocks in the AI chip industry. JEL
 codes: D82, G14.
 \end{abstract}
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, boxrule=0pt, enhanced, borderline west={3pt}{0pt}{shadecolor}, frame hidden, sharp corners, interior hidden]}{\end{tcolorbox}}\fi
 
 ``\emph{Firms making investment decisions are starting to emulate the
 hair-trigger behaviour of financial investors. That means that a growing
@@ -227,8 +227,7 @@ of today's corporations make their investment in equipment and software
 vulnerable to the kind of self-fulfilling pessimism that used to be
 possible only for investment in paper assets.}'' - Krugman (2001)
 
-\hypertarget{introduction}{%
-\section{Introduction}\label{introduction}}
+\section{Introduction}\label{introduction}
 
 The increasing capabilities of large language models (LLM) and other
 artificial intelligence (AI) models unlock useful new ways to transform
@@ -287,8 +286,7 @@ potentially outsized effects of cyber security or other operational risk
 incidents, and finally the supply chain shocks in the AI chip industry
 are simulated.
 
-\hypertarget{literature}{%
-\subsection{Literature}\label{literature}}
+\subsection{Literature}\label{literature}
 
 This work relates to the literatures on information acquisition in
 incomplete information games, and on AI and data in finance.
@@ -317,8 +315,7 @@ to use data (Korinek (2023)). Lopez-Lira and Tang (2023) show evidence
 that ChatGPT, the flagship LLM, can successfully pick stocks.
 Danielsson, Macrae, and Uthemann (2022) discuss risks.
 
-\hypertarget{model}{%
-\section{Model}\label{model}}
+\section{Model}\label{model}
 
 The model draws from the setup in Szkup and Trevino (2021), with
 important additions. First, the cost of technology adoption is subject
@@ -329,8 +326,7 @@ well. And third, the process by which AI improves the signal is laid out
 in more detail to highlight the cases where the technology can transform
 more data text into inormation but cannot yet \emph{reason} about it.
 
-\hypertarget{setup}{%
-\subsection{Setup}\label{setup}}
+\subsection{Setup}\label{setup}
 
 The simplest version of the model is a two-investor setup as follows.
 
@@ -370,9 +366,9 @@ private signals, then each investor will observe
 Putting all of this together, the private signal about the fundamentals
 is:
 
-\begin{equation}\protect\hypertarget{eq-privatesignals}{}{
+\begin{equation}\phantomsection\label{eq-privatesignals}{
 x_i = \theta + (\eta + \phi(e^{\lambda \alpha(R_i)})) \sigma / \alpha(R_i)
-}\label{eq-privatesignals}\end{equation}
+}\end{equation}
 
 Given this scenario for technology investment, two ex ante identical
 investors \(i \in \{1,2\}\) choose how much \(R_i\) to acquire. Because
@@ -394,7 +390,7 @@ the investors decide how to allocate \(I_i\), in a safe or risky asset
 yields zero regardless of \(\theta\) or the number of investors who
 choose it. Conversely, the risk asset's payoff can be successful in
 either of the following situations: (a) if \(\theta \geq \bar{\theta}\)
-or (b) if \(\theta \geq \underline{\theta}\) and \(a_i = a_j = 1\).
+or (b) if \(\theta \geq \underline{\theta}\) and \(A_i = A_j = 1\).
 While this payoff structure follows Szkup and Trevino (2021) closely,
 the current model differs from that one because investors only allocates
 \(I_i\). Because investing in the risky asset entails a cost \(T\), the
@@ -415,15 +411,15 @@ common price that reflects their joint AI investments.\footnote{A richer
   a dedicated exposition and not further dealt with in this paper.} Each
 investor's utility is a mapping of the form
 \(u : \{0, 1\} \times \{0, 1\} \times \mathbf{R} \times [0, 1] \to \mathbf{R}\),
-with \(u(a_i, a_j, x_i, R_i)\) representing investor \(i\)'s pay-off as
+with \(u(A_i, A_j, x_i, R_i)\) representing investor \(i\)'s pay-off as
 a function of their own action, the other investor's action, the signal
 observed by \(i\), and its investment in the AI technology.
 
 In concrete terms,
 
-\begin{equation}\protect\hypertarget{eq-utility}{}{
-u(a_i, a_j, x_i, R_i) = (\mathbf{1}[\theta \geq \bar{\theta}|x_i] + \mathbf{1}[x_i \geq x_i^*|\theta]a_j)a_i(\theta I_i - T) - R_i,
-}\label{eq-utility}\end{equation}
+\begin{equation}\phantomsection\label{eq-utility}{
+u(A_i, A_j, x_i, R_i) = (\mathbf{1}[\theta \geq \bar{\theta}|x_i] + \mathbf{1}[x_i \geq x_i^*|\theta]a_j)a_i(\theta I_i - T) - R_i,
+}\end{equation}
 
 from which the indifference threshold with respect to investing or not
 investing depending on the signal is set. {[}to add, equilibrium{]}
@@ -440,18 +436,9 @@ those ideas. The idea requires resources for implementation, and thus a
 technological advance only happens if the idea, once actually
 implemented, overcomes the barrier to innovation. Formally:
 
-\begin{equation}\protect\hypertarget{eq-tech}{}{
-p = \text{max}(0, \underbrace{\pi_{\text{idea}} * (1-\rho)}_{\text{Implemented idea}} - \pi_{\text{obstacle}}).
-}\label{eq-tech}\end{equation}
-
-With \(p\) the level of actual innovation in AI reasoning, the next step
-is to define the simple connection between the potential technology jump
-after allocation of the AI-specific resources and the innovation
-outcome. And so, through the equation
-
-\begin{equation}\protect\hypertarget{eq-reasoning}{}{
-\phi(x) = (1 - p)x,
-}\label{eq-reasoning}\end{equation}
+\begin{equation}\phantomsection\label{eq-tech}{
+\phi = 1-\text{max}(0, \underbrace{\pi_{\text{idea}} * (1-\rho)}_{\text{Implemented idea}} - \pi_{\text{obstacle}}).
+}\end{equation}
 
 \(\phi\) tapers off the noisiness to help the private signal get closer
 to \(\theta + \eta\). Note that the only chance of a full shutdown of
@@ -465,9 +452,8 @@ literature (Morris and Shin (2002), Morris and Shin (2003)): the price
 \(\rho\) of AI resources has an outsized impact on outcomes by virtue of
 its public nature.
 
-\hypertarget{ai-as-a-technique-to-read-information}{%
 \subsection{AI as a technique to read
-information}\label{ai-as-a-technique-to-read-information}}
+information}\label{ai-as-a-technique-to-read-information}
 
 \begin{itemize}
 \item
@@ -481,9 +467,8 @@ information}\label{ai-as-a-technique-to-read-information}}
   expand the envelope of data that can be analysed to look for signal.
 \end{itemize}
 
-\hypertarget{equilibrium-in-financial-and-ai-investments}{%
 \subsection{Equilibrium in financial and AI
-investments}\label{equilibrium-in-financial-and-ai-investments}}
+investments}\label{equilibrium-in-financial-and-ai-investments}
 
 After the decisions to invest in AI is taken, the second stage involves
 an investment in the financial asset. This step resembles a traditional
@@ -505,41 +490,39 @@ subscript is irrelevant because all investors are ex ante similar.
 \end{proposition}
 
 \begin{proof}
-
 The first order condition only holds for one value of \(\alpha > 0\).
 Starting with the first derivative, \[
-\frac{d}{d \alpha^*} (\eta + \phi(e^{\lambda \alpha^*})) \sigma / \alpha^* = 0
+\frac{d}{d \alpha^*} (\eta + \phi e^{\lambda \alpha^*}) \sigma / \alpha^* = 0
 \]
 
 the expression can be manipulated to facilitate isolating \(\alpha^*\)
 in the numerator to the left side:
 
 \[
-\frac{\lambda e^{\lambda \alpha^*} \sigma}{\alpha} - \frac{e^{\lambda \alpha^*}\sigma}{(\alpha^*)^2} = \frac{\eta \sigma}{(\alpha^*)^2}.
+\frac{\phi \lambda e^{\lambda \alpha^*} \sigma}{\alpha^*} - \frac{\phi e^{\lambda \alpha^*}\sigma}{(\alpha^*)^2} = \frac{\eta \sigma}{(\alpha^*)^2}.
 \]
 
 Multiplying both sides by \((\alpha^*)^2\) obtains
 
 \[
-\lambda \alpha^* e^{\lambda \alpha^*} \sigma - e^{\lambda \alpha^*}\sigma = \eta \sigma,
+\alpha^* \lambda \phi e^{\lambda \alpha^*} \sigma - \phi e^{\lambda \alpha^*}\sigma = \eta \sigma,
 \]
 
 which is the same as
 
 \[
-e^{\lambda \alpha^*} (\lambda \alpha^* - 1)= \eta,
+\phi e^{\lambda \alpha^*} (\lambda \alpha^* - 1)= \eta,
 \]
 
-and thus the only possible solution with a positive value is
-\(\alpha^* = 1/\lambda\).
+and thus if \(\phi > 0\), the only possible solution with a positive
+value is \(\alpha^* = 1/\lambda\).
 
 The second derivative obtained by substituting this equality above is
 positive, confirming that \(\alpha^*\) minimises the bias on the signal.
 
 \[
-\frac{d^2}{d (1/\lambda)^2} (\eta + \phi(e)) \sigma \lambda = (\sigma \lambda^2 e + \sigma \lambda e)\lambda^3 \\
+\frac{d^2}{d (1/\lambda)^2} (\eta + \phi e) \sigma \lambda = (\sigma \lambda^2 \phi e + \sigma \lambda \phi e)\lambda^3 \\
 \]
-
 \end{proof}
 
 Proposition~\ref{prp-alphainvestunbiased} highlights the problem with AI
@@ -562,8 +545,41 @@ data such as text to improve signal pickup), the fact it \emph{can}
 hallucinate and at the same time is increasingly trusted both by its
 practicality and precision, introduces uncertainty in the model.
 
-\hypertarget{sec-reasoning}{%
-\section{Reasoning}\label{sec-reasoning}}
+\section{Equilibrium}\label{equilibrium}
+
+Note that similar to Szkup and Trevino (2021), the investment stage can
+resemble a global game, only with investors that are potentially
+heterogeneous on their private signals. So I follow standard practice in
+global games and find the equilibrium strategies based on a signal
+\(x_i^*(R_i)\) that would lie at the investment indifference threshold
+for investor \(i\):
+
+\[
+A(R_i, x_i) = \mathbf{1}[x_i \geq x_i^*(R_i)].
+\]
+
+Finding this threshold entails equating Equation~\ref{eq-utility} with
+zero under the investment scenario, ie \(A(R_i, x_i)=1\), and then
+solving for \(x_i^*(R_i)\):
+
+\begin{equation}\phantomsection\label{eq-equilinvest}{
+E[Pr(A_j(\theta)=1)\theta I_i | x_i = x_i^*, \theta \in [\underline{\theta}, \bar{\theta}] ] + E[\theta I_i |x_i = x_i^*, \theta > \bar{\theta} ] = T,
+}\end{equation}
+
+where \(E[Pr(A_j(\theta)=1)]\) is the expected (by \(i\)) probability
+that \(j\) has invested in the asset given the fundamental. The first
+term on the left is the expected success payout in the intermediate
+fundamentals case, which requires coordination. The second term is the
+expected success in the good fundamentals scenario.
+
+The equilibrium is due to Szkup and Trevino (2021), who extend the
+monotone supermodular games result from Van Zandt and Vives (2007) in
+games with unbounded utility functions. In particular, Szkup and Trevino
+(2021) show that there exist both a least and a greatest bounds in
+Bayesian Nash equilibra, and that these thresholds correspond to a
+univalent mapping to a unique outcome.
+
+\section{Reasoning}\label{sec-reasoning}
 
 This section discusses the elements of \(\phi\) that can be interpreted
 as an AI model's reasoning ability. It draws from Araujo (2024), where a
@@ -581,13 +597,11 @@ ultimately it is even questionable if a robust for of reasoning can be
 obtained by continuing to scale a technique that involves memorisation
 rather than actual abstract thinking (LeCun\ldots)
 
-\hypertarget{statistics}{%
-\section{Statistics}\label{statistics}}
+\section{Statistics}\label{statistics}
 
 Szkup (2020) show that only the direct effect is important.
 
-\hypertarget{sec-closedmodels}{%
-\section{Open vs closed models}\label{sec-closedmodels}}
+\section{Open vs closed models}\label{sec-closedmodels}
 
 What is the influence, if any, of the possibility of investors to use
 exclusive, closed models to the equilibrium outcomes laid out above?
@@ -601,9 +615,8 @@ with real life). In this case, then investors would choose the
 closed-model if \(\alpha_i(R_i) > \alpha(R_i)\) and the final net payoff
 would still be positive even with the safe.
 
-\hypertarget{operational-risks-eg-cyber-disruptions-and-ai-vendor-dependence}{%
 \section{Operational risks (eg, cyber disruptions and AI vendor
-dependence)}\label{operational-risks-eg-cyber-disruptions-and-ai-vendor-dependence}}
+dependence)}\label{operational-risks-eg-cyber-disruptions-and-ai-vendor-dependence}
 
 Suppose now that \(\alpha\) has a small but nonzero chance of being set
 to zero during the investment stage. Such a scenario would be akin to an
@@ -618,15 +631,13 @@ Take Equation~\ref{eq-privatesignals}, but now assume that \(\mu\) is a
 constant that always multiplies \(\alpha\). The constant goes to zero
 with probability \(\rho\), representing an operational incident.
 
-\hypertarget{supply-chain-disruptions}{%
-\section{Supply chain disruptions}\label{supply-chain-disruptions}}
+\section{Supply chain disruptions}\label{supply-chain-disruptions}
 
 A shock during the investment phase that equivalently increases the
 price of the AI factors \(\rho\) or decreases their yield \(\alpha\).
 
-\hypertarget{preliminary-considerationsconcl}{%
 \section[Preliminary considerations]{\texorpdfstring{Preliminary
-considerations\footnote{This section will become the conclusion section.}}{Preliminary considerations}}\label{preliminary-considerationsconcl}}
+considerations\footnote{This section will become the conclusion section.}}{Preliminary considerations}}\label{preliminary-considerationsconcl}
 
 \begin{itemize}
 \item
@@ -645,8 +656,7 @@ considerations\footnote{This section will become the conclusion section.}}{Preli
   operational risk issues and others.
 \end{itemize}
 
-\hypertarget{discussion}{%
-\section{Discussion}\label{discussion}}
+\section{Discussion}\label{discussion}
 
 The idea that the market might overreact to the knowledge about
 deployment of AI by firms is not new (Morris and Shin (2002)).
@@ -657,157 +667,161 @@ nature of the outcome of games that allow for information aquisition,
 and the relatively amenable conditions under which equilibrium is
 unique.
 
-\hypertarget{references}{%
-\section*{References}\label{references}}
+\section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
 
-\hypertarget{refs}{}
+\phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
-\leavevmode\vadjust pre{\hypertarget{ref-angeletos2016incomplete}{}}%
+\bibitem[\citeproctext]{ref-angeletos2016incomplete}
 Angeletos, G-M, and Chen Lian. 2016. {``Incomplete Information in
 Macroeconomics: Accommodating Frictions in Coordination.''} In
 \emph{Handbook of Macroeconomics}, 2:1065--1240. Elsevier.
 
-\leavevmode\vadjust pre{\hypertarget{ref-Araujo2024reasoning}{}}%
+\bibitem[\citeproctext]{ref-Araujo2024reasoning}
 Araujo, Douglas Kiarelly Godoy. 2024. {``Economic Reasoning in
 Artificial Intelligence Models.''}
 
-\leavevmode\vadjust pre{\hypertarget{ref-araujo2023data}{}}%
+\bibitem[\citeproctext]{ref-araujo2023data}
 Araujo, Douglas Kiarelly Godoy, Giuseppe Bruno, Juri Marcucci, Rafael
 Schmidt, and Bruno Tissot. n.d. {``Data Science in Central Banking:
 Applications and Tools.''}
 
-\leavevmode\vadjust pre{\hypertarget{ref-araujo2024artificial}{}}%
+\bibitem[\citeproctext]{ref-araujo2024artificial}
 Araujo, Douglas Kiarelly Godoy, Sebastian Doerr, Leonardo Gambacorta,
 and Bruno Tissot. 2024. {``Artificial Intelligence in Central
 Banking.''}
 
-\leavevmode\vadjust pre{\hypertarget{ref-bcbs2022tpsp}{}}%
+\bibitem[\citeproctext]{ref-bcbs2022tpsp}
 Basel Committee on Banking Supervision. 2022. {``{Newsletter on Third-
 and Fourth-Party Risk Management and Concentration Risk}.''} {Bank for
 International Settlements}. \url{https://www.bis.org}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-begenau2018big}{}}%
+\bibitem[\citeproctext]{ref-begenau2018big}
 Begenau, Juliane, Maryam Farboodi, and Laura Veldkamp. 2018. {``Big Data
 in Finance and the Growth of Large Firms.''} \emph{Journal of Monetary
 Economics} 97: 71--87.
 
-\leavevmode\vadjust pre{\hypertarget{ref-bonney2024tracking}{}}%
+\bibitem[\citeproctext]{ref-bonney2024tracking}
 Bonney, Kathryn, Cory Breaux, Catherine Buffington, Emin Dinlersoz,
 Lucia Foster, Nathan Goldschlag, John Haltiwanger, Zachary Kroff, and
 Keith Savage. 2024. {``Tracking Firm Use of AI in Real Time: A Snapshot
 from the Business Trends and Outlook Survey.''}
 
-\leavevmode\vadjust pre{\hypertarget{ref-carlsson1993global}{}}%
+\bibitem[\citeproctext]{ref-carlsson1993global}
 Carlsson, Hans, and Eric Van Damme. 1993. {``Global Games and
 Equilibrium Selection.''} \emph{Econometrica: Journal of the Econometric
 Society}, 989--1018.
 
-\leavevmode\vadjust pre{\hypertarget{ref-colombo2014information}{}}%
+\bibitem[\citeproctext]{ref-colombo2014information}
 Colombo, Luca, Gianluca Femminis, and Alessandro Pavan. 2014.
 {``Information Acquisition and Welfare.''} \emph{The Review of Economic
 Studies} 81 (4): 1438--83.
 
-\leavevmode\vadjust pre{\hypertarget{ref-danielsson2022artificial}{}}%
+\bibitem[\citeproctext]{ref-danielsson2022artificial}
 Danielsson, Jon, Robert Macrae, and Andreas Uthemann. 2022.
 {``Artificial Intelligence and Systemic Risk.''} \emph{Journal of
 Banking \& Finance} 140: 106290.
 
-\leavevmode\vadjust pre{\hypertarget{ref-farboodi2022has}{}}%
+\bibitem[\citeproctext]{ref-farboodi2022has}
 Farboodi, Maryam, Adrien Matray, Laura Veldkamp, and Venky
 Venkateswaran. 2022. {``Where Has All the Data Gone?''} \emph{The Review
 of Financial Studies} 35 (7): 3101--38.
 
-\leavevmode\vadjust pre{\hypertarget{ref-frankel2003equilibrium}{}}%
+\bibitem[\citeproctext]{ref-frankel2003equilibrium}
 Frankel, David M, Stephen Morris, and Ady Pauzner. 2003. {``Equilibrium
 Selection in Global Games with Strategic Complementarities.''}
 \emph{Journal of Economic Theory} 108 (1): 1--44.
 
-\leavevmode\vadjust pre{\hypertarget{ref-techadoption}{}}%
+\bibitem[\citeproctext]{ref-techadoption}
 Frankel, David, and Ady Pauzner. 2000. {``{Resolving Indeterminacy in
 Dynamic Settings: The Role of Shocks*}.''} \emph{The Quarterly Journal
 of Economics} 115 (1): 285--304.
 \url{https://doi.org/10.1162/003355300554746}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-goldfarb2019digital}{}}%
+\bibitem[\citeproctext]{ref-goldfarb2019digital}
 Goldfarb, Avi, and Catherine Tucker. 2019. {``Digital Economics.''}
 \emph{Journal of Economic Literature} 57 (1): 3--43.
 
-\leavevmode\vadjust pre{\hypertarget{ref-hellwig2009knowing}{}}%
+\bibitem[\citeproctext]{ref-hellwig2009knowing}
 Hellwig, Christian, and Laura Veldkamp. 2009. {``Knowing What Others
 Know: Coordination Motives in Information Acquisition.''} \emph{The
 Review of Economic Studies} 76 (1): 223--51.
 
-\leavevmode\vadjust pre{\hypertarget{ref-hirshleifer1978private}{}}%
+\bibitem[\citeproctext]{ref-hirshleifer1978private}
 Hirshleifer, Jack. 1978. {``The Private and Social Value of Information
 and the Reward to Inventive Activity.''} In \emph{Uncertainty in
 Economics}, 541--56. Elsevier.
 
-\leavevmode\vadjust pre{\hypertarget{ref-korinek2023gen}{}}%
+\bibitem[\citeproctext]{ref-korinek2023gen}
 Korinek, Anton. 2023. {``Generative AI for Economic Research: Use Cases
 and Implications for Economists.''} \emph{Journal of Economic
 Literature} 61 (4): 1281--1317.
 \url{https://doi.org/10.1257/jel.20231736}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-krugman2001out}{}}%
+\bibitem[\citeproctext]{ref-krugman2001out}
 Krugman, Paul. 2001. {``Out of the Loop.''} \emph{New York Times}, 15.
 
-\leavevmode\vadjust pre{\hypertarget{ref-lopez2023can}{}}%
+\bibitem[\citeproctext]{ref-lopez2023can}
 Lopez-Lira, Alejandro, and Yuehua Tang. 2023. {``Can Chatgpt Forecast
 Stock Price Movements? Return Predictability and Large Language
 Models.''} \emph{arXiv Preprint arXiv:2304.07619}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-morris2003global}{}}%
+\bibitem[\citeproctext]{ref-morris2003global}
 Morris, Stephen, and HS Shin. 2003. {``Global Games: Theory and
 Applications. Advances in Economics and Econometrics, m Dewatripont, l
 Hansen, and s Turnovsky.''} Cambridge University Press, NY.
 
-\leavevmode\vadjust pre{\hypertarget{ref-morris2002social}{}}%
+\bibitem[\citeproctext]{ref-morris2002social}
 Morris, Stephen, and Hyun Song Shin. 2002. {``Social Value of Public
 Information.''} \emph{American Economic Review} 92 (5): 1521--34.
 
-\leavevmode\vadjust pre{\hypertarget{ref-perez2024testing}{}}%
+\bibitem[\citeproctext]{ref-perez2024testing}
 Perez-Cruz, Fernando, and Hyun Song Shin. 2024. {``Testing the Cognitive
 Limits of Large Language Models.''} Bank for International Settlements.
 
-\leavevmode\vadjust pre{\hypertarget{ref-ranco2015effects}{}}%
+\bibitem[\citeproctext]{ref-ranco2015effects}
 Ranco, Gabriele, Darko Aleksovski, Guido Caldarelli, Miha Grčar, and
 Igor Mozetič. 2015. {``The Effects of Twitter Sentiment on Stock Price
 Returns.''} \emph{PloS One} 10 (9): e0138441.
 
-\leavevmode\vadjust pre{\hypertarget{ref-reshidi2021individual}{}}%
+\bibitem[\citeproctext]{ref-reshidi2021individual}
 Reshidi, Pëllumb, Alessandro Lizzeri, Leeat Yariv, Jimmy H Chan, and
 Wing Suen. 2021. {``Individual and Collective Information Acquisition:
 An Experimental Study.''} National Bureau of Economic Research.
 
-\leavevmode\vadjust pre{\hypertarget{ref-szkup2020multiplier}{}}%
+\bibitem[\citeproctext]{ref-szkup2020multiplier}
 Szkup, Michal. 2020. {``Multiplier Effect and Comparative Statics in
 Global Games of Regime Change.''} \emph{Theoretical Economics} 15 (2):
 625--67.
 
-\leavevmode\vadjust pre{\hypertarget{ref-szkup2015informationtr}{}}%
+\bibitem[\citeproctext]{ref-szkup2015informationtr}
 Szkup, Michal, and Isabel Trevino. 2015a. {``Information Acquisition and
 Transparency in Global Games.''} \emph{Journal of Economic Theory} 160:
 387--428.
 
-\leavevmode\vadjust pre{\hypertarget{ref-szkup2015informationgg}{}}%
+\bibitem[\citeproctext]{ref-szkup2015informationgg}
 ---------. 2015b. {``Information Acquisition in Global Games of Regime
 Change.''} \emph{Journal of Economic Theory} 160: 387--428.
 
-\leavevmode\vadjust pre{\hypertarget{ref-szkup2020sentiments}{}}%
+\bibitem[\citeproctext]{ref-szkup2020sentiments}
 ---------. 2020. {``Sentiments, Strategic Uncertainty, and Information
 Structures in Coordination Games.''} \emph{Games and Economic Behavior}
 124: 534--53.
 
-\leavevmode\vadjust pre{\hypertarget{ref-szkup2021information}{}}%
+\bibitem[\citeproctext]{ref-szkup2021information}
 ---------. 2021. {``Information Acquisition and Self-Selection in
 Coordination Games.''} mimeo.
 
-\leavevmode\vadjust pre{\hypertarget{ref-veldkamp2019data}{}}%
+\bibitem[\citeproctext]{ref-van2007monotone}
+Van Zandt, Timothy, and Xavier Vives. 2007. {``Monotone Equilibria in
+Bayesian Games of Strategic Complementarities.''} \emph{Journal of
+Economic Theory} 134 (1): 339--60.
+
+\bibitem[\citeproctext]{ref-veldkamp2019data}
 Veldkamp, Laura, and Cindy Chung. 2019. {``Data and the Aggregate
 Economy.''} \emph{Journal of Economic Literature}.
 
-\leavevmode\vadjust pre{\hypertarget{ref-yang2015coordination}{}}%
+\bibitem[\citeproctext]{ref-yang2015coordination}
 Yang, Ming. 2015. {``Coordination with Flexible Information
 Acquisition.''} \emph{Journal of Economic Theory} 158: 721--38.
 
