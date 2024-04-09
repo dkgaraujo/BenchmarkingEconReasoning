@@ -270,44 +270,50 @@ skilled practitioners, graphics processing unit chips - GPU) from a
 limited pool \(R\). The remainder after the investors decide their AI
 investment is available to technologists, and will influence
 technological development: \(R = R_{AI} + \sum_i R_i\). Next, the
-\emph{financial investment} stage entails\ldots{}
+\emph{financial investment} stage entails a binary investment decision
+on the remainder of the endowment, \(I_i = E - R_i\). The payoff depends
+on an unobserved state \(\theta\) and, for intermediate levels of the
+fundamental outcome, on coordination between investors. These decisions
+are taken after each investor observes a private signal that depends
+non-linearly on the level of AI investment: higher AI amounts increase
+precision in the private signal, but expose the investor to AI
+hallucinations. These latter elements are additive biases in the private
+signal that behave exponentially, like a ``hockey stick'' line, kicking
+off strongly at high levels of AI adoption. A final unknown component in
+the model is the degree of technological advance in between stages.
+Technologists take the remainer of the resources, \(R_{AI}\), and use it
+to implement research ideas that are compared with obstacles. Whenever
+these are net positive, the hallucinations taper off. This represents
+for example advances in reasoning ability (Douglas K. G. Araujo (2024))
+or in fine-tuning to make models.
 
-Investors choose the level of costly deployment of AI models, such as
-LLMs, to better extract signal about fundamentals from a noisy and
-multidimensional common data space.\footnote{All players have access to}
-The monotonically increasing technology frontier evolves over time but
-actual adoption depends on the use of scarce resources that influence
-costs, mimicking constraints in human resources and parallel computing.
-Participants make decisions based on a `double global game' with
-simultaneous higher-order beliefs about asset prices and technology
-adoption by peers. Similar to the traditional case with assets,
-participants overinvest in AI because they think others might be doing
-so, etc. But while this overinvestment in AI reduces the noise about
-fundamentals, the higher-order beliefs that everyone else also observes
-lower noise ends up leading to the same theme of overinvestment in the
-asset as well. If the technology envelope does not include a properly
-reasoning AI model, which is able to robustly ignore noise about
-fundamentals, the equilibrium outcome is a self-reinforcing
-overinvestment both in the asset and in the AI-related resources. In
-contrast, the emergence of a reasoning model brings the noise to zero
-and agents coordinate perfectly.
-
-The model is simple enough to represent the main dynamics of investors'
-indirect acquisition of information through their investment in AI. At
-the same time, it contains rich enough representations that allow the
-study of questions of interest. In this paper I explore four of them.
-First, the model allows for an AI to fully reason with respect to an
-input and task. Second, given discussions around the wisedom of open
-source versus closed source models, the mode shines a light on the role
-of a closed versus open AI model. Third, analyses demonstrate the
-potentially outsized effects of cyber security or other operational risk
-incidents, and finally the supply chain shocks in the AI chip industry
-are simulated.
+A unique value of AI investment minimises the bias in the private
+signal, ie optimally balances the hallucination with the
+precision-increasing effects of greater investment in AI. Interestingly,
+even as the equilibrium definition is not conditional on an optimal
+first-stage allocation, this happens to be the value that is consistent
+with the second-stage equilibrium. The model is simple enough to
+represent the main dynamics of investors' indirect acquisition of
+information through their investment in AI. At the same time, it
+contains rich enough representations that allow the study of questions
+of interest. In this paper I explore three of them. First, the baseline
+specification speaks to AI's ability to reason. One of the extensions,
+studying the effect of an eventual much-hyped artificial general
+intelligence (AGI), simply involves turning off the hallucination. The
+third extension addresses current policy and academic discussions around
+the wisedom of openly available versus closed models. Secondly, the
+model can be slightly adapted to study the potentially outsized effects
+of cyber security or other operational risk incidents, including issues
+related to AI vendor concentration.
 
 \subsection{Literature}\label{literature}
 
 This work relates to the literatures on information acquisition in
-incomplete information games, and on AI and data in finance.
+incomplete information games, and on AI and data in finance. The class
+of global games models address incomplete information settings Carlsson
+and Van Damme (1993). Morris and Shin (2002), Morris and Shin (2003). A
+second stream of papers related to this work discuss endogenous
+information acquisition, similar to the current paper.
 \textbf{Coordination with information acquisition}. Angeletos and Lian
 (2016), Szkup and Trevino (2015b), Szkup and Trevino (2015a), Szkup and
 Trevino (2021). Reshidi et al. (2021) study the individual and
@@ -318,20 +324,28 @@ Pavan (2014). Colombo, Femminis, and Pavan (2014) highlights the
 difference between effiencies in information acquisition and its usage.
 In contrast with that literature, here the AI technology frontier also
 develops endogenously and responds (negatively) to the resource take-up
-from technology adoption\ldots{} \textbf{Global games}. Carlsson and Van
-Damme (1993). Morris and Shin (2002), Morris and Shin (2003).
+from technology adoption.
 
-\textbf{Data in finance} Farboodi et al. (2022) models the extraction by
-investors of \emph{information} on assets from \emph{data}, and how the
-value of data is related also to characteristics of the asset itself.
-Begenau, Farboodi, and Veldkamp (2018) argues that the existence of more
-data to larger firms favours them over others. \textbf{AI in finance,
-including risks.} AI can read information better (Araujo et al. (n.d.),
+Another stream of papers discusses \textbf{data in finance}: Farboodi et
+al. (2022) models the extraction by investors of \emph{information} on
+assets from \emph{data}, and how the value of data is related also to
+characteristics of the asset itself. Begenau, Farboodi, and Veldkamp
+(2018) argues that the existence of more data to larger firms favours
+them over others. And a more specific line of works examines \textbf{AI
+in finance, including associated risks.} AI can read information better
+(Douglas Kiarelly Godoy Araujo et al. (n.d.), Douglas Kiarelly Godoy
 Araujo et al. (2024)), and especially the more sophisticated type of
 models - large language models (LLMs) can further increase the ability
 to use data (Korinek (2023)). Lopez-Lira and Tang (2023) show evidence
 that ChatGPT, the flagship LLM, can successfully pick stocks.
-Danielsson, Macrae, and Uthemann (2022) discuss risks.
+Danielsson, Macrae, and Uthemann (2022) discuss risks. Increased
+availability of data (Veldkamp and Chung (2019)) and lower cost across
+data pipeline (Goldfarb and Tucker (2019)). This facilitates the use of
+new data, or data in a compound way, due to the ``discovery'' of new
+data by newer technologies (\textbf{hirshleifer1978private?}). An early
+reference is Ranco et al. (2015). New techniques not only process more
+data more effectively, but they also expand the envelope of data that
+can be analysed to look for signal.
 
 \section{Model}\label{model}
 
@@ -371,7 +385,7 @@ However, unless the AI model can actually reason, very precise signals
 which bias the investor's perception about fundamentals. Such a problem
 is of course compounded by the high confidence the investor has in the
 signal given its acquired low \(\sigma_i\). This is modelled through a
-\emph{reasoning filter} \(\phi\) (see Section~\ref{sec-reasoning}). This
+\emph{reasoning filter} \(\phi\) (see \textbf{?@sec-reasoning}). This
 function is the identity function if the AI cannot reason and 0 if it
 can reason. Having \(\eta \sim N(0, \sigma_\eta)\) as the baseline level
 of noise\footnote{Reflecting, for example, technology frictions in the
@@ -468,22 +482,6 @@ investments is consistent with a classical result in the global games
 literature (Morris and Shin (2002), Morris and Shin (2003)): the price
 \(\rho\) of AI resources has an outsized impact on outcomes by virtue of
 its public nature.
-
-\subsection{AI as a technique to read
-information}\label{ai-as-a-technique-to-read-information}
-
-\begin{itemize}
-\item
-  Increased availability of data Veldkamp and Chung (2019) and lower
-  cost across data pipeline Goldfarb and Tucker (2019). This facilitates
-  the use of new data, or data in a compound way, due to the
-  ``discovery'' of new data by newer technologies
-  (\textbf{hirshleifer1978private?}).
-\item
-  An early reference is Ranco et al. (2015). The idea is simple: new
-  techniques not only process more data more effectively, but they also
-  expand the envelope of data that can be analysed to look for signal.
-\end{itemize}
 
 \subsection{Equilibrium in financial and AI
 investments}\label{equilibrium-in-financial-and-ai-investments}
@@ -597,27 +595,19 @@ games with unbounded utility functions. In particular, Szkup and Trevino
 Bayesian Nash equilibra, and that these thresholds correspond to a
 univalent mapping to a unique outcome.
 
-\section{Reasoning}\label{sec-reasoning}
+\section{Equilibrium}\label{equilibrium-1}
 
-This section discusses the elements of \(\phi\) that can be interpreted
-as an AI model's reasoning ability. It draws from Araujo (2024), where a
-more thorough discussion of rationality of AI models from an economics
-perspective can be found.
+The equilibrium is found by backward induction. Starting with the
+financial investment stage, collect a vector \(r=\{R_i, R_j, R_{AI}\}\)
+with the allocations of \(R\). Investor strategies
+\(A : \mathbf{R} \times [0,1]^3 \times (0,1]\to \{0,1\}\) map the
+private signal, the vector \(r\) and the AI reasoning ability \(\phi\)
+to a binary investment decision, where \(1\) is associated with the
+investing choice.
 
-Recall from Equation~\ref{eq-privatesignals} that \(\phi\) outputs the
-additional noise components, except if the model is able to reason. At
-this point, \(\phi\) is a gate that filters those noises.
-
-Note that \(\phi\) itself is not dependent on the performance of the AI.
-This is in line with compiling evidence that while the increasing power
-of AI affords it new abilities, including some that resemble reasoning,
-ultimately it is even questionable if a robust for of reasoning can be
-obtained by continuing to scale a technique that involves memorisation
-rather than actual abstract thinking (LeCun\ldots)
-
-\section{Statistics}\label{statistics}
-
-Szkup (2020) show that only the direct effect is important.
+Using the global games' threshold strategies and the uniquess of
+equilibrium outcomes due to Szkup and Trevino (2021) and Van Zandt and
+Vives (2007).
 
 \section{Open vs closed models}\label{sec-closedmodels}
 
@@ -648,11 +638,6 @@ AI shutdown effects that are proportional to \(\rho\).
 Take Equation~\ref{eq-privatesignals}, but now assume that \(\mu\) is a
 constant that always multiplies \(\alpha\). The constant goes to zero
 with probability \(\rho\), representing an operational incident.
-
-\section{Supply chain disruptions}\label{supply-chain-disruptions}
-
-A shock during the investment phase that equivalently increases the
-price of the AI factors \(\rho\) or decreases their yield \(\alpha\).
 
 \section[Preliminary considerations]{\texorpdfstring{Preliminary
 considerations\footnote{This section will become the conclusion section.}}{Preliminary considerations}}\label{preliminary-considerationsconcl}
@@ -700,8 +685,8 @@ Angeletos, G-M, and Chen Lian. 2016. {``Incomplete Information in
 Macroeconomics: Accommodating Frictions in Coordination.''} In
 \emph{Handbook of Macroeconomics}, 2:1065--1240. Elsevier.
 
-\bibitem[\citeproctext]{ref-Araujo2024reasoning}
-Araujo, Douglas Kiarelly Godoy. 2024. {``Economic Reasoning in
+\bibitem[\citeproctext]{ref-Araujo2024reason}
+Araujo, Douglas K. G. 2024. {``Benchmarking Economic Reasoning in
 Artificial Intelligence Models.''}
 
 \bibitem[\citeproctext]{ref-araujo2023data}
@@ -812,11 +797,6 @@ Returns.''} \emph{PloS One} 10 (9): e0138441.
 Reshidi, Pëllumb, Alessandro Lizzeri, Leeat Yariv, Jimmy H Chan, and
 Wing Suen. 2021. {``Individual and Collective Information Acquisition:
 An Experimental Study.''} National Bureau of Economic Research.
-
-\bibitem[\citeproctext]{ref-szkup2020multiplier}
-Szkup, Michal. 2020. {``Multiplier Effect and Comparative Statics in
-Global Games of Regime Change.''} \emph{Theoretical Economics} 15 (2):
-625--67.
 
 \bibitem[\citeproctext]{ref-szkup2015informationtr}
 Szkup, Michal, and Isabel Trevino. 2015a. {``Information Acquisition and
