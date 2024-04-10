@@ -32,3 +32,39 @@ $
 
 
 In this game, a strategy is a function $s : \mathbf{R} \to \{0, 1\}$.
+
+
+for $\mathbf{A} \def 0 = \nu(x_i^*(\{R_i, R_j^*, R_{AI}\}, \phi), x_j^*(r^*, \phi); r)$.
+
+x_i^* \in \{x_i^*|\nu(x_i^*(\{R_i, R_j^*, R_{AI}\}, \phi), x_j^*(r^*, \phi); r)=0, A(x_i^*;r;\phi)=A(x_j^*;r;\phi)|\theta \in [\underline{\theta}, \bar{\theta})\}
+
+
+
+After the decisions to invest in AI is taken, the second stage involves an investment in the financial asset. This step resembles a traditional global game (@morris2003global), but where players choose the precision of their own information as in, for example, @yang2015coordination, @szkup2021information. The tendency of the game to a unique outcome, due to the limit uniqueness (@frankel2003equilibrium).
+
+
+
+Note that similar to @szkup2021information, the investment stage can resemble a global game, only with investors that are potentially heterogeneous on their private signals. So I follow standard practice in global games and find the equilibrium strategies based on a signal $x_i^*(R_i)$ that would lie at the investment indifference threshold for investor $i$:
+
+$$
+A(R_i, x_i) = \mathbf{1}[x_i \geq x_i^*(R_i)].
+$$
+
+Finding this threshold entails equating @eq-utility with zero under the investment scenario, ie $A(R_i, x_i)=1$, and then solving for $x_i^*(R_i)$:
+
+$$
+E[Pr(A_j(\theta)=1)\theta I_i | x_i = x_i^*, \theta \in [\underline{\theta}, \bar{\theta}] ] + E[\theta I_i |x_i = x_i^*, \theta > \bar{\theta} ] = T,
+$$ {#eq-equilinvest}
+
+where $E[Pr(A_j(\theta)=1)]$ is the expected (by $i$) probability that $j$ has invested in the asset given the fundamental. The first term on the left is the expected success payout in the intermediate fundamentals case, which requires coordination. The second term is the expected success in the good fundamentals scenario.
+
+
+
+
+
+
+# Discussion
+
+The idea that the market might overreact to the knowledge about deployment of AI by firms is not new (@morris2002social). 
+
+More broadly, this model extends the work of @szkup2015informationgg. That paper establishes important results with respect to the symmetric nature of the outcome of games that allow for information aquisition, and the relatively amenable conditions under which equilibrium is unique.
