@@ -177,10 +177,12 @@
   pdfcreator={LaTeX via pandoc}}
 
 \title{Benchmarking economic reasoning in artificial intelligence models
-(Preliminary: estimation in progress)\thanks{This work represents my
-opinion and not necessarily that of the BIS. Note: estimation of the
-benchmark results in progress; results will be included in the first
-complete draft.}}
+(Preliminary: estimation in progress)\thanks{I thank Fernando Perez-Cruz
+and participants of the BIS Informal Machine Learning Community for
+insightful comments and suggestions. This work represents my opinion and
+not necessarily that of the BIS. Note: estimation of the benchmark
+results in progress; results will be included in the first complete
+draft.}}
 
 
   \author{Douglas K. G. Araujo}
@@ -219,7 +221,7 @@ C88, C59
 
 \begin{quote}
 ``Machines will be capable, within twenty years, of doing any work a man
-can do'' - Herbert Simon, AI pioneer, in 1965
+can do'' - AI pioneer Herbert Simon, in 1965
 \end{quote}
 
 \section{Introduction}\label{introduction}
@@ -227,22 +229,24 @@ can do'' - Herbert Simon, AI pioneer, in 1965
 Large language models (LLMs), in particular those classified as
 generative artificial intelligence (AI), increasingly support use cases
 in finance and economics (Korinek (2023)), including in central banks
-(Araujo et al. (2024)). These models are tested for their ability to
-reason, often boasting seemingly impressive results: for example,
-OpenAI's GPT-4 boats human-like performance across tests of reasoning
-and more than 80\% correct results in academic and professional micro-
-and macroeconomics tests (Achiam et al. (2023)). Still, even such
-advanced models can fail miserably when it comes to reasoning: for
-example, the same model can correctly solve a logical puzzle requiring
-reasoning about higher order knowledge but fails when irrelevant details
-are changed (Perez-Cruz and Shin (2024)). Building on results such as
-this, this work discusses how to systematically measure \emph{economic}
-reasoning, combining literatures from economics and computer science. In
-practical terms, the task at hand is to come up with a benchmark task
-that can help measure economic reasoning in AI models in a comparable
-way. This task is of first-order importance given the break-neck speed
-of evolution of LLMs (Yang et al. (2023)) and their potential risks
-(Danielsson, Macrae, and Uthemann (2022)).
+(Araujo et al. (2024)). A key value proposition is their ability to
+automate some high-skill, nuanced tasks that require some
+``understanding'' of complex texts. These models are tested for their
+ability to reason, often boasting seemingly impressive results: for
+example, OpenAI's GPT-4 boats human-like performance across tests of
+reasoning and more than 80\% correct results in academic and
+professional micro- and macroeconomics tests (Achiam et al. (2023)).
+Still, even such advanced models can fail miserably in simple reasoning
+tasks: for example, the same model can correctly solve a logical puzzle
+requiring reasoning about higher order knowledge but fails when
+irrelevant details are changed (Perez-Cruz and Shin (2024)). Building on
+results such as this, this work discusses how to systematically measure
+\emph{economic} reasoning, combining literatures from economics and
+computer science. In practical terms, the task at hand is to come up
+with a benchmark task that can help measure economic reasoning in AI
+models in a comparable way. This task is of first-order importance given
+the break-neck speed of evolution of LLMs (Yang et al. (2023)) and their
+potential risks (Danielsson, Macrae, and Uthemann (2022)).
 
 Such benchmark tasks are crucial for the comparison of the abilities of
 AI models over time and in the cross-section. Results of benchmark tasks
@@ -275,11 +279,10 @@ the set of incorrect choices, the accuracy of an AI's response (ie,
 \(\mathbb{1}(\hat{\alpha} \in \mathcal{A}_C)\)) reflects only one of
 three possible answering processes: chance, probabilistic assignment or
 a correct \emph{reasoning} process. The first one is simply
-\(P(\hat{\alpha} \in \mathcal{A}_C) = \#\mathcal{A}_C / \#\mathcal{A}\),
-and the second process depends on a measure of some distance
-\(d(\cdot)\) between \((Q, \mathcal{A})\) and the AI's training data
-\(D\):
-\(P(\hat{\alpha} \in \mathcal{A}_C) = P(\hat{\alpha} \in \mathcal{A}_C|d((Q, \mathcal{A}), D))\).
+\(P_{\text{chance}}(\hat{\alpha} \in \mathcal{A}_C) = \#\mathcal{A}_C / \#\mathcal{A}\).
+The second process depends on a measure of some distance \(d(\cdot)\)
+between \((Q, \mathcal{A})\) and the AI's training data \(D\):
+\(P_{\text{prob}}(\hat{\alpha} \in \mathcal{A}_C) = P(\hat{\alpha} \in \mathcal{A}_C|d((Q, \mathcal{A}), D))\).
 
 The third, and most interesting answering process is \emph{reasoning}.
 It can only be said to occur if \(\hat{\alpha}\) results from the
@@ -332,13 +335,13 @@ like learning or priming, AI systems can be easily started fresh or
 respawned and so it is trivial to test whether accuracy is due to chance
 alone. But it is still difficult to separate probabilistic answering
 from reasoning without a ``structural'' model of reasoning, especially
-since \(D\) is not observed in advanced AI systems due to commercial
-protection or simply because it is very large and difficult to analyse.
-The main contribution of this paper is precisely in offering a model of
-reasoning that can be sufficiently rich to reflect theoretical and
-empirical knowledge about reasoning and AI systems, while staying simple
-enough that it can be engineered into a benchmark test to allow
-diagnosing current and future AI systems.
+since the training data \(D\) is not observed in advanced AI systems due
+to commercial protection or simply because it is very large and
+difficult to analyse. The main contribution of this paper is precisely
+in offering a model of reasoning that can be sufficiently rich to
+reflect theoretical and empirical knowledge about reasoning and AI
+systems, while staying simple enough that it can be engineered into a
+benchmark test to allow diagnosing current and future AI systems.
 
 Functions \(f\), \(k\) and \(l\) are interesting by themselves, but the
 goal of this paper is to identify when they are successfully put to use
@@ -365,7 +368,10 @@ from the social economics and expectation formation literatures and
 create identifying variation in \(Q\), adapted from how this is done
 with human subjects to study their own reasoning functions about
 economic problems (see Stantcheva (2023), Fuster and Zafar (2023) and
-the works cited in these papers). Specifically:
+the works cited in these papers). Specifically, with \(\epsilon_i^j\)
+one of the \(M_j\) variations introduced in the seed question \(Q\) to
+identify the use of an information filtering function (\(j=f\)),
+knowledge association (\(j=k\)) or logic attribution (\(j=l\)):
 
 \begin{equation}\phantomsection\label{eq-empiricsyst}{
 \begin{aligned}
@@ -375,28 +381,24 @@ the works cited in these papers). Specifically:
 \end{aligned}
 }\end{equation}
 
-with \(\epsilon_i^j\) one of the \(M_j\) variations introduced in the
-seed question \(Q\) to identify the use of an information filtering
-function (\(j=f\)), knowledge association (\(j=k\)) or logic attribution
-(\(j=l\)). For example, the tests described in Perez-Cruz and Shin
-(2024) comprise variations of unimportant details of the puzzle while
-leaving the key details unchanged; I interpret them as \(\epsilon^f\)
-variations to the same prompt because this exercise probes the ability
-of ChatGPT to recognise the truly important information and abastract
-from everything else. \(\hat{\kappa}^*\) and \(\hat{\lambda}^*\) are
-only estimated upon the successful completion of the previous steps. In
-other words, estimation is the result of evaluating answers by the same
-AI system to multiple versions of seed question \(Q \in \mathcal{Q}\),
-where each version is an \(\epsilon^j\)-neighbourhood of \(Q\) that
-should prompt the same result if an AI system is using the same
-\(j \in \{f, k, l\}\) function.\footnote{Note the estimation equations
-  do not have residue terms because the equalities are directly
-  observed.} Ultimately, \(\hat{\alpha}(Q)\) is only considered to be
-the result of a reasoning process when all of the relevant variations
-for the same question are answered correctly - in other words, the AI
-model has evaded ``banana skins'' that try to trick it into revealing
-lack of information filtering, spurious knowledge association or faulty
-logics.
+For example, the tests described in Perez-Cruz and Shin (2024) comprise
+variations of unimportant details of the puzzle while leaving the key
+details unchanged; I interpret them as \(\epsilon^f\) variations to the
+same prompt because this exercise probes the ability of ChatGPT to
+recognise the truly important information and abastract from everything
+else. \(\hat{\kappa}^*\) and \(\hat{\lambda}^*\) are only estimated upon
+the successful completion of the previous steps. In other words,
+estimation is the result of evaluating answers by the same AI system to
+multiple versions of seed question \(Q \in \mathcal{Q}\), where each
+version is an \(\epsilon^j\)-neighbourhood of \(Q\) that should prompt
+the same result if an AI system is using the same \(j \in \{f, k, l\}\)
+function.\footnote{Note the estimation equations do not have residue
+  terms because the equalities are directly observed.} Ultimately,
+\(\hat{\alpha}(Q)\) is only considered to be the result of a reasoning
+process when all of the relevant variations for the same question are
+answered correctly - in other words, the AI model has evaded ``banana
+skins'' that try to trick it into revealing lack of information
+filtering, spurious knowledge association or faulty logics.
 
 The empirical challenge is then in creating the \(Q + \epsilon^j\)
 variations for each step \(j\). There are several classes of variations
@@ -1432,7 +1434,7 @@ Harmless Econometrics: An Empiricist's Companion}. Princeton University
 Press.
 
 \bibitem[\citeproctext]{ref-araujo2024artificial}
-Araujo, Douglas Kiarelly Godoy de, Sebastian Doerr, Leonardo Gambacorta,
+Araujo, Douglas Kiarelly Godoy, Sebastian Doerr, Leonardo Gambacorta,
 and Bruno Tissot. 2024. {``Artificial Intelligence in Central
 Banking.''}
 
