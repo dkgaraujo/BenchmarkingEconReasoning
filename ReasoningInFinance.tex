@@ -111,8 +111,8 @@
 
 \usepackage{algpseudocode}
 \usepackage{algorithm}
-\usepackage[noblocks]
-{authblk}
+\usepackage[noblocks]{authblk}
+\usepackage[giveninits=false, uniquename=false]{biblatex}
 \renewcommand*{\Authsep}{, }
 \renewcommand*{\Authand}{, }
 \renewcommand*{\Authands}{, }
@@ -178,7 +178,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Information acquisition in financial markets through artificial intelligence (Early stage work)},
+  pdftitle={Implications of artificial intelligence for coordination under incomplete information (Early stage work)},
   pdfauthor={Douglas K. G. Araujo},
   colorlinks=true,
   linkcolor={blue},
@@ -187,9 +187,11 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
-\title{Information acquisition in financial markets through artificial
-intelligence (Early stage work)\thanks{This work represents my opinion
-and not necessarily that of the BIS.}}
+\title{Implications of artificial intelligence for coordination under
+incomplete information (Early stage work)\thanks{This work represents my
+opinion and not necessarily that of the BIS. An early version of the
+manuscript circulated as `Information acquisition in financial markets
+through artificial intelligence'.}}
 
 
   \author{Douglas K. G. Araujo}
@@ -224,33 +226,47 @@ incidents. JEL codes: D82, G14.
 
 \section{Introduction}\label{introduction}
 
-The increasing capabilities of large language models (LLM) and modern
-artificial intelligence (AI) systems more generally unlock useful new
-ways to transform data into actionable information, expanding the ``data
-envelope'' (Hirshlelfer (1971), Goldfarb and Tucker (2019)). These
-sophisticated models have been posited to be useful even for forecasting
-and stock trading (eg, Lopez-Lira and Tang (2023)), adding further
-momentum to the use of these technologies. Clearly, more advanced AI
-models are able to transform more data into information, improving the
-precision of a signal. But other key, specific features of AI as an
-information technology require new modelling tools that are not found in
-existing frameworks of endogenous information acquisition in incomplete
-games (eg, Hellwig and Veldkamp (2009), M. Yang (2015), Szkup and
-Trevino (2015b)). First, AI models can also output erroneous content
-that may be hard to identify, such as seemingly-correct
-``hallucinations'' (Alkaissi and McFarlane (2023), Ji et al. (2023)), an
-issue that is compounded by the inescrutable nature of these models. For
-example, LLMs might provide human-like answers that fail to correctly
-identify trivial aspects of tasks (Perez-Cruz and Shin (2024)). Second,
-the AI technology is still evolving at a fast pace (eg, J. Yang et al.
-(2023)), which itself might change the information acquisition
-calculation of agents as they expect a certain chance that current
-models will be nondecreasingly more powerful. In this paper, the AI
-resources not used by agents is made available to technologists, who
-then try to improve AI technology subject to resource availability. All
-of this on top of the usually modelled costs to acquire information,
-which in this case represent the limited AI-specific resources such as
-skilled labour force and adequate chips that are limited.
+The increasing capabilities of large language models (LLM) and
+generative artificial intelligence (gen AI) systems more generally
+unlock useful new ways to transform data into actionable information,
+expanding the ``data envelope'' (Hirshlelfer (1971), Goldfarb and Tucker
+(2019)). These sophisticated models can be useful even for forecasting
+and predicting stock returns (eg, Lopez-Lira and Tang (2024)), fueling
+their use in settings of economic importance. More generally, gen AI has
+the potential to process economically-relevant signals with greater
+precision. To the extent that many of these settings entail strategic
+complementarities, as the stock investment example, a baseline approach
+to understand the effects of gen AI on coordination under incomplete
+information is to model it as a standard global game (Carlsson and Van
+Damme (1993), Morris and Shin (2003)). Under this prism, and with
+standard assumptions on the common knowledge of the signal generating
+process, a unique risk-dominant equilibrium obtains where agents choose
+to invest or not based on a threshold rule. And since this threshold is
+independent of the signal precision, this baseline suggests gen AI would
+not affect coordination incentives regardless of its technical prowess.
+
+But specificities of gen AI as an information processing technology
+require adaptations to the model to enable policy analysis. The
+breakneck speed of gen AI investment strongly suggests that a key
+ingredient is endogenous information acquisition (eg, Hellwig and
+Veldkamp (2009), M. Yang (2015), Szkup and Trevino (2015b)). Other novel
+elements are also relevant to model gen AI, related to its reasoning and
+the externalities with AI developers. First, accumulated evidence
+suggests gen AI systems cannot properly reason and thus may introduce
+biases in the signal. Gen AI makes mistakes that are increasingly hard
+to spot because erroneous responses are presented with more confidence
+and eloquence with more advanced models, the so-called
+``hallucinations'' (Alkaissi and McFarlane (2023), Ji et al. (2023)).
+Second, the AI technology is still evolving at a fast pace (eg, J. Yang
+et al. (2023)) one breakthrough at a time, but both development and use
+of these systems require broadly the same core resources: the
+quintessential example are graphical processing units (GPUs), the
+computer chips that effectively enable gen AI.\footnote{https://www.nytimes.com/2023/08/16/technology/ai-gpu-chips-shortage.html.}
+In other words, investment in resources to deploy gen AI for information
+processing reduce its speed of development. This impacts the ex ante
+information acquisition calculation as investors expect that models
+will, once acquired, have a positive probability of experiencing a
+breakthrough.
 
 The main contribution of this paper is to set up a simple but flexible
 model of endogenous information acquisiton under incomplete information,
@@ -328,7 +344,8 @@ Pavan (2014). Colombo, Femminis, and Pavan (2014) highlights the
 difference between effiencies in information acquisition and its usage.
 In contrast with that literature, here the AI technology frontier also
 develops endogenously and responds (negatively) to the resource take-up
-from technology adoption.
+from technology adoption. (Denti (2023) study information acquisition
+about other players' information)
 
 Another stream of papers discusses \textbf{data in finance}: Farboodi et
 al. (2022) models the extraction by investors of \emph{information} on
@@ -337,10 +354,10 @@ characteristics of the asset itself. Begenau, Farboodi, and Veldkamp
 (2018) argues that the existence of more data to larger firms favours
 them over others. And a more specific line of works examines \textbf{AI
 in finance, including associated risks.} AI can read information better
-(Douglas Kiarelly Godoy Araujo et al. (n.d.), Douglas Kiarelly Godoy
+(Douglas Kiarelly Godoy Araujo et al. (2023), Douglas Kiarelly Godoy
 Araujo et al. (2024)), and especially the more sophisticated type of
 models - large language models (LLMs) can further increase the ability
-to use data (Korinek (2023)). Lopez-Lira and Tang (2023) show evidence
+to use data (Korinek (2023)). Lopez-Lira and Tang (2024) show evidence
 that ChatGPT, the flagship LLM, can successfully pick stocks.
 Danielsson, Macrae, and Uthemann (2022) discuss risks. Increased
 availability of data (Veldkamp and Chung (2019)) and lower cost across
@@ -377,31 +394,39 @@ analysed to look for signal.
     This also has the advantage that the model is directly comparable
     with most of the information acquisition literature.
   \end{itemize}
-\item
-  But AI has particular characteristics that are not found in other
-  information acquisition technologies, and in particular are
-  exacerbated in the most recent generation of sophisticated AI models,
-  including LLMs.
-
-  \begin{itemize}
-  \tightlist
-  \item
-    First, AI models hallucinate, meaning that their result seems
-    correct but in fact is made up in an attempt by the model to appease
-    its users. Even in applications in finance, which typically use more
-    scalable applications than chatbots, suffer from the fact that these
-    models do not properly reason (even as they appear to gain
-    capabilities with their growing size). All of this is compounded by
-    the fact that these models are increasing unscrutinable.
-  \item
-    A second characteristic of AI is that the technology is still
-    undergoing very fast levels of development (eg, J. Yang et al.
-    (2023)). This matters because of the influence it can have on
-    decisions related to information acquisition and ultimately on the
-    financial payoff, since agents expect some possibility that these
-    breakthroughs will happen.
-  \end{itemize}
 \end{itemize}
+
+But AI has particular characteristics that are not found in other
+information acquisition technologies, and in particular are exacerbated
+in the most recent generation of sophisticated AI models, including
+LLMs. Those are described next.
+
+\subsection{Reasoning and
+hallucinations}\label{reasoning-and-hallucinations}
+
+First, AI models hallucinate, meaning that their result seems correct
+but in fact is made up in an attempt by the model to appease its users.
+Even in applications in finance, which typically use more scalable
+applications than chatbots, suffer from the fact that these models do
+not properly reason (even as they appear to gain capabilities with their
+growing size). All of this is compounded by the fact that these models
+are increasing unscrutinable.
+
+LLMs might provide human-like, confident but incorrect answers to
+trivial questions (Perez-Cruz and Shin (2024)), flip initially correct
+answers when questioned by the user (Laban et al. (2023)) or double-down
+on previous mistakes during a chat(Zhang et al. (2023)).
+
+\subsection{AI development}\label{ai-development}
+
+A second characteristic of AI is that the technology is still undergoing
+very fast levels of development (eg, J. Yang et al. (2023)). This
+matters because of the influence it can have on decisions related to
+information acquisition and ultimately on the financial payoff, since
+agents expect some possibility that these breakthroughs will happen.
+
+The development for these models require considerable computing power
+and technical staff resources.
 
 \subsection{Policy questions related to AI in
 finance}\label{policy-questions-related-to-ai-in-finance}
@@ -438,11 +463,19 @@ technology. Second, the technology itself evolves stochastically over
 time, including in response to factor prices as well. And third, the
 process by which AI improves the signal is laid out in more detail to
 highlight the cases where the technology can transform more data text
-into inormation but cannot yet \emph{reason} about it.
+into information but cannot yet \emph{reason} about it.
 
 \subsection{Setup}\label{setup}
 
-The simplest version of the model is a two-investor setup as follows.
+The simplest version of the model is a two-investor setup as
+follows.\footnote{More advanced or more generalised perturbations, where
+  the information structure is more richer than a linearly additive
+  error (eg, Morris, Shin, and Yildiz (2016) with rank beliefs or Morris
+  and Yang (2022) with a stochastic continuous choice) could in
+  principle be explored. But since the goal of this work is to add a
+  richer structure to a model, a canonical global games model with
+  linear information (Morris and Shin (2003)) is used as a well-studied
+  benchmark.}
 
 The state of economic fundamentals is a random variable with normal
 distribution \(\theta \sim N(\mu_\theta, \sigma_\theta^2)\). \(\theta\)
@@ -554,7 +587,8 @@ implemented, overcomes the barrier to innovation. Formally:
 to \(\theta + \eta\). Note that the only chance of a full shutdown of
 the added noise by the AI model - for example, through the concept of
 \emph{artificial generalised intelligence}, is ruled out and would
-require all of the AI-related resources to the technologists only.
+require all of the AI-related resources to be available to the
+technologists only.
 
 \subsection{Bias in private signal}\label{bias-in-private-signal}
 
@@ -721,6 +755,36 @@ and is unique.
 
 \end{proposition}
 
+\subsubsection{A discussion on the uniqueness of the
+equilibrium}\label{a-discussion-on-the-uniqueness-of-the-equilibrium}
+
+Equilibrium selection from perturbations of complete information games
+is widely studied (Carlsson and Van Damme (1993), Morris and Shin
+(2003)). More recently, this result has been increasingly generalised:
+Morris, Shin, and Yildiz (2016) shows that the equilibrium selection
+comes from the common uniform rank beliefs and Szkup and Trevino
+(2015b), M. Yang (2015) and Morris and Yang (2022) generalise this
+further to the infeasibility of acquiring an information precision that
+perfectly discriminates between states. In fact, while this paper models
+the information acquisition and investment stages as separate steps,
+they can be understood as a single step, two-signal game where one of
+the signals is related to the continuous stochastic choice (Morris and
+Yang (2022)): to the extent that players are not able to sharply
+distinguish between states when they get close to a state threshold,
+then uniqueness of outcome results.
+
+\subsubsection{Equilibrium efficiency}\label{equilibrium-efficiency}
+
+Is the equilibrium under information acquisiton through AI with
+hallucination and technology externalities efficient?
+
+\begin{itemize}
+\tightlist
+\item
+  Szkup and Trevino (2015b) study equilibrium efficiency under
+  endogenous information acquisition.
+\end{itemize}
+
 \subsection{Information-efficient use of
 AI}\label{information-efficient-use-of-ai}
 
@@ -771,7 +835,12 @@ Assume that the development of a closed-model entails a cost \(C > 0\)
 whereas the use of a public-knowledge open model is free (consistent
 with real life). In this case, then investors would choose the
 closed-model if \(\alpha_i(R_i) > \alpha(R_i)\) and the final net payoff
-would still be positive even with the safe.
+would still be positive even with the safe. And, for conservativeness,
+to reflect concerns that open source gen AI can facilitate cyber crime
+and other deleterious activities such as bomb building (Seger et al.
+(2023)), suppose also that the realised technology at the second stage
+can serve with a probability \(\delta\) to lead to the same outcome as
+the non-invest for both players.
 
 \section[Operational risks (eg, cyber disruptions and AI vendor
 dependence)]{\texorpdfstring{Operational risks\footnote{This section is
@@ -790,6 +859,16 @@ AI shutdown effects that are proportional to \(\rho\).
 Take Equation~\ref{eq-privatesignals}, but now assume that \(\mu\) is a
 constant that always multiplies \(\alpha\). The constant goes to zero
 with probability \(\rho\), representing an operational incident.
+
+\section{``Data reflexion'' problem}\label{data-reflexion-problem}
+
+One of the concerns about the widespread use of generative AI is that
+over time, the data available to train new models will be increasingly
+itself the output of an AI. This can be conceptualised as a similar
+application to Morris and Shin (2018), who studied the reflexion of
+market prices and central bank guidance. For this reason, I use the same
+machinery to sketch what the implications of heightened data reflexion
+could look like.
 
 \section[Preliminary considerations]{\texorpdfstring{Preliminary
 considerations\footnote{This section will become the conclusion section.}}{Preliminary considerations}}\label{preliminary-considerationsconcl}
@@ -836,13 +915,13 @@ Artificial Intelligence Models.''}
 
 \bibitem[\citeproctext]{ref-araujo2023data}
 Araujo, Douglas Kiarelly Godoy, Giuseppe Bruno, Juri Marcucci, Rafael
-Schmidt, and Bruno Tissot. n.d. {``Data Science in Central Banking:
-Applications and Tools.''}
+Schmidt, and Bruno Tissot. 2023. {``Data Science in Central Banking:
+Applications and Tools.''} \emph{IFC Bulletin}, no. 59.
 
 \bibitem[\citeproctext]{ref-araujo2024artificial}
 Araujo, Douglas Kiarelly Godoy, Sebastian Doerr, Leonardo Gambacorta,
 and Bruno Tissot. 2024. {``Artificial Intelligence in Central
-Banking.''}
+Banking.''} \emph{BIS Bulletin}, no. 84.
 
 \bibitem[\citeproctext]{ref-bcbs2022tpsp}
 Basel Committee on Banking Supervision. 2022. {``{Newsletter on Third-
@@ -868,6 +947,10 @@ Studies} 81 (4): 1438--83.
 Danielsson, Jon, Robert Macrae, and Andreas Uthemann. 2022.
 {``Artificial Intelligence and Systemic Risk.''} \emph{Journal of
 Banking \& Finance} 140: 106290.
+
+\bibitem[\citeproctext]{ref-denti2023unrestricted}
+Denti, Tommaso. 2023. {``Unrestricted Information Acquisition.''}
+\emph{Theoretical Economics} 18 (3): 1101--40.
 
 \bibitem[\citeproctext]{ref-farboodi2022has}
 Farboodi, Maryam, Adrien Matray, Laura Veldkamp, and Venky
@@ -910,15 +993,20 @@ and Implications for Economists.''} \emph{Journal of Economic
 Literature} 61 (4): 1281--1317.
 \url{https://doi.org/10.1257/jel.20231736}.
 
+\bibitem[\citeproctext]{ref-laban2023you}
+Laban, Philippe, Lidiya Murakhovs' ka, Caiming Xiong, and Chien-Sheng
+Wu. 2023. {``Are You Sure? Challenging Llms Leads to Performance Drops
+in the Flipflop Experiment.''} \emph{arXiv Preprint arXiv:2311.08596}.
+
 \bibitem[\citeproctext]{ref-lerner2005economics}
 Lerner, Josh, and Jean Tirole. 2005. {``The Economics of Technology
 Sharing: Open Source and Beyond.''} \emph{Journal of Economic
 Perspectives} 19 (2): 99--120.
 
 \bibitem[\citeproctext]{ref-lopez2023can}
-Lopez-Lira, Alejandro, and Yuehua Tang. 2023. {``Can Chatgpt Forecast
+Lopez-Lira, Alejandro, and Yuehua Tang. 2024. {``Can Chatgpt Forecast
 Stock Price Movements? Return Predictability and Large Language
-Models.''} \emph{arXiv Preprint arXiv:2304.07619}.
+Models.''} \emph{SSRN}.
 
 \bibitem[\citeproctext]{ref-morris2003global}
 Morris, Stephen, and HS Shin. 2003. {``Global Games: Theory and
@@ -928,6 +1016,22 @@ Hansen, and s Turnovsky.''} Cambridge University Press, NY.
 \bibitem[\citeproctext]{ref-morris2002social}
 Morris, Stephen, and Hyun Song Shin. 2002. {``Social Value of Public
 Information.''} \emph{American Economic Review} 92 (5): 1521--34.
+
+\bibitem[\citeproctext]{ref-morris2018central}
+---------. 2018. {``Central Bank Forward Guidance and the Signal Value
+of Market Prices.''} In \emph{AEA Papers and Proceedings}, 108:572--77.
+American Economic Association 2014 Broadway, Suite 305, Nashville, TN
+37203.
+
+\bibitem[\citeproctext]{ref-morris2016common}
+Morris, Stephen, Hyun Song Shin, and Muhamet Yildiz. 2016. {``Common
+Belief Foundations of Global Games.''} \emph{Journal of Economic Theory}
+163: 826--48.
+
+\bibitem[\citeproctext]{ref-morris2022coordination}
+Morris, Stephen, and Ming Yang. 2022. {``Coordination and Continuous
+Stochastic Choice.''} \emph{The Review of Economic Studies} 89 (5):
+2687--2722.
 
 \bibitem[\citeproctext]{ref-perez2024testing}
 Perez-Cruz, Fernando, and Hyun Song Shin. 2024. {``Testing the Cognitive
@@ -942,6 +1046,13 @@ Returns.''} \emph{PloS One} 10 (9): e0138441.
 Reshidi, Pëllumb, Alessandro Lizzeri, Leeat Yariv, Jimmy H Chan, and
 Wing Suen. 2021. {``Individual and Collective Information Acquisition:
 An Experimental Study.''} National Bureau of Economic Research.
+
+\bibitem[\citeproctext]{ref-seger2023opensourcing}
+Seger, Elizabeth, Noemi Dreksler, Richard Moulange, Emily Dardaman,
+Jonas Schuett, K. Wei, Christoph Winter, et al. 2023. {``Open-Sourcing
+Highly Capable Foundation Models: An Evaluation of Risks, Benefits, and
+Alternative Methods for Pursuing Open-Source Objectives.''}
+\url{https://arxiv.org/abs/2311.09227}.
 
 \bibitem[\citeproctext]{ref-szkup2015informationtr}
 Szkup, Michal, and Isabel Trevino. 2015a. {``Information Acquisition and
@@ -974,6 +1085,11 @@ Preprint arXiv:2304.13712}.
 \bibitem[\citeproctext]{ref-yang2015coordination}
 Yang, Ming. 2015. {``Coordination with Flexible Information
 Acquisition.''} \emph{Journal of Economic Theory} 158: 721--38.
+
+\bibitem[\citeproctext]{ref-zhang2023language}
+Zhang, Muru, Ofir Press, William Merrill, Alisa Liu, and Noah A. Smith.
+2023. {``How Language Model Hallucinations Can Snowball.''}
+\url{https://arxiv.org/abs/2305.13534}.
 
 \end{CSLReferences}
 
